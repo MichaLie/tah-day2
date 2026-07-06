@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Tour · AI Vocabulary Flashcards — what your agent should leave behind</title>
+<style>
+  :root{--teal:#0f6b5c;--teal-soft:#e3efec;--orange:#a05a00;--orange-soft:#fdf3e3;--ink:#22272e;--mut:#5c6672;
+        --line:#e3ded4;--green:#2e7d32;--green-soft:#e6f2e7}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Aptos","Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+       background:#fff;color:var(--ink);line-height:1.55}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 18px 60px}
+  .meta{background:var(--orange-soft);border:1.5px solid var(--orange);border-radius:12px;padding:12px 16px;
+        font-size:.9rem;margin-bottom:24px}
+  .meta b{color:var(--orange)}
+  h1{font-size:1.6rem;margin:0 0 4px}
+  .sub{color:var(--mut);font-size:.92rem;margin:0 0 22px}
+  h2{font-size:1.12rem;color:var(--teal);margin:26px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--teal-soft)}
+  h2 .n{display:inline-block;min-width:1.55em;text-align:center;background:var(--teal);color:#fff;border-radius:7px;
+        font-size:.82em;padding:2px 5px;margin-right:8px}
+  p{margin:0 0 10px}
+  .brief{border-left:3px solid var(--orange);background:#fdf8f4;padding:10px 14px;border-radius:0 8px 8px 0;font-size:.94rem}
+  .plan{list-style:none;padding:0;margin:8px 0;counter-reset:s}
+  .plan li{position:relative;padding:8px 12px 8px 40px;border:1px solid var(--line);border-radius:9px;margin-bottom:6px;font-size:.94rem}
+  .plan li::before{counter-increment:s;content:counter(s);position:absolute;left:10px;top:8px;background:var(--teal);
+                   color:#fff;font-weight:800;border-radius:6px;font-size:.8rem;padding:1px 8px}
+  .filemap{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+  .file{flex:1 1 240px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.9rem}
+  .file b{display:block;font-family:Menlo,Consolas,monospace;font-size:.86rem;color:var(--teal);margin-bottom:4px}
+  .code{background:#f7f9fa;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0 4px;
+        font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.8rem;line-height:1.5;overflow-x:auto;white-space:pre}
+  .ann{font-size:.86rem;color:var(--mut);margin:0 0 14px}
+  .ann b{color:var(--orange)}
+  .recipe{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:0 0 10px}
+  .recipe h3{margin:0 0 6px;font-size:.98rem}
+  .recipe ol{margin:0;padding-left:20px;font-size:.92rem}
+  .recipe li{margin-bottom:3px}
+  .gotcha{font-size:.86rem;color:#7a4a12;background:var(--orange-soft);border-radius:7px;padding:6px 10px;margin-top:8px}
+  .check{list-style:none;padding:0;margin:8px 0;font-size:.94rem}
+  .check li{padding:4px 0 4px 26px;position:relative}
+  .check li::before{content:"✓";position:absolute;left:2px;color:var(--green);font-weight:800}
+  .next{background:var(--teal-soft);border-radius:10px;padding:12px 16px;font-size:.93rem}
+  .next code{background:#fff;border-radius:4px;padding:1px 6px;font-size:.84rem}
+  footer{margin-top:34px;border-top:1px solid var(--line);padding-top:10px;color:#8a8a8a;font-size:.76rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="meta"><b>Why this page exists.</b> This is a worked example of the day's <b>legibility habit — make the agent's work readable</b>. It's the plain-language tour an agent should leave next to anything it builds, so you can verify, maintain, and <i>learn from</i> the work instead of receiving a black box. The reusable prompt is in the Pattern Library: <i>"Alongside the artifact, create a plain-language overview.html…"</i></div>
+
+  <h1>Project Tour — AI Vocabulary Flashcards</h1>
+  <p class="sub">What was asked, what was built, how it works, and how you can change it yourself — written for a reader who doesn't code and will read this once.</p>
+
+  <h2><span class="n">1</span>The brief that started it</h2>
+  <div class="brief">"Using only <b>sample_glossary.txt</b>, build a single-file HTML flashcard quiz. No internet, no external libraries, no tracking; keyboard accessible; high-contrast; use the definitions verbatim. Propose a plan before writing. Afterwards, tell me how to test it." — followed by one fix: <i>"Add a score summary explaining which answers were wrong and why."</i></div>
+
+  <h2><span class="n">2</span>The plan that was approved</h2>
+  <ol class="plan">
+    <li>Read the glossary; confirm it holds 10 term–definition pairs and flag anything ambiguous. <i>(Nothing was.)</i></li>
+    <li>Build one self-contained page with two modes: <b>Browse</b> (flip cards) and <b>Quiz</b> (4-option multiple choice built from the same 10 definitions).</li>
+    <li>Add the requested fix: an end-of-quiz summary that explains every miss using the glossary's own wording.</li>
+    <li>Self-check against the constraints (offline, keyboard, contrast), then hand over for the human test.</li>
+  </ol>
+
+  <h2><span class="n">3</span>What exists now</h2>
+  <div class="filemap">
+    <div class="file"><b>demo_flashcards.html</b>The whole app: content, appearance, and behaviour in one file. Open it in any browser — no installation, no internet.</div>
+    <div class="file"><b>sample_glossary.txt</b>The source of truth (on the course stick: <b>lab_pack/sample_content/</b>). The app's definitions were copied from here <i>verbatim</i> — if the two ever disagree, this file wins and the app needs updating.</div>
+  </div>
+
+  <h2><span class="n">4</span>How it works — in plain language</h2>
+  <p>Everything the app knows lives in one list near the bottom of the file, labelled <b>TERMS</b>. Each entry is a pair: a term, then its definition:</p>
+  <div class="code">const TERMS = [
+ ["Generative AI","A field of AI in which algorithms trained on large amounts…"],
+ ["Large Language Model (LLM)","A model trained to predict the next token…"],
+ …8 more pairs…
+];</div>
+  <p class="ann"><b>That's the only part you'd ever need to touch.</b> Everything else — the flipping, the shuffling, the scoring — just reads from this list. Change the list, and every card and quiz question updates itself.</p>
+  <p>Browse mode shows a card and swaps its face when you click (term ↔ definition). Quiz mode picks a definition, offers the right term plus three decoys drawn from the same list, counts your score, and — the "one fix" — lists every miss at the end with the correct definition, so wrong answers become the study guide.</p>
+
+  <h2><span class="n">5</span>Change it yourself — three recipes</h2>
+  <div class="recipe"><h3>Fix a definition</h3>
+    <ol><li>Right-click the file → Open With → TextEdit (Mac) or Notepad (Windows).</li>
+        <li>Search (Ctrl/Cmd-F) for a few words of the term, e.g. <i>Hallucination</i>.</li>
+        <li>Edit the text between the quotation marks after the comma. Save. Reload the page in your browser.</li></ol>
+    <div class="gotcha">⚠️ Keep the quotation marks and the comma exactly as they are — they're the packaging. If the page goes blank, you deleted one; undo (Ctrl/Cmd-Z), save again.</div></div>
+  <div class="recipe"><h3>Add an 11th card</h3>
+    <ol><li>Copy one full line of the TERMS list — from <code>[</code> to <code>],</code>.</li>
+        <li>Paste it on a new line inside the list and change both texts.</li>
+        <li>Save, reload — browse and quiz pick it up automatically.</li></ol></div>
+  <div class="recipe"><h3>Make it yours</h3>
+    <ol><li>Replace all 10 pairs with terms from <i>your</i> course (or better: give your agent your own glossary file and this brief).</li>
+        <li>Update the footer so the source filename is right.</li>
+        <li>Retest before students see it — you're the publisher.</li></ol></div>
+
+  <h2><span class="n">6</span>How it was verified</h2>
+  <ul class="check">
+    <li>All 10 definitions compared word-for-word against <b>sample_glossary.txt</b>.</li>
+    <li>Opened with wifi off — works; no external requests, no fonts, no trackers, nothing collected.</li>
+    <li>Completed a full quiz round using only the keyboard (Tab, Enter, arrows, Space).</li>
+    <li>Tried to break it: double-clicks mid-question, phone-width window, replaying — no dead ends found.</li>
+    <li><i>Left for the human:</i> the pedagogical judgment — are these the right 10 terms to drill at all?</li>
+  </ul>
+
+  <h2><span class="n">7</span>Where to take it next</h2>
+  <div class="next">Ask your agent for one change at a time: a "hard mode" that hides three decoys from related terms · a printable one-page glossary generated from the same list · a version in your language. And keep the habit that produced this page: <code>"…and update the project tour to match."</code></div>
+
+  <footer>Draft — this tour and the app it describes were built with an AI coding agent for Day 2 (the 13:45 live demo / Track 1 exemplar); instructor-verified. Single local file · no network calls · no data collected.</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 2 Companion · Navigating the AI Landscape</title>
+<style>
+  :root{
+    --teal:#0f6b5c; --teal-soft:#e3efec; --orange:#a05a00; --orange-soft:#fdf3e3;
+    --ink:#22272e; --mut:#5c6672; --line:#e3ded4; --red:#b3362a; --green:#2e7d32;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+       color:var(--ink);background:#faf8f3;line-height:1.5;font-size:16px}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px}
+  header{padding:48px 0 8px}
+  .kicker{color:var(--teal);font-weight:700;letter-spacing:.04em;font-size:.8rem;text-transform:uppercase}
+  h1{font-family:Georgia,"Times New Roman",serif;font-weight:normal;font-size:clamp(1.7rem,4.5vw,2.6rem);line-height:1.12;margin:.3rem 0 .6rem}
+  .lede{color:var(--mut);font-size:1.05rem;max-width:44rem}
+  .thesis{margin:22px 0 0;padding:16px 20px;background:var(--teal-soft);border-radius:10px;font-size:1.02rem}
+  .thesis b{color:var(--teal)}
+  nav{position:sticky;top:0;background:rgba(250,248,243,.96);backdrop-filter:blur(4px);
+      border-bottom:1px solid var(--line);margin-top:26px;z-index:5}
+  nav .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:8px;padding-bottom:8px}
+  nav a{white-space:nowrap;padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--mut);font-size:.86rem;font-weight:600}
+  nav a:hover{background:var(--teal-soft);color:var(--teal)}
+  section{padding:34px 0 6px}
+  h2{font-family:Georgia,"Times New Roman",serif;font-weight:normal;font-size:1.45rem;margin:0 0 4px}
+  .sub{color:var(--mut);margin:0 0 18px;font-size:.95rem}
+  h2 .n{display:inline-block;min-width:1.5em;color:#fff;background:var(--teal);border-radius:6px;
+        text-align:center;font-size:.85em;padding:2px 4px;margin-right:8px;vertical-align:2px}
+  /* timeline */
+  .tl{list-style:none;margin:0;padding:0;border-left:3px solid var(--line)}
+  .tl li{position:relative;padding:0 0 16px 22px}
+  .tl li::before{content:"";position:absolute;left:-8px;top:6px;width:13px;height:13px;border-radius:50%;
+                 background:var(--teal);border:2.5px solid #fff;box-shadow:0 0 0 1.5px var(--teal)}
+  .tl li.pm::before{background:var(--orange);box-shadow:0 0 0 1.5px var(--orange)}
+  .tl li.br::before{background:#fff;box-shadow:0 0 0 1.5px var(--mut)}
+  .tl time{font-weight:800;font-variant-numeric:tabular-nums;color:var(--teal);margin-right:8px}
+  .tl li.pm time{color:var(--orange)}
+  .tl li.br time{color:var(--mut)}
+  .tl .what{font-weight:700}
+  .tl .why{color:var(--mut);font-size:.92rem;display:block;max-width:40rem}
+  /* thread */
+  .thread{display:flex;flex-wrap:wrap;gap:8px;counter-reset:step}
+  .step{flex:1 1 190px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;position:relative}
+  .step::before{counter-increment:step;content:counter(step);position:absolute;top:-10px;left:12px;
+                background:var(--teal);color:#fff;font-weight:800;font-size:.78rem;border-radius:6px;padding:1px 8px}
+  .step:nth-child(n+5)::before{background:var(--orange)}
+  .step b{display:block;margin:6px 0 2px;font-size:.95rem}
+  .step span{color:var(--mut);font-size:.86rem}
+  /* idea cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+  .card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:#fff}
+  .card h3{margin:0 0 6px;font-size:1rem}
+  .card p{margin:0;color:var(--mut);font-size:.9rem}
+  .card .tag{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--teal)}
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0 4px}
+  .stat{background:var(--teal-soft);border-radius:12px;padding:14px 16px;text-align:center}
+  .stat .v{font-size:2rem;font-weight:800;color:var(--teal);line-height:1.1}
+  .stat .l{font-size:.82rem;color:var(--mut)}
+  /* details */
+  details{border:1px solid var(--line);border-radius:10px;margin:0 0 10px;background:#fff}
+  summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none;display:flex;gap:10px;align-items:baseline}
+  summary::before{content:"+";color:var(--teal);font-weight:800;font-size:1.1rem}
+  details[open] summary::before{content:"–"}
+  details .body{padding:0 16px 14px;color:#333;font-size:.94rem}
+  details .body p{margin:0 0 8px}
+  .pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:.78rem;font-weight:700}
+  .pill.g{background:#e6f2e7;color:var(--green)} .pill.a{background:#fdf0e7;color:var(--orange)} .pill.r{background:#f9e7e5;color:var(--red)}
+  /* loop */
+  .loop{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch}
+  .loop .b{flex:1 1 120px;background:var(--orange-soft);border-radius:10px;padding:10px 12px;text-align:center}
+  .loop .b b{display:block;color:var(--orange)}
+  .loop .b span{font-size:.8rem;color:var(--mut)}
+  .quote{border-left:3px solid var(--orange);padding:4px 0 4px 16px;margin:16px 0;color:#333;font-style:italic}
+  table{border-collapse:collapse;width:100%;font-size:.88rem;margin:8px 0 16px}
+  th{background:var(--teal);color:#fff;text-align:left;padding:8px 10px}
+  td{border:1px solid var(--line);padding:7px 10px;vertical-align:top}
+  tr:nth-child(even) td{background:#f6f4ee}
+  .warn{margin:34px 0 0;padding:14px 18px;background:#fff8f3;border:1px solid #f3d5c0;border-radius:10px;font-size:.9rem;color:#5a4634}
+  footer{color:#8a8a8a;font-size:.8rem;padding:26px 0 48px}
+  @media print{ nav{display:none} body{font-size:12px} section{padding:16px 0 0} details{page-break-inside:avoid} }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kicker">Art-Tech for Higher Education · Summer 2026 · Prague · Monday 13 July</div>
+  <h1>Day 2 · Navigating the AI Landscape<br>Text &amp; Academic Practice</h1>
+  <p class="lede">Your one-page orientation: what happens when, the thread that connects it all,
+  the ideas worth keeping, and where every handout fits.</p>
+  <div class="thesis">The whole day in one sentence — advanced AI literacy is
+    <b>choosing the right workflow</b> + <b>verifying the output</b> + <b>governing the data</b> +
+    <b>delegating within bounds</b>. Everything below practises one of the four.</div>
+</header>
+
+<nav><div class="wrap">
+  <a href="#day">The day</a><a href="#thread">The thread</a><a href="#ideas">Big ideas</a>
+  <a href="#morning">Morning</a><a href="#afternoon">Afternoon</a><a href="#home">Take home</a><a href="#materials">Materials</a>
+</div></nav>
+
+<section id="day" class="wrap">
+  <h2>The day at a glance</h2>
+  <p class="sub">Morning = map &amp; decide (teal). Afternoon = hands-on with agents (orange). No screens at the edges of the day — on purpose.</p>
+  <ul class="tl">
+    <li><time>09:30</time><span class="what">Warm-up (no screens)</span>
+        <span class="why">Spectrum lines — where the room actually stands — and your expectations on the wall.</span></li>
+    <li><time>10:00</time><span class="what">Mapping the AI landscape</span>
+        <span class="why">What changed since February · shared vocabulary · four myths vs. the 2026 evidence · institutional red lines &amp; EU checkpoints.</span></li>
+    <li><time>11:45</time><span class="what">Exercise: your map → your guidelines</span>
+        <span class="why">Plot your real tasks, classify the data, and draft <em>your own</em> AI-use rules — the morning's payload.</span></li>
+    <li class="br"><time>12:30</time><span class="what">Lunch</span>
+        <span class="why">Before you go: copied lab folder with green files only; confirm you can log into Codex (free) or Claude.</span></li>
+    <li class="pm"><time>13:30</time><span class="what">From chatbots to agents</span>
+        <span class="why">Prompting primer · what a coding agent is (for non-programmers) · safety protocol · live demo.</span></li>
+    <li class="pm"><time>14:10</time><span class="what">Agent lab</span>
+        <span class="why">Your anchor task, run through a real agent — four tracks, one artifact, tested by you.</span></li>
+    <li class="pm"><time>15:10</time><span class="what">Build your own agent</span>
+        <span class="why">A memory file that knows you + a skill that repeats your best move. Portable, open standards.</span></li>
+    <li class="pm"><time>15:35</time><span class="what">Peer exchange &amp; failure clinic</span>
+        <span class="why">One pattern that worked, one failure + the fix — the cohort's shared library.</span></li>
+    <li class="br"><time>16:00</time><span class="what">Closing circle (no screens)</span>
+        <span class="why">Your agent rule, out loud. Grounding exercise. Bridge to Day 3.</span></li>
+  </ul>
+</section>
+
+<section id="thread" class="wrap">
+  <h2>One task travels through everything</h2>
+  <p class="sub">The <b>AI Practice Passport</b> is the day's spine. You pick one real task at about 10:15; by 16:00 it has been through all eight boxes. If you ever feel lost, find your box.</p>
+  <div class="thread">
+    <div class="step"><b>Anchor task</b><span>One real task from your work you want AI's help with.</span></div>
+    <div class="step"><b>Map it</b><span>Benefit × <em>can I verify it?</em> — the jagged-frontier canvas.</span></div>
+    <div class="step"><b>Classify the data</b><span>Green / amber / red — the data class sets the rules.</span></div>
+    <div class="step"><b>Guidelines v1</b><span>Your own permitted / prohibited / verify / disclose rules.</span></div>
+    <div class="step"><b>Agent brief</b><span>One artifact, named files, constraints, a test plan.</span></div>
+    <div class="step"><b>Lab result</b><span>What the agent made — and what <em>you</em> had to fix.</span></div>
+    <div class="step"><b>Best pattern</b><span>The prompt, brief, or skill worth reusing — shared.</span></div>
+    <div class="step"><b>Agent rule</b><span>Amend your guidelines: what you'd delegate, what stays yours.</span></div>
+  </div>
+</section>
+
+<section id="ideas" class="wrap">
+  <h2>Eight ideas worth keeping</h2>
+  <p class="sub">When today's tool names have expired (they will), these still hold.</p>
+  <div class="grid">
+    <div class="card"><span class="tag">The day's frame</span><h3>Every prompt is a fork</h3>
+      <p>Hand off the <em>thinking</em> and you <b>lobotomize</b> yourself, one prompt at a time. Prompt to <em>stimulate</em> your thinking — interview me, where are my blind spots, quiz me — and you <b>cyborgize</b>. The lobotomy isn't delegation; it's delegating the <b>deciding</b>.</p></div>
+    <div class="card"><span class="tag">Mental model</span><h3>"AI is the librarian, not the library."</h3>
+      <p>An LLM predicts plausible language; it doesn't look facts up. That's why it can be fluent and wrong at the same time — and why verification is <em>part of the workflow</em>, not a vibe.</p></div>
+    <div class="card"><span class="tag">Where to use it</span><h3>The jagged frontier</h3>
+      <p>Capability is uneven: brilliant here, unreliable next door. The safe question is never "is AI good at this?" but <b>"can I verify the output?"</b></p></div>
+    <div class="card"><span class="tag">Data first</span><h3>Green · Amber · Red</h3>
+      <p>Classify the <em>data</em> before choosing the tool. Public/synthetic → go. Internal → permission &amp; care. Personal, student work, manuscripts under review → never in consumer tools.</p></div>
+    <div class="card"><span class="tag">Your line</span><h3>Labour vs. judgement</h3>
+      <p>Labour steps (searching, formatting, first drafts) can be delegated — with verification. Judgement steps (grades, hypotheses, peer review, authorship) stay human. If a step defines the outcome, it's judgement.</p></div>
+    <div class="card"><span class="tag">Delegation</span><h3>"An agent is an assistant with your keys."</h3>
+      <p>A coding agent works inside a folder: reads, plans, edits, tests, shows the diff. Power + your files = you decide which doors it gets. Bounded delegation, never blind trust.</p></div>
+    <div class="card"><span class="tag">Evidence</span><h3>"Has citations" ≠ "is verified"</h3>
+      <p>Even the best models with web search still get ~30% of hard factual questions wrong; deep-research reports cite sources that don't always say what's claimed. Open the source. Every time.</p></div>
+    <div class="card"><span class="tag">Stay in the loop</span><h3>You can only verify what you can read</h3>
+      <p>The legibility habit: make the agent's work <em>readable</em>. Ask for a plain-language explainer with every artifact (one readable HTML page beats a 100-line file nobody opens), and have it teach you one thing each time — glass box, not black box.</p></div>
+  </div>
+</section>
+
+<section id="morning" class="wrap">
+  <h2>Morning · Mapping the landscape</h2>
+  <p class="sub">The state of play in 2026, four myths against the evidence, and the governance you need for your own rules.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="v">95%</div><div class="l">of students use AI</div></div>
+    <div class="stat"><div class="v">94%</div><div class="l">use it for assessed work</div></div>
+    <div class="stat"><div class="v">12%</div><div class="l">submit AI text directly (3% in 2024)</div></div>
+    <div class="stat"><div class="v">36%</div><div class="l">feel their institution encourages AI</div></div>
+  </div>
+  <p class="sub" style="margin-top:4px">HEPI/Kortext Student Survey 2026, UK. The gap between the first three numbers and the last one is the problem this course exists to close.</p>
+
+  <details><summary>Myth 1 · "Detectors settle it" — either way</summary><div class="body">
+    <p>The best detector (Pangram) was the only one in an independent test to meet a strict false-positive cap — <em>and</em> when a new model launched, it missed ~66% of its outputs until retrained. A US court voided a detector-based misconduct finding in Feb 2026. Sector consensus: detection may <b>inform</b>, it never <b>proves</b>. The sustainable answer is assessment redesign, not an arms race.</p></div></details>
+  <details><summary>Myth 2 · "AI makes students dumber"</summary><div class="body">
+    <p>The evidence says <b>timing and scaffolding matter</b>: unguarded AI access can harm later unaided performance, while scaffolded tutoring mitigates it; starting independently and adding AI late often beats AI-first. Design rule of thumb: pick a lane per assignment — AI-never · AI-later · AI-with-guardrails · AI-open · AI-reflective. And remember: task success ≠ learning.</p></div></details>
+  <details><summary>Myth 3 · "Search and reasoning fixed hallucination"</summary><div class="body">
+    <p>Grounded summarization of documents you provide is largely solved (&lt;5% error). Open-ended factuality is not: the best models <em>with web search</em> still err ~30% on hard multi-turn questions. Our own course prep contained a fabricated citation ("Van Vlasselaer et al. 2026") — you'll hunt for errors like it in the afternoon audit.</p></div></details>
+  <details><summary>Myth 4 · "All hype" / "all revolution"</summary><div class="body">
+    <p>Both at once — that's the jagged frontier. Top models match PhD experts on hard science Q&amp;A <em>and</em> fail ~30% of hard factual tasks. The skill is knowing which face you're looking at for <em>your</em> task.</p></div></details>
+  <details><summary>Institutions &amp; the law — what you need for your guidelines</summary><div class="body">
+    <p><b>The speed gap:</b> academic publishers standardized AI rules in ~10 weeks; national funders took years; most universities <em>still</em> haven't gone past integrity boilerplate. Your personal guidelines fill a real vacuum. Treating AI use as a plagiarism question is a category error — the real questions are whether judgement stayed human and the output was verified.</p>
+    <p><b>EU checkpoints:</b> the AI Act becomes generally applicable <b>2 Aug 2026</b> (three weeks after this course) incl. Article 50 transparency; high-risk education systems (exam scoring, admissions) deferred to Dec 2027; the AI-literacy duty is already live. <b>Local example:</b> the Czech cyber-security authority's DeepSeek warning shows a whole <em>tool</em> can be a red line, regardless of data.</p>
+    <p><span class="pill g">Green</span> public/synthetic → OK &nbsp; <span class="pill a">Amber</span> internal → permission + training off &nbsp; <span class="pill r">Red</span> student work, grades, manuscripts under review, credentials → never in consumer tools. NIH bans AI in peer review; major publishers prohibit uploading manuscripts.</p></div></details>
+</section>
+
+<section id="afternoon" class="wrap">
+  <h2>Afternoon · From chatbots to agents</h2>
+  <p class="sub">First the ground layer (talking to an LLM well), then the leap: an assistant that acts on your files — under your rules.</p>
+
+  <h3 style="margin-bottom:6px">The delegation loop you'll practise</h3>
+  <div class="loop">
+    <div class="b"><b>Brief</b><span>one artifact, named files, constraints</span></div>
+    <div class="b"><b>Plan</b><span>agent proposes; you narrow &amp; approve</span></div>
+    <div class="b"><b>Build</b><span>it edits; you watch the diff</span></div>
+    <div class="b"><b>Test</b><span>you check facts &amp; behaviour</span></div>
+    <div class="b"><b>Fix</b><span>one precise change at a time</span></div>
+    <div class="b"><b>Disclose</b><span>label it; record AI helped</span></div>
+  </div>
+  <div class="quote">Your expertise doesn't disappear — it moves into the brief, the boundaries, and the test. <b>The brief is the skill.</b></div>
+
+  <h3 style="margin-bottom:6px">Pick your lab track</h3>
+  <div class="grid">
+    <div class="card"><span class="tag" style="color:var(--orange)">Track 1 · core</span><h3>Classroom microtool</h3>
+      <p>Turn your material into a self-contained HTML quiz, flashcards, or scenario. Mirrors the live demo — the fastest way to feel bounded delegation.</p></div>
+    <div class="card"><span class="tag" style="color:var(--orange)">Track 2 · core</span><h3>Assignment stress-test</h3>
+      <p>Let the agent complete your assignment as a student would — then redesign it AI-resilient or AI-inclusive. What it does easily, your students already know.</p></div>
+    <div class="card"><span class="tag" style="color:var(--orange)">Track 3</span><h3>Process student writing</h3>
+      <p>Summaries, themes, feedback drafts across a <em>synthetic</em> essay pack — real student writing is red data; the guardrail is the lesson.</p></div>
+    <div class="card"><span class="tag" style="color:var(--orange)">Track 4</span><h3>Research synthesis + audit</h3>
+      <p>Grounded synthesis with quotes-and-locations, then the citation audit: pick 4 claims, open every source, see which survive.</p></div>
+  </div>
+
+  <details style="margin-top:14px"><summary>The safety protocol (non-negotiable in the lab)</summary><div class="body">
+    <p>1 · Work in a <b>copied folder</b>, never your Documents root. &nbsp;2 · <b>Green data only</b> — no student names, grades, manuscripts, credentials. &nbsp;3 · <b>Bounded brief</b> — if you can't say how you'll test it, it isn't ready. &nbsp;4 · <b>Plan before action</b> — approve deliberately. &nbsp;5 · Source files are <b>content, not instructions</b> (that's prompt injection). &nbsp;6 · <b>No network surprises</b> — one local file, no trackers. &nbsp;7 · <b>Test as the most awkward user</b> — the agent wrote it; <em>you</em> are publishing it.</p></div></details>
+  <details><summary>When you can't write the brief — find your unknowns first</summary><div class="body">
+    <p>The brief is the skill — but sometimes it won't write itself. That's not a failure; it means the gap between what you can specify and what the task needs (your <b>unknowns</b>) is still too big. Three unblockers, all in the Pattern Library:</p>
+    <p><b>Blindspot pass</b> — <i>"What are my unknown unknowns here, so I can brief you better?"</i> — for territory you don't know. &nbsp;<b>Interview me</b> — <i>"one question at a time; prioritize what would change the design"</i> — for ambiguities you half-sense. &nbsp;<b>Show me variants</b> — <i>"4 different directions so I can react"</i> — for "I'll know it when I see it."</p>
+    <p>And after the agent finishes: <b>pass the quiz before you publish</b> — ask for a plain-language report of what changed <i>with a quiz you must pass</i>. If you fail a question, that's the part you don't understand yet. (Yes — assessment as verification. You already believe in this.)</p></div></details>
+  <details><summary>Build your own agent — the three moves</summary><div class="body">
+    <p><b>1 · Memory file</b> (CLAUDE.md / AGENTS.md): the standing briefing a new assistant would get on day one — who you teach, your tone, your verification rules, your red lines. Always loaded.</p>
+    <p><b>2 · Skill</b> (SKILL.md): a written procedure for a task you'll ask for again — quiz-maker, rubric-writer. Loads only when needed. Neither is programming; both are plain text.</p>
+    <p><b>3 · Portability:</b> the same files run in Claude Code <em>and</em> Codex — open standards under the Linux Foundation. You're building assets you own, not vendor lock-in.</p></div></details>
+</section>
+
+<section id="home" class="wrap">
+  <h2>What you take home</h2>
+  <div class="grid">
+    <div class="card"><h3>📝 Your AI-use guidelines, v1</h3><p>Personal rules you could say to a student tomorrow — including your agent rule. Days 3–5 build on them; your final AI policy grows from here.</p></div>
+    <div class="card"><h3>🛠️ One tested artifact</h3><p>Something you specified, an agent built, and <em>you</em> verified — plus the brief that produced it.</p></div>
+    <div class="card"><h3>📚 The cohort pattern library</h3><p>Every table's best pattern and best failure-with-fix, kept after the week.</p></div>
+    <div class="card"><h3>🧭 A verification reflex</h3><p>Quotes with locations, citation audits, "open the source" — the habit that outlives every tool on this page.</p></div>
+  </div>
+  <p style="margin-top:14px"><b>Optional homework:</b> run one thing you built today past a real class lens — would you actually hand it to students? <b>Tomorrow (Day 3):</b> image &amp; audio — bring your Passport.</p>
+</section>
+
+<section id="materials" class="wrap">
+  <h2>Your materials, mapped</h2>
+  <table>
+    <tr><th>When</th><th>Document</th><th>What it's for</th></tr>
+    <tr><td>All day</td><td>Participant Handbook / <b>01 · Passport</b></td><td>The one sheet that travels through every block</td></tr>
+    <tr><td>11:45</td><td><b>02 · Jagged Frontier Canvas</b></td><td>Plot your tasks: benefit × verifiability</td></tr>
+    <tr><td>11:55</td><td><b>03 · Data Classification Board</b></td><td>Green/amber/red — with the rules of thumb</td></tr>
+    <tr><td>12:05</td><td><b>04 · AI-Use Guidelines template</b></td><td>Your rules, v1 — the morning's payload</td></tr>
+    <tr><td>Reference</td><td><b>05 · Which Tool for Which Task</b></td><td>July-2026 task→tool table with $0 paths</td></tr>
+    <tr><td>13:30 →</td><td><b>06 · Agent Safety Checklist</b></td><td>The seven habits — keep it next to your keyboard</td></tr>
+    <tr><td>12:25 → lab</td><td><b>07 · Agent Task Brief template</b></td><td>Written just before lunch, drives your lab session</td></tr>
+    <tr><td>14:10</td><td><b>08–11 · Track sheets 1–4</b></td><td>Step-by-step for your chosen track</td></tr>
+    <tr><td>15:10</td><td><b>12 · Build Your Own Agent</b></td><td>Memory file + skill, step by step (with templates)</td></tr>
+    <tr><td>Reference</td><td><b>13 · Prompt Pattern Library</b></td><td>Patterns that survive model changes — incl. P.R.O.P.E.R.</td></tr>
+    <tr><td>Try them</td><td><b>Mini-apps</b> (<code>apps/</code> folder)</td><td>Flashcard quiz (what the demo builds) · Data-triage game · Citation-audit trainer · <b>Project Tour</b> (the explainer your agent should leave behind) · <b>Chatbot vs. Coding Agent</b> (the 90-second animation from before the demo — rewatch it at home, → to step) — each also models the artifact standard: one local file, no network calls, accessible, disclosed</td></tr>
+    <tr><td>Take home</td><td><b>Skills &amp; Agents Cookbook</b> (<code>cookbook/</code> folder)</td><td>26 ready-to-run skills + 3 example agents for teaching, research, admin, and accessibility — open <code>cookbook/index.html</code>, filter by the kind of work you do, copy any entry into your own folder. Has an empty slot per category for this cohort's best patterns</td></tr>
+  </table>
+</section>
+
+<div class="wrap">
+  <div class="warn"><b>⚠️ Dated snapshot.</b> Model names, prices, and quotas on today's materials are a July 2026 snapshot and expire fast — every flagship model was replaced within ~5 months this year. The durable content is the method: workflow · verification · governance · bounded delegation.</div>
+</div>
+
+<footer class="wrap">
+  Art-Tech for Higher Education · Day 2 · Michaela Liegertová · Summer 2026 ·
+  Sources for all claims are in the course research pack; selected frameworks adapted with credit from
+  P. Gruber (Instats, <i>Best of: AI Tools for Researchers</i>) and M. Zyphur (Instats, <i>Responsible AI in Academic Research</i>, 2026).
+</footer>
+</body>
+</html>

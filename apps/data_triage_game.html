@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Triage · Green–Amber–Red trainer</title>
+<style>
+  :root{--teal:#0f6b5c;--ink:#22272e;--mut:#5c6672;--line:#e3ded4;
+        --green:#2e7d32;--green-soft:#e6f2e7;--amber:#b56018;--amber-soft:#fdf3e3;--red:#B02A1F;--red-soft:#f9e7e5}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Aptos","Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+       background:#fff;color:var(--ink);line-height:1.5}
+  .wrap{max-width:680px;margin:0 auto;padding:28px 18px 60px}
+  h1{font-size:1.5rem;margin:0 0 2px}
+  .sub{color:var(--mut);font-size:.9rem;margin:0 0 6px}
+  .rule{font-size:.92rem;background:#f4f8fa;border-radius:10px;padding:10px 14px;margin:12px 0 20px}
+  #pos{color:var(--mut);font-size:.88rem}
+  .scenario{border:2px solid var(--teal);border-radius:14px;padding:22px 22px;margin:10px 0 16px;background:#fff;
+            font-size:1.08rem;font-weight:700;min-height:96px;display:flex;align-items:center}
+  .choices{display:flex;gap:8px}
+  .choices button{flex:1;padding:13px 8px;border-radius:10px;font:inherit;font-weight:800;cursor:pointer;border:2px solid transparent}
+  .choices button:focus-visible,#next:focus-visible,#again:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  #bg{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+  #ba{background:var(--amber-soft);color:var(--amber);border-color:var(--amber)}
+  #br{background:var(--red-soft);color:var(--red);border-color:var(--red)}
+  .choices button:disabled{opacity:.45;cursor:default}
+  .choices button.picked{opacity:1;box-shadow:0 0 0 3px currentColor inset}
+  .verdict{margin:14px 0 0;padding:12px 16px;border-radius:10px;font-size:.95rem}
+  .verdict.ok{background:var(--green-soft);border-left:4px solid var(--green)}
+  .verdict.no{background:var(--red-soft);border-left:4px solid var(--red)}
+  .verdict b{display:block;margin-bottom:2px}
+  #next{margin-top:14px;padding:10px 22px;border:none;background:var(--teal);color:#fff;border-radius:9px;font:inherit;font-weight:700;cursor:pointer}
+  .score{font-size:2.2rem;font-weight:800;color:var(--teal)}
+  .recap{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:.92rem}
+  .recap b{color:var(--teal)}
+  #again{margin-top:10px;padding:10px 22px;border:2px solid var(--teal);background:#fff;color:var(--teal);border-radius:9px;font:inherit;font-weight:700;cursor:pointer}
+  .keyhint{color:var(--mut);font-size:.8rem;text-align:center;margin-top:8px}
+  footer{margin-top:34px;border-top:1px solid var(--line);padding-top:10px;color:#8a8a8a;font-size:.76rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Data Triage — Green · Amber · Red</h1>
+  <p class="sub">Before any task goes near an AI tool, classify the <b>data</b> it touches. 12 situations from academic life — what's your call?</p>
+  <div class="rule">🟢 public or synthetic → go &nbsp;·&nbsp; 🟠 internal, needs permission &amp; care → think first &nbsp;·&nbsp; 🔴 personal / confidential / protected → never in consumer tools</div>
+
+  <div id="game">
+    <p id="pos" aria-live="polite"></p>
+    <div class="scenario" id="scen" aria-live="polite"></div>
+    <div class="choices" role="group" aria-label="Classify">
+      <button id="bg">🟢 Green</button>
+      <button id="ba">🟠 Amber</button>
+      <button id="br">🔴 Red</button>
+    </div>
+    <div id="verdict" class="verdict" hidden aria-live="polite"></div>
+    <button id="next" hidden>Next situation →</button>
+    <p class="keyhint">Keyboard: press 1 = green, 2 = amber, 3 = red</p>
+  </div>
+
+  <div id="summary" hidden aria-live="polite">
+    <p class="score" id="scoreline"></p>
+    <p id="scoremsg"></p>
+    <div class="recap"><b>The rules of thumb worth keeping:</b><br>
+      · Peer-review manuscripts are red, not amber — publishers prohibit uploading them, and the NIH bans AI in review.<br>
+      · Student writing needs an approved tool <i>and</i> informed students — anonymization alone is not a licence.<br>
+      · "Temporary chat" and "training off" reduce exposure; they do not reclassify red data.<br>
+      · Agents amplify everything: least privilege, copied folders, dummy data, no secrets.<br>
+      · Sometimes the whole <i>tool</i> is the red line, whatever the data class.</div>
+    <button id="again">Play again</button>
+  </div>
+
+  <footer>Draft — teaching game built with an AI coding agent for Day 2 (companion to the Data Classification Board); instructor-verified. All situations are generic; no real data involved. Single local file · no network calls · no data collected.</footer>
+</div>
+
+<script>
+"use strict";
+// class: 0 = green, 1 = amber, 2 = red — matches 03_Data_Classification_Board.md
+const ITEMS = [
+ ["Summarize a published, openly accessible journal article.", 0,
+  "Published and public — green. (Still check the licence if you plan to redistribute the output.)"],
+ ["Turn your own lecture notes into a practice quiz.", 0,
+  "Your own teaching content, no third parties — green, and a perfect agent task in a copied folder."],
+ ["Practise feedback-drafting on the course's synthetic student essays.", 0,
+  "Synthetic data exists exactly for this — green. Rehearse the workflow here, not on real students."],
+ ["Polish the wording of next semester's exam questions.", 2,
+  "Exam questions are red on the board: leaked items compromise the assessment itself. Draft with AI only from scratch material that never becomes the real exam, or keep it offline."],
+ ["Extract themes from 30 anonymized open-text student feedback comments.", 1,
+  "Anonymized internal feedback is amber: use an institution-approved tool or training-off settings, and check your terms — anonymization helps but doesn't make it public data."],
+ ["Get AI comments on a manuscript you're peer-reviewing for a journal.", 2,
+  "Red — and not a judgement call: publishers (e.g. Nature Portfolio) prohibit uploading manuscripts under review, and the NIH bans AI in its peer review. Confidentiality isn't yours to waive."],
+ ["Brainstorm structure for your unpublished grant proposal draft.", 1,
+  "Your own unpublished writing is amber: fine with training off / enterprise terms, but think about novelty-sensitive ideas before pasting."],
+ ["Draft feedback on real student essays that carry names and IDs.", 2,
+  "Identifiable student work is red in consumer tools — full stop. The defensible route: approved institutional tool + informed students; today, the synthetic pack."],
+ ["Ask AI to analyze a spreadsheet of student grades.", 2,
+  "Grades are personal data tied to identifiable people — red. Aggregate, anonymized statistics prepared by you are a different (amber) conversation."],
+ ["Summarize internal strategy notes from yesterday's faculty meeting.", 1,
+  "Internal but not personal — amber: needs permission and an appropriate tool; colleagues didn't speak for an AI audience."],
+ ["Convert the public syllabus on your university website into a one-pager.", 0,
+  "Already public — green. Great low-stakes agent task."],
+ ["Let an agent read a config file that contains your API key to ‘fix a setting’.", 2,
+  "Credentials are always red. Agents get copied folders with no secrets — that's safety-checklist rule #1 and #2 in one."]
+];
+
+const $ = id => document.getElementById(id);
+const NAMES = ["🟢 green","🟠 amber","🔴 red"];
+let order = [], q = 0, score = 0, locked = false;
+function shuffle(a){ for (let k = a.length - 1; k > 0; k--){ const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; } return a; }
+
+function start(){
+  order = shuffle(ITEMS.map((_, k) => k)); q = 0; score = 0;
+  $("summary").hidden = true; $("game").hidden = false; render();
+}
+function render(){
+  locked = false;
+  $("pos").textContent = "Situation " + (q+1) + " of " + order.length + " · " + score + " correct";
+  $("scen").textContent = ITEMS[order[q]][0];
+  ["bg","ba","br"].forEach(id => { const b = $(id); b.disabled = false; b.classList.remove("picked"); });
+  $("verdict").hidden = true; $("next").hidden = true;
+}
+function answer(cls, btn){
+  if (locked) return; locked = true;
+  const item = ITEMS[order[q]];
+  ["bg","ba","br"].forEach(id => $(id).disabled = true);
+  btn.classList.add("picked");
+  const right = cls === item[1];
+  if (right) score++;
+  const v = $("verdict");
+  v.className = "verdict " + (right ? "ok" : "no");
+  v.innerHTML = "<b>" + (right ? "Right — " : "Careful — ") + "this is " + NAMES[item[1]] + ".</b>" + item[2];
+  v.hidden = false;
+  $("next").hidden = false; $("next").focus();
+}
+$("bg").addEventListener("click", () => answer(0, $("bg")));
+$("ba").addEventListener("click", () => answer(1, $("ba")));
+$("br").addEventListener("click", () => answer(2, $("br")));
+document.addEventListener("keydown", e => {
+  if ($("game").hidden || locked) return;
+  if (e.key === "1") answer(0, $("bg"));
+  if (e.key === "2") answer(1, $("ba"));
+  if (e.key === "3") answer(2, $("br"));
+});
+$("next").addEventListener("click", () => {
+  q++;
+  if (q < order.length) render(); else finish();
+});
+function finish(){
+  $("game").hidden = true; $("summary").hidden = false;
+  $("scoreline").textContent = score + " / " + order.length;
+  $("scoremsg").textContent =
+    score === ITEMS.length ? "Perfect triage. Your data instincts are ready for agents." :
+    score >= 9 ? "Solid instincts — read the recap for the ones that bit you." :
+    "The distinctions are learnable and they matter — the recap below is the whole board in five lines.";
+}
+$("again").addEventListener("click", start);
+start();
+</script>
+</body>
+</html>

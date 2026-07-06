@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Vocabulary Flashcards · Day 2 demo artifact</title>
+<style>
+  :root{--teal:#0f6b5c;--teal-soft:#e3efec;--orange:#a05a00;--ink:#22272e;--mut:#5c6672;--line:#e3ded4;
+        --green:#2e7d32;--red:#B02A1F}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Aptos","Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+       background:#fff;color:var(--ink);line-height:1.5}
+  .wrap{max-width:680px;margin:0 auto;padding:28px 18px 60px}
+  h1{font-size:1.5rem;margin:0 0 2px}
+  .sub{color:var(--mut);font-size:.9rem;margin:0 0 18px}
+  .modes{display:flex;gap:8px;margin:0 0 20px}
+  .modes button{flex:1;padding:10px;border:2px solid var(--teal);background:#fff;color:var(--teal);
+                border-radius:10px;font:inherit;font-weight:700;cursor:pointer}
+  .modes button[aria-pressed="true"]{background:var(--teal);color:#fff}
+  .modes button:focus-visible,.card:focus-visible,.nav button:focus-visible,.opt:focus-visible,#again:focus-visible
+      {outline:3px solid var(--orange);outline-offset:2px}
+  /* flashcards */
+  .card{width:100%;min-height:230px;border:2px solid var(--teal);border-radius:14px;background:var(--teal-soft);
+        padding:26px 24px;cursor:pointer;text-align:center;display:flex;flex-direction:column;justify-content:center;
+        font:inherit}
+  .card .face-label{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+  .card .txt{font-size:1.06rem}
+  .card.front .txt{font-size:1.5rem;font-weight:800}
+  .nav{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:14px}
+  .nav button{padding:9px 18px;border:1.5px solid var(--line);background:#fff;border-radius:9px;font:inherit;font-weight:600;cursor:pointer}
+  .nav button:hover{border-color:var(--teal);color:var(--teal)}
+  #pos{color:var(--mut);font-size:.9rem}
+  .hint{color:var(--mut);font-size:.82rem;text-align:center;margin-top:10px}
+  /* quiz */
+  .q{font-size:1.05rem;font-weight:700;margin:0 0 14px}
+  .opt{display:block;width:100%;text-align:left;margin:0 0 8px;padding:11px 14px;border:1.5px solid var(--line);
+       border-radius:10px;background:#fff;font:inherit;cursor:pointer}
+  .opt:hover{border-color:var(--teal)}
+  .opt.correct{border-color:var(--green);background:#e6f2e7}
+  .opt.wrong{border-color:var(--red);background:#f9e7e5}
+  .opt:disabled{cursor:default;opacity:.92}
+  .explain{margin:10px 0 0;padding:10px 14px;border-left:3px solid var(--orange);background:#fdf3e3;font-size:.92rem}
+  #next{margin-top:14px;padding:10px 22px;border:none;background:var(--teal);color:#fff;border-radius:9px;
+        font:inherit;font-weight:700;cursor:pointer}
+  /* summary */
+  .score{font-size:2.2rem;font-weight:800;color:var(--teal)}
+  .miss{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0}
+  .miss b{color:var(--red)}
+  .miss .right{color:var(--green);font-weight:700}
+  .miss p{margin:4px 0 0;font-size:.92rem;color:#333}
+  #again{margin-top:14px;padding:10px 22px;border:2px solid var(--teal);background:#fff;color:var(--teal);
+         border-radius:9px;font:inherit;font-weight:700;cursor:pointer}
+  footer{margin-top:34px;border-top:1px solid var(--line);padding-top:10px;color:#8a8a8a;font-size:.76rem}
+  .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AI Vocabulary Flashcards</h1>
+  <p class="sub">10 key terms from the course glossary · Day 2 live-demo artifact (also the fallback if the wifi dies)</p>
+
+  <div class="modes" role="group" aria-label="Mode">
+    <button id="mBrowse" aria-pressed="true">Browse cards</button>
+    <button id="mQuiz" aria-pressed="false">Quiz me</button>
+  </div>
+
+  <div id="browse">
+    <button class="card front" id="card" aria-live="polite"></button>
+    <div class="nav">
+      <button id="prev">← Previous</button>
+      <span id="pos" aria-live="polite"></span>
+      <button id="nextCard">Next →</button>
+    </div>
+    <p class="hint">Click / Enter / Space to flip · ← → arrow keys to move between cards</p>
+  </div>
+
+  <div id="quiz" hidden>
+    <p id="qpos" class="sub" aria-live="polite"></p>
+    <p class="q" id="qtext"></p>
+    <div id="opts"></div>
+    <div id="explain" class="explain" hidden></div>
+    <button id="next" hidden>Next question →</button>
+  </div>
+
+  <div id="summary" hidden aria-live="polite">
+    <p class="score" id="scoreline"></p>
+    <p id="scoremsg"></p>
+    <div id="misses"></div>
+    <button id="again">Try the quiz again</button>
+  </div>
+
+  <div id="sr" class="visually-hidden" aria-live="polite"></div>
+
+  <footer>Draft — built with an AI coding agent from the course glossary (<code>lab_pack/sample_content/sample_glossary.txt</code> on the course stick); definitions used verbatim; instructor-verified before classroom use. Single local file · no network calls · no data collected.</footer>
+</div>
+
+<script>
+"use strict";
+// Definitions verbatim from sample_glossary.txt — do not edit here without editing the source file.
+const TERMS = [
+ ["Generative AI","A field of AI in which algorithms trained on large amounts of existing data learn patterns and structures in that data in order to generate novel content such as text, images, audio, or video."],
+ ["Large Language Model (LLM)","A model trained to predict the next token in a sequence of text; it generates coherent language from a learned statistical map of language, without an internal database of facts."],
+ ["Token","The unit of text an LLM processes — often a word or part of a word — which is converted into numbers the model can compute on."],
+ ["Hallucination","A fluent, confident output from an AI model that is factually wrong or fabricated, arising because the model predicts plausible text rather than retrieving verified facts."],
+ ["Reasoning model","An LLM that generates intermediate reasoning steps before answering, trading speed for stronger performance on complex, multi-step tasks."],
+ ["Jagged frontier","The uneven pattern of AI capability, where a model performs excellently on some tasks and poorly on very similar-seeming ones."],
+ ["Prompt","The input text a user gives an AI model to steer its output; effective prompts supply context, the problem, and the desired form of the answer."],
+ ["Retrieval-augmented generation (RAG)","A technique that gives an LLM access to specific external documents at query time so its answers can be grounded in and cite those sources."],
+ ["Coding agent","An AI assistant that works inside a folder of files — reading them, planning, editing or creating files, running commands, and testing results — under human review."],
+ ["Prompt injection","An attack in which text hidden in a document or web page is crafted to be read by an AI system as instructions, hijacking its behavior; mitigated by treating source content as data, not commands."]
+];
+
+const $ = id => document.getElementById(id);
+let i = 0, showingFront = true;
+
+function renderCard(){
+  const c = $("card");
+  c.className = "card " + (showingFront ? "front" : "back");
+  c.innerHTML = '<span class="face-label">' + (showingFront ? "Term — flip for definition" : "Definition — flip for term") + '</span>' +
+                '<span class="txt">' + TERMS[i][showingFront ? 0 : 1] + '</span>';
+  $("pos").textContent = "Card " + (i+1) + " of " + TERMS.length;
+}
+function move(d){ i = (i + d + TERMS.length) % TERMS.length; showingFront = true; renderCard(); }
+$("card").addEventListener("click", () => { showingFront = !showingFront; renderCard(); });
+$("prev").addEventListener("click", () => move(-1));
+$("nextCard").addEventListener("click", () => move(1));
+document.addEventListener("keydown", e => {
+  if ($("browse").hidden) return;
+  if (e.key === "ArrowLeft") move(-1);
+  if (e.key === "ArrowRight") move(1);
+});
+
+// ----- quiz mode -----
+let order = [], q = 0, score = 0, wrongs = [], locked = false;
+function shuffle(a){ for (let k = a.length - 1; k > 0; k--){ const j = Math.floor(Math.random() * (k + 1)); [a[k], a[j]] = [a[j], a[k]]; } return a; }
+function startQuiz(){
+  order = shuffle(TERMS.map((_, k) => k)); q = 0; score = 0; wrongs = [];
+  $("summary").hidden = true; $("quiz").hidden = false; renderQ();
+}
+function renderQ(){
+  locked = false;
+  const t = TERMS[order[q]];
+  $("qpos").textContent = "Question " + (q+1) + " of " + order.length + (score ? " · " + score + " correct so far" : "");
+  $("qtext").textContent = "Which term matches this definition?  “" + t[1] + "”";
+  const wrongIdx = shuffle(TERMS.map((_, k) => k).filter(k => k !== order[q])).slice(0, 3);
+  const options = shuffle([order[q], ...wrongIdx]);
+  $("opts").innerHTML = "";
+  options.forEach(k => {
+    const b = document.createElement("button");
+    b.className = "opt"; b.textContent = TERMS[k][0];
+    b.addEventListener("click", () => answer(k, b));
+    $("opts").appendChild(b);
+  });
+  $("explain").hidden = true; $("next").hidden = true;
+}
+function answer(k, btn){
+  if (locked) return; locked = true;
+  const right = k === order[q];
+  [...$("opts").children].forEach(b => {
+    b.disabled = true;
+    if (b.textContent === TERMS[order[q]][0]) b.classList.add("correct");
+  });
+  if (right){ score++; $("sr").textContent = "Correct."; }
+  else {
+    btn.classList.add("wrong");
+    wrongs.push({picked: TERMS[k][0], term: TERMS[order[q]][0], def: TERMS[order[q]][1]});
+    $("explain").innerHTML = "<b>Not quite.</b> The definition describes <b>" + TERMS[order[q]][0] + "</b>. Check it against the glossary — that habit is the whole point of today.";
+    $("explain").hidden = false;
+    $("sr").textContent = "Incorrect. The right answer is " + TERMS[order[q]][0] + ".";
+  }
+  $("next").hidden = false; $("next").focus();
+}
+$("next").addEventListener("click", () => {
+  q++;
+  if (q < order.length) renderQ(); else showSummary();
+});
+function showSummary(){
+  $("quiz").hidden = true; $("summary").hidden = false;
+  $("scoreline").textContent = score + " / " + order.length;
+  $("scoremsg").textContent = score === order.length
+    ? "Full marks — now go verify something a model wrote."
+    : "The summary below explains every miss — this panel is the “one fix” requested in the live demo.";
+  $("misses").innerHTML = wrongs.length ? "<h3>Where you slipped, and why</h3>" : "";
+  wrongs.forEach(w => {
+    const d = document.createElement("div");
+    d.className = "miss";
+    d.innerHTML = "You picked <b>" + w.picked + "</b> — the definition belongs to <span class='right'>" + w.term + "</span>." +
+                  "<p>" + w.def + "</p>";
+    $("misses").appendChild(d);
+  });
+}
+$("again").addEventListener("click", startQuiz);
+
+// mode switching
+function setMode(quiz){
+  $("mQuiz").setAttribute("aria-pressed", String(quiz));
+  $("mBrowse").setAttribute("aria-pressed", String(!quiz));
+  $("browse").hidden = quiz;
+  if (quiz){ startQuiz(); } else { $("quiz").hidden = true; $("summary").hidden = true; renderCard(); }
+}
+$("mBrowse").addEventListener("click", () => setMode(false));
+$("mQuiz").addEventListener("click", () => setMode(true));
+renderCard();
+</script>
+</body>
+</html>

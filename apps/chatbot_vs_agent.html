@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chatbot vs. Coding Agent — one task, two ways of working</title>
+<style>
+  :root { --ink:#22272e; --mut:#5c6672; --line:#e3ded4; --soft:#faf8f3; --acc:#0f6b5c;
+          --ok:#1b7f3b; --warn:#b3261e; --chat:#f1f0ee; --user:#e3edff; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; }
+  body { background:#fff; color:var(--ink); line-height:1.45;
+         font-family:Aptos,"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width:1080px; margin:0 auto; padding:1rem 1.1rem 1.4rem; }
+
+  header { display:flex; flex-wrap:wrap; align-items:center; gap:.6rem 1rem; margin-bottom:.7rem; }
+  header h1 { font-size:1.05rem; font-weight:650; margin:0; letter-spacing:-.01em; }
+  .hint { color:var(--mut); font-size:.82rem; }
+  .controls { display:flex; align-items:center; gap:.4rem; margin-left:auto; }
+  .controls button { font:inherit; font-size:.85rem; border:1px solid var(--line); background:#fff;
+                     border-radius:8px; padding:.28rem .7rem; cursor:pointer; color:var(--ink); }
+  .controls button:hover { border-color:var(--ink); }
+  .controls button:disabled { opacity:.35; cursor:default; }
+  .controls button:focus-visible, .dot:focus-visible { outline:2px solid var(--acc); outline-offset:2px; }
+  .dots { display:flex; gap:.3rem; margin:0 .3rem; }
+  .dot { width:.65rem; height:.65rem; border-radius:50%; border:1px solid var(--mut); background:#fff; padding:0; cursor:pointer; }
+  .dot[aria-current="true"] { background:var(--ink); border-color:var(--ink); }
+
+  .stage { position:relative; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--soft); }
+  .panels { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); min-height:430px; height:56vh; }
+  .panel { background:#fff; display:flex; flex-direction:column; min-width:0; }
+  .phead { padding:.5rem .9rem; border-bottom:1px solid var(--line); font-weight:650; font-size:.92rem;
+           display:flex; gap:.5rem; align-items:center; }
+  .phead .sub { color:var(--mut); font-weight:400; font-size:.8rem; }
+  .pbody { padding:.7rem .9rem 1rem; overflow-y:auto; flex:1; }
+
+  /* beat visibility */
+  .b:not(.on) { display:none !important; }
+  .b.on { animation:fadeup .45s ease both; }
+  @keyframes fadeup { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:none; } }
+
+  /* left: chat */
+  .outside { border:1.5px dashed var(--line); border-radius:10px; padding:.5rem .7rem; color:var(--mut);
+             font-size:.83rem; margin-bottom:.7rem; background:var(--soft); }
+  .bubble { border-radius:12px; padding:.55rem .75rem; margin:.5rem 0; font-size:.86rem; max-width:95%; }
+  .you { background:var(--user); margin-left:auto; }
+  .bot { background:var(--chat); }
+  .who { display:block; font-size:.72rem; color:var(--mut); margin-bottom:.15rem; text-transform:uppercase; letter-spacing:.05em; }
+  .mono { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.8rem; }
+  .stream div { animation:fadeup .3s ease both; }
+  .stream div:nth-child(2) { animation-delay:.25s; } .stream div:nth-child(3) { animation-delay:.5s; }
+  .stream div:nth-child(4) { animation-delay:.75s; } .stream div:nth-child(5) { animation-delay:1s; }
+  .stream div:nth-child(6) { animation-delay:1.25s; } .stream div:nth-child(7) { animation-delay:1.5s; }
+  .tag { display:inline-block; font-size:.72rem; color:var(--mut); border:1px solid var(--line);
+         border-radius:999px; padding:.05rem .5rem; margin-top:.3rem; background:#fff; }
+  .err { border-radius:4px; padding:0 .15rem; }
+  body:is([data-beat="5"],[data-beat="6"],[data-beat="7"],[data-beat="8"]) .err {
+    background:#ffecec; outline:1.5px solid var(--warn); }
+  .errnote { color:var(--warn); font-size:.78rem; margin-top:.25rem; }
+  body[data-beat="7"] .fadeaway { opacity:.35; filter:grayscale(1); transition:opacity .8s, filter .8s; }
+
+  /* right: agent */
+  .folder { border:1px solid var(--line); border-radius:10px; margin-bottom:.7rem; overflow:hidden; }
+  .fhead { background:var(--soft); border-bottom:1px solid var(--line); padding:.35rem .7rem; font-size:.8rem;
+           color:var(--mut); font-weight:600; }
+  .file { display:flex; gap:.5rem; align-items:baseline; padding:.3rem .7rem; font-size:.84rem; border-top:1px solid #f0f0ee; }
+  .file:first-of-type { border-top:none; }
+  .fnote { color:var(--mut); font-size:.75rem; }
+  .newfile { background:#f0fff4; }
+  .newfile .fname::after { content:" +"; color:var(--ok); font-weight:700; }
+  .fname { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.8rem; }
+  .step { border:1px solid var(--line); border-radius:10px; padding:.55rem .75rem; margin:.5rem 0; font-size:.86rem; background:#fff; }
+  .cmd { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.8rem; background:var(--ink);
+         color:#fff; border-radius:8px; padding:.45rem .7rem; margin:.5rem 0; }
+  .plan { border:1.5px solid var(--ink); }
+  .plan ul { margin:.3rem 0 .4rem; padding-left:1.15rem; }
+  .plan li { margin:.12rem 0; }
+  .gate { display:flex; align-items:center; gap:.6rem; margin-top:.35rem; }
+  .approve { display:inline-block; font:inherit; font-size:.83rem; border:1.5px solid var(--ink); border-radius:8px;
+             background:#fff; padding:.25rem .8rem; font-weight:650; }
+  body[data-beat="3"] .approve { animation:pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { box-shadow:0 0 0 0 rgba(15,98,254,.35); } 50% { box-shadow:0 0 0 7px rgba(15,98,254,0); } }
+  .waiting { color:var(--mut); font-size:.78rem; }
+  .ok { color:var(--ok); } .bad { color:var(--warn); }
+  .diff { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.78rem; border-radius:8px;
+          overflow:hidden; border:1px solid var(--line); margin-top:.35rem; }
+  .diff div { padding:.22rem .6rem; }
+  .del { background:#ffecec; } .add { background:#eaffef; }
+
+  /* overlays */
+  .overlay { position:absolute; inset:0; background:#fff; z-index:4; display:none;
+             flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:2rem; gap:1rem; }
+  .overlay.on { display:flex; animation:fadeup .5s ease both; }
+  .overlay h2 { font-size:clamp(1.4rem,3.4vw,2.1rem); margin:0; font-weight:650; letter-spacing:-.01em; max-width:24ch; }
+  .task { border:1.5px solid var(--ink); border-radius:999px; padding:.45rem 1.1rem; font-size:.95rem; background:var(--soft); }
+  .vs { display:flex; gap:1.2rem; color:var(--mut); font-size:.95rem; }
+  .safety { display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; }
+  .safety span { border:1px solid var(--line); border-radius:999px; padding:.3rem .8rem; font-size:.85rem; background:var(--soft); }
+
+  .caption { min-height:3.2rem; display:flex; align-items:center; justify-content:center; text-align:center;
+             padding:.7rem 1rem 0; }
+  .caption p { margin:0; font-size:clamp(1rem,2vw,1.2rem); font-weight:600; max-width:64ch; }
+  footer { color:var(--mut); font-size:.76rem; text-align:center; margin-top:.9rem; line-height:1.5; }
+
+  @media (max-width:760px) {
+    .panels { grid-template-columns:1fr; height:auto; }
+    .panel { min-height:300px; max-height:46vh; }
+    .controls { flex-wrap:wrap; }
+  }
+  @media (max-width:560px) {
+    .dots { display:none; }
+    .hint { display:none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .b.on, .overlay.on, .stream div { animation:none !important; }
+    body[data-beat="3"] .approve { animation:none; }
+  }
+</style>
+</head>
+<body data-beat="0">
+<div class="wrap">
+
+<header>
+  <h1>Chatbot vs. Coding Agent</h1>
+  <span class="hint">→ / click / space: next · ←: back · R: restart · P: autoplay</span>
+  <div class="controls">
+    <button id="prev" type="button" aria-label="Previous beat">←</button>
+    <div class="dots" id="dots" role="tablist" aria-label="Beats"></div>
+    <button id="next" type="button" aria-label="Next beat">→</button>
+    <button id="play" type="button" aria-label="Autoplay">▶</button>
+    <button id="restart" type="button" aria-label="Restart">↺</button>
+  </div>
+</header>
+
+<div class="stage" id="stage">
+
+  <!-- Beat 0: title overlay -->
+  <div class="overlay b" data-show="0" data-hide="1">
+    <h2>One task, two ways of working.</h2>
+    <div class="task">“Turn <span class="mono">sample_glossary.txt</span> into a practice quiz for my students.”</div>
+    <div class="vs"><span>💬 a chatbot</span><span>·</span><span>📁 a coding agent</span></div>
+    <span class="hint">Press → to begin</span>
+  </div>
+
+  <!-- Beat 8: closing overlay -->
+  <div class="overlay b" data-show="8">
+    <h2>A chatbot answers you.<br>An agent works for you — inside boundaries you set.</h2>
+    <div class="safety">
+      <span>📂 copied folder</span><span>🟢 green data only</span><span>🗺️ plan before build</span>
+      <span>👀 review the diff</span><span>✅ verify against the source</span>
+    </div>
+    <span class="hint">← to revisit any beat · this file is on your USB stick</span>
+  </div>
+
+  <div class="panels">
+    <!-- LEFT: chatbot -->
+    <section class="panel" aria-label="Chatbot side">
+      <div class="phead">💬 Chatbot <span class="sub">a window you visit</span></div>
+      <div class="pbody" id="chatscroll">
+        <div class="b outside" data-show="1">
+          📄 <span class="mono">sample_glossary.txt</span> — sits on <em>your disk</em>, outside this window.
+          The chatbot can’t see it.
+        </div>
+        <div class="fadeaway">
+          <div class="b bubble you" data-show="2">
+            <span class="who">You</span>
+            Here’s my glossary — make a practice quiz:<br>
+            <span class="mono">Generative AI | A field of AI in which algorithms trained on…<br>
+            Large Language Model (LLM) | A model trained to predict…<br>
+            Token | The unit of text an LLM processes…</span><br>
+            <em>(…238 more lines, pasted by hand)</em>
+            <span class="tag">you are the courier</span>
+          </div>
+          <div class="b bubble bot" data-show="3">
+            <span class="who">Chatbot</span>
+            <div class="stream">
+              <div>Sure! Here are 10 practice questions:</div>
+              <div><strong>Q1.</strong> What does an LLM predict? …</div>
+              <div><strong>Q2.</strong> What is a token? …</div>
+              <div><strong>Q3–Q6.</strong> … … … …</div>
+              <div><strong>Q7.</strong> A hallucination is… <span class="err">c) an error caused by missing training data ✓</span></div>
+              <div><strong>Q8–Q10.</strong> … … …</div>
+              <div><em>Let me know if you’d like more!</em></div>
+            </div>
+            <span class="tag">instant answer — no plan, no questions</span>
+            <div class="b errnote" data-show="5">▲ the wrong answer is in here — will anyone notice? (the glossary says: “fluent, confident output that is factually wrong”)</div>
+          </div>
+          <div class="b bubble you" data-show="4">
+            <span class="who">You</span>
+            *copies 120 lines out* — now what? Paste into Word? Make it interactive somehow?
+            Check all 10 answers by hand?
+            <span class="tag">the output is text — assembly is your job</span>
+          </div>
+          <div class="b bubble you" data-show="6">
+            <span class="who">You</span>
+            Question 7 looks wrong — fix it?
+          </div>
+          <div class="b bubble bot" data-show="6">
+            <span class="who">Chatbot</span>
+            Apologies! Here are all <strong>10 questions again</strong>, regenerated: Q1… Q2… Q3… …
+            <span class="tag">a new wall of text — re-check everything</span>
+          </div>
+        </div>
+        <div class="b outside" data-show="7">
+          🕳️ The transcript scrolls away. Next week, a new chat starts from zero —
+          no files, no memory of your rules, nothing to reuse.
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: coding agent -->
+    <section class="panel" aria-label="Coding agent side">
+      <div class="phead">📁 Coding agent <span class="sub">an assistant in your folder</span></div>
+      <div class="pbody" id="agentscroll">
+        <div class="b folder" data-show="1">
+          <div class="fhead">quiz_project/ — a copy · green data only</div>
+          <div class="file"><span class="fname">sample_glossary.txt</span> <span class="fnote">your source, where it lives</span></div>
+          <div class="file"><span class="fname">CLAUDE.md</span> <span class="fnote">knows: educator · verify answers · no student data</span></div>
+          <div class="b file newfile" data-show="4"><span class="fname">quiz.html</span> <span class="fnote b" data-show="4" data-hide="6">built — not yet verified</span><span class="fnote ok b" data-show="6">✓ tested against the source</span></div>
+        </div>
+        <div class="b cmd" data-show="2">&gt; Build a practice quiz from sample_glossary.txt</div>
+        <div class="b step" data-show="2">
+          Reading <span class="mono">sample_glossary.txt</span> ✓ <span class="fnote">— you didn’t paste anything</span>
+        </div>
+        <div class="b step plan" data-show="3">
+          <strong>Plan</strong> — nothing written yet:
+          <ul>
+            <li>10 multiple-choice questions from the glossary</li>
+            <li>one self-contained file: <span class="mono">quiz.html</span> · no network calls</li>
+            <li>keyboard-accessible · every answer traceable to the source</li>
+          </ul>
+          <div class="gate">
+            <span class="b approve" data-show="3" data-hide="4">Approve?</span>
+            <span class="b approve ok" data-show="4">✓ Approved</span>
+            <span class="b waiting" data-show="3" data-hide="4">waiting for you — the agent asked first</span>
+          </div>
+        </div>
+        <div class="b step" data-show="4">
+          <span class="ok">＋ quiz.html created</span> — 10 questions, one file, works offline.
+          <span class="fnote">You review what changed before moving on.</span>
+        </div>
+        <div class="b step" data-show="5">
+          <strong>Self-check against the source:</strong> Q1–Q6 ✓ &nbsp; Q8–Q10 ✓<br>
+          <span class="bad">Q7 ✗ — answer not traceable to the glossary</span>
+          <span class="fnote">(the rule came from CLAUDE.md: “every answer must be checkable”)</span>
+        </div>
+        <div class="b cmd" data-show="6">&gt; Change only question 7 — take the answer from the glossary.</div>
+        <div class="b step" data-show="6">
+          <div class="diff">
+            <div class="del">− c) an error caused by missing training data</div>
+            <div class="add">＋ b) fluent, confident output that is factually wrong (glossary, line 4)</div>
+          </div>
+          <span class="fnote">one bounded fix — everything else untouched</span>
+        </div>
+        <div class="b step" data-show="7">
+          <strong>What stays:</strong> <span class="mono">quiz.html</span> ✓ tested ·
+          <span class="mono">CLAUDE.md</span> still knows your rules next week ·
+          tomorrow this pattern becomes a <span class="mono">/quiz-maker</span> skill.
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="caption"><p id="caption" aria-live="polite"></p></div>
+
+<footer>
+  Illustration for the Art-Tech for Higher Education course, Day 2 · built the way the course teaches:
+  one local file, no network calls, no tracking, keyboard-accessible.<br>
+  Drafted with an AI agent (Claude, Anthropic); verified by Michaela Liegertová · TAH Centre Prague · July 2026.
+</footer>
+</div>
+
+<script>
+(function () {
+  var LAST = 8;
+  var captions = [
+    "The same task goes to both sides — step through with → or click.",
+    "The chatbot lives in a window. The agent works inside your folder.",
+    "You ferry content by hand — or the agent reads the file where it lives.",
+    "One answers instantly. The other proposes a plan and waits for your yes.",
+    "Text you still have to assemble — or a working file in your folder.",
+    "Same model, same possible error. The workflow on the right catches it.",
+    "Regenerate and re-read everything — or one bounded fix with a visible diff.",
+    "A conversation that scrolls away — or assets: files, memory, a repeatable skill.",
+    "Now let's do it for real — over to the live demo."
+  ];
+  var beat = 0, timer = null;
+  var beatEls = Array.prototype.slice.call(document.querySelectorAll(".b"));
+  var dotsBox = document.getElementById("dots");
+  var caption = document.getElementById("caption");
+  var prev = document.getElementById("prev"), next = document.getElementById("next");
+  var play = document.getElementById("play"), restart = document.getElementById("restart");
+  var dots = [];
+
+  for (var i = 0; i <= LAST; i++) (function (n) {
+    var d = document.createElement("button");
+    d.className = "dot"; d.type = "button";
+    d.setAttribute("aria-label", "Beat " + n + ": " + captions[n]);
+    d.addEventListener("click", function () { stop(); go(n); });
+    dotsBox.appendChild(d); dots.push(d);
+  })(i);
+
+  function render() {
+    document.body.setAttribute("data-beat", String(beat));
+    beatEls.forEach(function (el) {
+      var show = parseInt(el.getAttribute("data-show"), 10);
+      var hideAttr = el.getAttribute("data-hide");
+      var hide = hideAttr === null ? LAST + 1 : parseInt(hideAttr, 10);
+      el.classList.toggle("on", beat >= show && beat < hide);
+    });
+    dots.forEach(function (d, n) { d.setAttribute("aria-current", n === beat ? "true" : "false"); });
+    caption.textContent = captions[beat];
+    prev.disabled = beat === 0;
+    next.disabled = beat === LAST;
+    setTimeout(function () {
+      ["chatscroll", "agentscroll"].forEach(function (id) {
+        var box = document.getElementById(id);
+        box.scrollTop = beat <= 1 ? 0 : box.scrollHeight;
+      });
+    }, 0);
+  }
+  function go(n) { beat = Math.max(0, Math.min(LAST, n)); render(); }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; play.textContent = "▶"; play.setAttribute("aria-label", "Autoplay"); }
+  }
+  function togglePlay() {
+    if (timer) { stop(); return; }
+    if (beat === LAST) go(0);
+    play.textContent = "⏸"; play.setAttribute("aria-label", "Pause autoplay");
+    timer = setInterval(function () { if (beat >= LAST) stop(); else go(beat + 1); }, 6500);
+  }
+
+  prev.addEventListener("click", function () { stop(); go(beat - 1); });
+  next.addEventListener("click", function () { stop(); go(beat + 1); });
+  restart.addEventListener("click", function () { stop(); go(0); });
+  play.addEventListener("click", togglePlay);
+  document.getElementById("stage").addEventListener("click", function (e) {
+    if (e.target.closest("button")) return;
+    stop(); go(beat + 1);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); stop(); go(beat + 1); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); stop(); go(beat - 1); }
+    else if (e.key === "r" || e.key === "R" || e.key === "Home") { stop(); go(0); }
+    else if (e.key === "p" || e.key === "P") { togglePlay(); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
