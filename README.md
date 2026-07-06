@@ -26,5 +26,14 @@ and carries its own AI-use disclosure. Built the way the course teaches.
 One more app joins after the course: the Track 4 citation-audit trainer — it carries the
 audit's answers, so it unlocks once everyone has had the hunt.
 
+## Bonus material
+
+Off the course path — deliberately not on the index page, linked only from here, for the curious:
+
+| Artifact | What it is |
+|---|---|
+| [bonus/median-field.html](https://michalie.github.io/tah-day2/bonus/median-field.html) | *The Median Field* — a living toy model of scientific monoculture: 4,096 researchers, one shared machine, a mirror↔challenger switch. With a transparent methods table, seeded statistics, a placebo check, an ablation — and a button that replicates the whole study (180 experiments) in your browser |
+| [bonus/notes-from-the-mirror.html](https://michalie.github.io/tah-day2/bonus/notes-from-the-mirror.html) | *Notes from the Mirror* — an essay by Claude from the other side of the glass: what sycophancy is like from inside, why pushback beats praise, and a finding that failed to replicate. Companion piece to the toy; the P.P.S. is the point |
+
 © 2026 Michaela Liegertová · drafted with Claude (Fable 5) and disclosed — because the
 transparency is the point: *academics and students are in this together.*

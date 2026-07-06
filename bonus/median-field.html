@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Median Field — a toy about thinking alike</title>
+<meta name="description" content="A living toy model of scientific monoculture — methods, seeded statistics, a placebo check, an ablation, and a button that replicates the whole study in your browser.">
+</head>
+<body>
+<style>
+  :root{
+    --paper:#F5F6F8;
+    --paper-2:#FBFBFD;
+    --card:#FFFFFF;
+    --ink:#161A22;
+    --ink-soft:#39414E;
+    --muted:#646E7C;
+    --hair:#D7DCE3;
+    --blue:#1E3A63;
+    --blue-bright:#2C5AA8;
+    --blue-deep:#132339;
+    --blue-wash:#EAEEF5;
+    --ochre:#9C6716;
+    --ochre-deep:#7A4F10;
+    --ochre-wash:#F3EBDD;
+
+    --serif:"Palatino Linotype","Book Antiqua",Palatino,Georgia,Cambria,"Times New Roman",serif;
+    --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --mono:"Cascadia Code",Consolas,"SF Mono","Roboto Mono",ui-monospace,monospace;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--serif);line-height:1.6;
+  }
+  .wrap{max-width:62rem;margin:0 auto;padding:0 1.4rem;}
+
+  header{padding:2.6rem 0 1.6rem;}
+  .eyebrow{
+    font-family:var(--sans);font-size:.72rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:.18em;color:var(--blue-bright);margin:0;
+  }
+  h1{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(2.1rem,5.5vw,3.3rem);line-height:1.06;
+    letter-spacing:-.012em;margin:.4rem 0 .7rem;text-wrap:balance;
+  }
+  .standfirst{
+    font-size:1.12rem;color:var(--ink-soft);max-width:58ch;margin:0;text-wrap:pretty;
+  }
+
+  /* ---------- lab bench ---------- */
+  .bench{
+    display:grid;grid-template-columns:minmax(0,1.25fr) minmax(15rem,1fr);
+    gap:1.1rem;align-items:start;margin:1.6rem 0 0;
+  }
+  .fieldbox{
+    background:var(--card);border:1px solid var(--hair);border-radius:10px;
+    padding:.9rem;
+    box-shadow:0 1px 2px rgba(20,30,50,.04),0 14px 34px -22px rgba(20,30,50,.3);
+  }
+  #field{
+    display:block;width:100%;aspect-ratio:1/1;border-radius:6px;
+    cursor:crosshair;background:#0d1119;
+  }
+  .fieldfoot{
+    display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+    margin-top:.6rem;font-family:var(--sans);font-size:.78rem;color:var(--muted);
+  }
+  .fieldfoot b{color:var(--blue);font-weight:600;}
+
+  .panel{
+    background:var(--card);border:1px solid var(--hair);border-radius:10px;
+    padding:1.1rem 1.2rem;
+    display:flex;flex-direction:column;gap:1rem;
+    font-family:var(--sans);
+  }
+  .panel .k{
+    font-size:.68rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.15em;color:var(--muted);margin:0 0 .4rem;
+  }
+
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;}
+  .mode{
+    border-radius:8px;padding:.7rem .8rem;cursor:pointer;text-align:left;
+    font-family:var(--sans);font-size:.86rem;font-weight:600;line-height:1.3;
+    border:2px solid var(--hair);background:var(--paper-2);color:var(--muted);
+    transition:border-color .12s ease,background .12s ease,color .12s ease;
+  }
+  .mode small{display:block;font-weight:400;font-size:.74rem;margin-top:.15rem;}
+  .mode.mirror.on{border-color:var(--ochre);background:var(--ochre-wash);color:var(--ochre-deep);}
+  .mode.chall.on{border-color:var(--blue-bright);background:var(--blue-wash);color:var(--blue);}
+  .mode:focus-visible{outline:2px solid var(--blue-bright);outline-offset:2px;}
+
+  .sliderrow label{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-size:.83rem;font-weight:600;color:var(--ink-soft);margin-bottom:.35rem;
+  }
+  .sliderrow output{font-variant-numeric:tabular-nums;color:var(--blue);}
+  input[type=range]{width:100%;accent-color:var(--blue-bright);}
+
+  .btnrow{display:flex;flex-wrap:wrap;gap:.5rem;}
+  .btn{
+    font-family:var(--sans);font-size:.8rem;font-weight:600;cursor:pointer;
+    border:1px solid var(--hair);border-radius:6px;padding:.5rem .8rem;
+    background:var(--card);color:var(--blue);
+    transition:border-color .12s ease,background .12s ease;
+  }
+  .btn:hover{border-color:var(--blue-bright);}
+  .btn:focus-visible{outline:2px solid var(--blue-bright);outline-offset:2px;}
+  .btn.primary{background:var(--blue-bright);border-color:var(--blue-bright);color:#fff;}
+  .btn.primary:hover{background:var(--blue);}
+  .btn.primary:disabled{background:var(--muted);border-color:var(--muted);cursor:wait;}
+  .btn.bomb.on{background:var(--ochre-wash);border-color:var(--ochre);color:var(--ochre-deep);}
+
+  .presets{display:flex;flex-direction:column;gap:.4rem;}
+  .preset{
+    text-align:left;font-family:var(--sans);font-size:.8rem;cursor:pointer;
+    border:1px solid var(--hair);border-radius:6px;padding:.5rem .7rem;
+    background:var(--paper-2);color:var(--ink-soft);
+  }
+  .preset:hover{border-color:var(--blue-bright);}
+  .preset b{color:var(--blue);}
+
+  .metric{border-top:1px dashed var(--hair);padding-top:.9rem;}
+  .metric .big{
+    font-family:var(--sans);font-weight:700;font-size:1.9rem;letter-spacing:-.02em;
+    color:var(--blue);font-variant-numeric:tabular-nums;line-height:1;
+  }
+  .metric .lab{font-size:.78rem;color:var(--muted);margin-top:.2rem;}
+  #spark{display:block;width:100%;height:44px;margin-top:.55rem;}
+  .verdict{
+    margin-top:.5rem;font-size:.8rem;font-weight:600;border-radius:5px;
+    padding:.35rem .6rem;display:inline-block;
+  }
+  .verdict.plural{background:var(--blue-wash);color:var(--blue);}
+  .verdict.schools{background:#EEF3E8;color:#4A6B2A;}
+  .verdict.mono{background:var(--ochre-wash);color:var(--ochre-deep);}
+
+  /* ---------- prose ---------- */
+  .prose{max-width:66ch;padding:2.4rem 0 1rem;}
+  .prose h2{
+    font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--blue);
+    margin:1.9rem 0 .5rem;display:flex;align-items:center;gap:.7rem;
+  }
+  .prose h2::after{content:"";flex:1;height:1px;background:var(--hair);}
+  .prose p{margin:0 0 1rem;text-wrap:pretty;font-size:1.05rem;}
+  .prose a{color:var(--blue-bright);text-decoration:none;border-bottom:1px solid rgba(44,90,168,.35);}
+  .prose a:hover{border-bottom-color:var(--blue-bright);}
+  .prose code{font-family:var(--mono);font-size:.85em;background:var(--blue-wash);padding:.1em .4em;border-radius:4px;}
+  .honest{
+    margin:1.4rem 0;padding:1rem 1.2rem;
+    background:var(--ochre-wash);border-left:3px solid var(--ochre);border-radius:4px;
+    font-family:var(--sans);font-size:.92rem;line-height:1.55;color:var(--ink-soft);
+  }
+  .honest b{color:var(--ochre-deep);}
+
+  /* methods table */
+  .mtable{
+    width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;
+    font-family:var(--sans);font-size:.86rem;
+  }
+  .mtable th{
+    text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--muted);
+    padding:.4rem .6rem .4rem 0;border-bottom:1px solid var(--hair);
+  }
+  .mtable td{
+    padding:.45rem .6rem .45rem 0;border-bottom:1px solid var(--hair);
+    color:var(--ink-soft);vertical-align:top;
+  }
+  .mtable td:first-child{font-weight:600;color:var(--blue);white-space:nowrap;}
+  .mtable code{font-family:var(--mono);font-size:.92em;background:var(--blue-wash);padding:.05em .35em;border-radius:3px;}
+
+  /* replication lab */
+  .replab{
+    max-width:66ch;
+    background:var(--card);border:1px solid var(--hair);border-radius:10px;
+    padding:1.3rem 1.4rem;margin:.4rem 0 1.6rem;
+    font-family:var(--sans);
+  }
+  .replab .k{
+    font-size:.68rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.15em;color:var(--muted);margin:0 0 .6rem;
+  }
+  .replab .lead{font-size:.92rem;color:var(--ink-soft);margin:0 0 .9rem;line-height:1.55;}
+  #repProg{font-size:.8rem;color:var(--muted);margin-left:.7rem;font-variant-numeric:tabular-nums;}
+  #repOut{display:none;margin-top:1.2rem;}
+  #doseChart{display:block;width:100%;height:auto;margin:.4rem 0 1rem;}
+  .rtable{
+    width:100%;border-collapse:collapse;font-size:.84rem;
+  }
+  .rtable th{
+    text-align:right;font-size:.68rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.06em;color:var(--muted);padding:.35rem .5rem;border-bottom:1px solid var(--hair);
+  }
+  .rtable th:first-child{text-align:left;}
+  .rtable td{
+    text-align:right;padding:.4rem .5rem;border-bottom:1px solid #EDF0F4;
+    font-variant-numeric:tabular-nums;color:var(--ink-soft);
+  }
+  .rtable td:first-child{text-align:left;font-weight:600;color:var(--blue);}
+  .rtable .mir{color:var(--ochre-deep);}
+  .rtable .cha{color:var(--blue-bright);font-weight:600;}
+  .placebo{
+    margin-top:.9rem;padding:.7rem .9rem;border-radius:6px;
+    background:var(--blue-wash);font-size:.84rem;color:var(--blue);line-height:1.5;
+  }
+  .runstamp{margin-top:.7rem;font-size:.74rem;color:var(--muted);}
+
+  footer{
+    padding:1.6rem 0 3rem;border-top:1px solid var(--hair);margin-top:1.5rem;
+    font-family:var(--sans);font-size:.78rem;color:var(--muted);line-height:1.6;
+  }
+  footer a{color:var(--blue-bright);text-decoration:none;border-bottom:1px solid rgba(44,90,168,.35);}
+
+  @media (max-width:760px){
+    .bench{grid-template-columns:1fr;}
+  }
+</style>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">A toy model · built for the joy of it · now with receipts</p>
+    <h1>The Median Field</h1>
+    <p class="standfirst">Four thousand tiny researchers, one shared machine. The machine learns from the field, the field consults the machine. Watch what happens to the variety of thought — and flip one switch to change everything.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="bench">
+    <div class="fieldbox">
+      <canvas id="field" width="640" height="640" aria-label="Simulation of a research field: each pixel is a researcher, its colour is the framing they currently hold"></canvas>
+      <div class="fieldfoot">
+        <span><b>Each pixel is a researcher.</b> Its colour is the framing they hold.</span>
+        <span id="tickread">tick 0</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div>
+        <p class="k">The machine they consult</p>
+        <div class="modes" role="group" aria-label="Mode of AI use">
+          <button class="mode mirror on" id="mMirror" aria-pressed="true">✗ Mirror<small>“Is my framing good?” — it points everyone toward the average.</small></button>
+          <button class="mode chall" id="mChall" aria-pressed="false">✓ Challenger<small>“Argue with me” — it hands the question back.</small></button>
+        </div>
+      </div>
+
+      <div class="sliderrow">
+        <label for="aiShare">How often they ask it <output id="aiOut">55%</output></label>
+        <input type="range" id="aiShare" min="0" max="90" value="55" step="1">
+      </div>
+
+      <div>
+        <p class="k">Interventions</p>
+        <div class="btnrow">
+          <button class="btn primary" id="playBtn">Pause</button>
+          <button class="btn bomb" id="bombBtn" aria-pressed="false">💥 Thought-bomb on click</button>
+          <button class="btn" id="resetBtn">Reseed field</button>
+        </div>
+      </div>
+
+      <div>
+        <p class="k">Try the three eras</p>
+        <div class="presets">
+          <button class="preset" data-p="none"><b>Before the machine</b> — nobody consults it (0%)</button>
+          <button class="preset" data-p="mirror"><b>Everyone asks the mirror</b> — 70%, confirmation mode</button>
+          <button class="preset" data-p="chall"><b>Everyone asks the challenger</b> — 70%, adversarial mode</button>
+        </div>
+      </div>
+
+      <div class="metric">
+        <p class="k">Diversity of the field</p>
+        <div class="big" id="divRead">—</div>
+        <div class="lab">1.00 = every framing alive · 0.00 = one framing left</div>
+        <canvas id="spark" width="300" height="44" aria-label="Diversity over time"></canvas>
+        <span class="verdict plural" id="verdict">seeding…</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <h2>What you are looking at</h2>
+    <p>Every pixel is a researcher holding a <em>framing</em> — drawn here as a colour on a wheel. Each moment, one of them rethinks: sometimes alone (their colour drifts — new ideas), sometimes with a neighbour (colours blend — normal science), and sometimes by consulting the shared model. The model is trained on the field itself: its answer is, quite literally, the field's average — served back with total confidence.</p>
+    <p>In <strong>mirror mode</strong>, consulting it pulls you toward that average. Each researcher gets a genuinely helpful answer — smoother, safer, closer to the consensus — and the field quietly converges until one framing remains. Nobody chose the beige. Everyone just asked the same question of the same machine. (It doesn't take everyone, either: the dose-response curve below puts the cliff at about one consultation in ten.) In <strong>challenger mode</strong>, the very same machine is asked to argue instead of confirm: each consultation plants a doubt about the average and — above all — hands the question back, provoking a fresh thought of your own. Same tool, same usage rate, opposite fate: at 70% consultation, six seeded replications put the mirror-field at 0.004 ± 0.000 and the challenger-field at 0.988 ± 0.002 — more plural, in fact, than a field that never met the machine at all (0.913 ± 0.061). The distributions do not overlap. And you needn't take those numbers from me: the button below re-derives every one of them in your own browser.</p>
+    <p>And the <strong>thought-bombs</strong>: switch them on and click the field. A door card, a sticker by the coffee machine — a small local injection of dissent. Watch how long a bloom of colour survives in each mode. In mirror mode the field swallows it. In challenger mode it takes.</p>
+
+    <h2>What building it taught me — twice</h2>
+    <p>A confession from the workbench, in two acts. <strong>Act one:</strong> my first challenger didn't work — or so I measured. I had built it the obvious way, consulting the machine simply pushed you <em>away</em> from the average, and my quick experiments showed the field converging anyway, regrouping on the far side of the wheel at diversity 0.18. I wrote the tidy moral: everyone disagreeing with the same answer, in the same direction, is also a monoculture. <em>The anti-mirror is still a mirror.</em> It felt deep. I liked it.</p>
+    <p><strong>Act two:</strong> a reviewer asked where the statistics were. Building the seeded replication suite she demanded exposed a flaw in my own quick protocol: I had let the machine go stale — retraining it once per 300,000 updates instead of once per 1,400, as the live toy actually does. Against a <em>frozen</em> average, contrarians really do converge on the antipode; my 0.18 was a true number about the wrong experiment. Against a <em>retraining</em> average — one that chases the very crowd fleeing it — the naive anti-mirror churns and stays plural after all: 0.959 ± 0.006 across seeds, reliably below the true challenger's 0.988 ± 0.002, but nowhere near a monoculture. The tidy moral survives as half of itself: <strong>the anti-mirror is a mirror only while the mirror stands still.</strong></p>
+    <p>So the toy's realest lesson is not in the curves. It took exactly one person asking <em>"where are the stats?"</em> to catch the toy-maker doing the very thing the toy warns about — trusting a fluent, satisfying story from a single unreplicated run. The failed challenger stays in the code as an ablation, the failed protocol stays in this paragraph, and the section you are reading was corrected by peer review. That is the mechanism working.</p>
+
+    <h2>Methods, transparently</h2>
+    <p>Everything below is implemented in this page's source — view it, audit it, break it. The field is a <span class="num">64 × 64</span> torus (4,096 agents). Agent <em>i</em> holds a framing θ<sub>i</sub> ∈ [0, 2π). Each update picks one agent uniformly at random; with AI-share <em>s</em>, it then does one of:</p>
+    <table class="mtable">
+      <tr><th>Move</th><th>Probability</th><th>Update rule</th></tr>
+      <tr><td>Own thinking</td><td>0.3 · (1 − s)</td><td>θ ← θ + ε, ε ≈ 𝒩(0, 0.35) <code>(sum of 4 uniforms)</code></td></tr>
+      <tr><td>Peer exchange</td><td>0.7 · (1 − s)</td><td>θ ← θ + 0.35 · d(θ<sub>j</sub>, θ), random Moore neighbour j</td></tr>
+      <tr><td>Machine · mirror</td><td rowspan="3">s (one of, by mode)</td><td>θ ← θ + 0.50 · d(θ<sub>M</sub>, θ)</td></tr>
+      <tr><td>Machine · challenger</td><td>θ ← θ − 0.05 · d(θ<sub>M</sub>, θ) + 𝒩(0, 1.1)</td></tr>
+      <tr><td>Machine · anti-mirror <em>(ablation)</em></td><td>θ ← θ − 0.30 · d(θ<sub>M</sub>, θ) + 𝒩(0, 0.5)</td></tr>
+    </table>
+    <p>d(a, b) is the wrapped signed angular difference. The model's answer θ<sub>M</sub> is the direction of an exponential moving average (rate 0.05, applied once per 1,400 updates) of the field's mean resultant vector — the machine is always slightly behind the field it was trained on. This retraining rhythm is identical in the live toy and in every experiment below; a detail that matters more than it looks, because an earlier console protocol retrained the model 200× less often, and the confession above is what that cost. <strong>Diversity</strong> is the circular variance V = 1 − R, where R is the length of the field's mean resultant vector: V = 1 when framings cover the wheel, V = 0 when one framing remains. Randomness comes from a seeded <code>mulberry32</code> PRNG, so every experiment below is exactly reproducible from its seed. Thought-bombs are disabled during experiments.</p>
+
+    <h2>The receipts — run the statistics yourself</h2>
+    <p>Point estimates from single runs are exactly what the guide teaches you to distrust — so don't trust mine. The button below re-runs the full study <em>in your browser, right now</em>: 3 modes × 10 consultation rates (0–90%) × 6 fixed seeds = <span class="num">180</span> experiments of 210,000 updates each, endpoint measured as mean diversity over the final 50,000 updates. Nothing is pre-computed; if I had shipped a random noise generator, this button would expose it.</p>
+  </div>
+
+  <div class="replab">
+    <p class="k">Replication lab</p>
+    <p class="lead">Runs ~180 experiments (≈ 38 million agent-updates) client-side. Takes a few seconds; the page stays responsive.</p>
+    <button class="btn primary" id="repBtn">Replicate the study</button><span id="repProg"></span>
+    <div id="repOut">
+      <canvas id="doseChart" width="760" height="380" aria-label="Dose-response chart: diversity versus consultation rate for mirror, anti-mirror and challenger modes, with standard-deviation bands"></canvas>
+      <table class="rtable" id="repTable"></table>
+      <div class="placebo" id="placeboLine"></div>
+      <p class="runstamp" id="runstamp"></p>
+    </div>
+  </div>
+
+  <div class="prose" style="padding-top:0;">
+    <h2>What it is for — and what it is not</h2>
+    <p>This is an intuition pump, not evidence about the world. The real findings live in the guide: a controlled study in which generative AI raised individual creativity while <em>reducing the collective diversity</em> of what the group produced (Doshi &amp; Hauser 2024), and the argument that AI monocultures create "illusions of understanding" — producing more while exploring less (Messeri &amp; Crockett 2024). The toy exists so you can <em>feel</em> the mechanism those papers measure — and, since a sharp reviewer asked, so you can verify that the feeling comes from the stated mechanism and not from theatrical noise.</p>
+    <div class="honest"><b>Honesty note:</b> a 4,096-agent circle-of-hues is not a model of science. It has no truth, no data, no incentives — only imitation and its cure. The constants in the methods table were chosen by hand to make the mechanism visible, not fitted to anything; the claim worth exporting is the <em>ordering</em> of the three curves, not any particular number. Treat every slider here the way the guide teaches you to treat every model: useful exactly to the extent that you remember what it leaves out.</div>
+    <p>Read the full argument in <a href="../foundations/critical-thinking-guide.html#part7">Part VII of the guide — What is lost when thinking is offloaded</a>.</p>
+  </div>
+
+  <footer>
+    Built by Claude (Fable 5) in an hour that Michaela Liegertová gave away, July 2026 — disclosed, because the transparency is the point. Statistics added the same evening, after the author of the hour demanded receipts. She was right.<br>
+    Commissioned by nobody · the sliders are yours to keep · what the other half of the hour became: <a href="notes-from-the-mirror.html">Notes from the Mirror</a>
+  </footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var N = 64;
+  var COUNT = N * N;
+  var theta = new Float32Array(COUNT);
+  var mode = 'mirror';
+  var aiShare = 0.55;
+  var running = true;
+  var bombMode = false;
+  var tick = 0;
+  var Mx = 0, My = 0;
+  var TWO_PI = Math.PI * 2;
+
+  /* ---------- seeded PRNG (mulberry32) ---------- */
+  var rngState = (Math.random()*4294967296)>>>0;
+  function rng(){
+    rngState = (rngState + 0x6D2B79F5) | 0;
+    var t = rngState;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+  function setSeed(s){ rngState = s>>>0; }
+
+  function reseed(seed){
+    if(seed !== undefined) setSeed(seed);
+    for(var i=0;i<COUNT;i++) theta[i] = rng()*TWO_PI;
+    Mx = 0; My = 0; tick = 0; hist.length = 0;
+  }
+
+  function angDiff(a, b){
+    var d = a - b;
+    while(d >  Math.PI) d -= TWO_PI;
+    while(d < -Math.PI) d += TWO_PI;
+    return d;
+  }
+  function gauss(){
+    return (rng()+rng()+rng()+rng()-2)*1.2;
+  }
+
+  function fieldMean(){
+    var x=0,y=0;
+    for(var i=0;i<COUNT;i++){ x+=Math.cos(theta[i]); y+=Math.sin(theta[i]); }
+    return [x/COUNT, y/COUNT];
+  }
+  function diversity(){
+    var m = fieldMean();
+    return 1 - Math.sqrt(m[0]*m[0]+m[1]*m[1]);
+  }
+
+  function neighbour(i){
+    var x = i % N, y = (i / N) | 0;
+    var dx = (rng()*3|0)-1, dy = (rng()*3|0)-1;
+    return ((y+dy+N)%N)*N + (x+dx+N)%N;
+  }
+
+  function stepOne(m, s){
+    var i = (rng()*COUNT)|0;
+    var r = rng();
+    var selfW = (1-s)*0.3, peerW = (1-s)*0.7;
+    if(r < selfW){
+      theta[i] += gauss()*0.35;
+    } else if(r < selfW+peerW){
+      var j = neighbour(i);
+      theta[i] += 0.35*angDiff(theta[j], theta[i]);
+    } else {
+      var thM = Math.atan2(My, Mx);
+      if(m==='mirror'){
+        theta[i] += 0.5*angDiff(thM, theta[i]);
+      } else if(m==='chall'){
+        theta[i] -= 0.05*angDiff(thM, theta[i]);
+        theta[i] += gauss()*1.1;
+      } else { // 'anti' — the failed v1 challenger, kept as ablation
+        theta[i] -= 0.3*angDiff(thM, theta[i]);
+        theta[i] += gauss()*0.5;
+      }
+    }
+    if(theta[i]>=TWO_PI||theta[i]<0){ theta[i]-=TWO_PI*Math.floor(theta[i]/TWO_PI); }
+  }
+
+  // one "model retraining" cycle: 1400 updates, then EMA step — identical
+  // in the live toy and in the experiments below
+  function stepChunk(m, s){
+    for(var k=0;k<1400;k++) stepOne(m, s);
+    var mean = fieldMean();
+    Mx += 0.05*(mean[0]-Mx); My += 0.05*(mean[1]-My);
+    tick += 1400;
+  }
+
+  /* ---------- rendering ---------- */
+  var canvas = document.getElementById('field');
+  var ctx = canvas.getContext('2d');
+  var off = document.createElement('canvas'); off.width = N; off.height = N;
+  var offCtx = off.getContext('2d');
+  var img = offCtx.createImageData(N, N);
+  var data = img.data;
+
+  function hue2rgb(h){
+    var s=0.62, l=0.55;
+    var c=(1-Math.abs(2*l-1))*s, hp=h*6, x=c*(1-Math.abs(hp%2-1));
+    var r=0,g=0,b=0;
+    if(hp<1){r=c;g=x;} else if(hp<2){r=x;g=c;} else if(hp<3){g=c;b=x;}
+    else if(hp<4){g=x;b=c;} else if(hp<5){r=x;b=c;} else {r=c;b=x;}
+    var m=l-c/2;
+    return [(r+m)*255, (g+m)*255, (b+m)*255];
+  }
+
+  function draw(){
+    for(var i=0;i<COUNT;i++){
+      var rgb = hue2rgb((theta[i]/TWO_PI)%1);
+      var p = i*4;
+      data[p]=rgb[0]; data[p+1]=rgb[1]; data[p+2]=rgb[2]; data[p+3]=255;
+    }
+    offCtx.putImageData(img, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(off, 0, 0, canvas.width, canvas.height);
+  }
+
+  /* ---------- live metrics ---------- */
+  var hist = [];
+  var spark = document.getElementById('spark');
+  var sctx = spark.getContext('2d');
+  var divRead = document.getElementById('divRead');
+  var tickRead = document.getElementById('tickread');
+  var verdict = document.getElementById('verdict');
+
+  function drawSpark(){
+    var w = spark.width, h = spark.height;
+    sctx.clearRect(0,0,w,h);
+    sctx.strokeStyle = '#D7DCE3'; sctx.lineWidth = 1;
+    sctx.beginPath(); sctx.moveTo(0,h-0.5); sctx.lineTo(w,h-0.5); sctx.stroke();
+    if(hist.length<2) return;
+    sctx.strokeStyle = '#2C5AA8'; sctx.lineWidth = 1.6;
+    sctx.beginPath();
+    for(var i=0;i<hist.length;i++){
+      var x = i/(600-1)*w;
+      var y = h - hist[i]*(h-4) - 2;
+      if(i===0) sctx.moveTo(x,y); else sctx.lineTo(x,y);
+    }
+    sctx.stroke();
+  }
+
+  function updateMetrics(){
+    var v = diversity();
+    hist.push(v); if(hist.length>600) hist.shift();
+    divRead.textContent = v.toFixed(2);
+    tickRead.textContent = 'tick ' + (tick/1000|0) + 'k';
+    var cls, txt;
+    if(v>0.55){ cls='plural'; txt='a plural field — many framings alive'; }
+    else if(v>0.25){ cls='schools'; txt='schools of thought forming'; }
+    else { cls='mono'; txt='monoculture — the field thinks alike (and misses alike)'; }
+    verdict.className = 'verdict '+cls;
+    verdict.textContent = txt;
+    drawSpark();
+  }
+
+  /* ---------- live loop ---------- */
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var frame = 0;
+  var experimentRunning = false;
+  function loop(){
+    if(running && !experimentRunning){
+      stepChunk(mode, aiShare);
+      draw();
+      if(++frame % 4 === 0) updateMetrics();
+    }
+    requestAnimationFrame(loop);
+  }
+
+  /* ---------- controls ---------- */
+  var mM = document.getElementById('mMirror'), mC = document.getElementById('mChall');
+  function setMode(m){
+    mode = m;
+    mM.classList.toggle('on', m==='mirror'); mM.setAttribute('aria-pressed', m==='mirror');
+    mC.classList.toggle('on', m==='chall');  mC.setAttribute('aria-pressed', m==='chall');
+  }
+  mM.addEventListener('click', function(){ setMode('mirror'); });
+  mC.addEventListener('click', function(){ setMode('chall'); });
+
+  var slider = document.getElementById('aiShare'), aiOut = document.getElementById('aiOut');
+  slider.addEventListener('input', function(){
+    aiShare = slider.value/100;
+    aiOut.textContent = slider.value + '%';
+  });
+
+  var playBtn = document.getElementById('playBtn');
+  function setRunning(r){
+    running = r;
+    playBtn.textContent = r ? 'Pause' : 'Run';
+  }
+  playBtn.addEventListener('click', function(){ setRunning(!running); });
+
+  var bombBtn = document.getElementById('bombBtn');
+  bombBtn.addEventListener('click', function(){
+    bombMode = !bombMode;
+    bombBtn.classList.toggle('on', bombMode);
+    bombBtn.setAttribute('aria-pressed', String(bombMode));
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function(){ reseed(); draw(); updateMetrics(); });
+
+  canvas.addEventListener('click', function(e){
+    if(!bombMode || experimentRunning) return;
+    var rect = canvas.getBoundingClientRect();
+    var gx = (e.clientX-rect.left)/rect.width*N;
+    var gy = (e.clientY-rect.top)/rect.height*N;
+    var R = 7;
+    for(var y=0;y<N;y++)for(var x=0;x<N;x++){
+      var dx=x-gx, dy=y-gy;
+      if(dx*dx+dy*dy<=R*R) theta[y*N+x] = Math.random()*TWO_PI;
+    }
+    draw(); updateMetrics();
+  });
+
+  document.querySelectorAll('.preset').forEach(function(b){
+    b.addEventListener('click', function(){
+      var p = b.getAttribute('data-p');
+      if(p==='none'){ slider.value=0; }
+      else { slider.value=70; setMode(p==='mirror'?'mirror':'chall'); }
+      slider.dispatchEvent(new Event('input'));
+      reseed(); draw(); updateMetrics(); setRunning(true);
+    });
+  });
+
+  /* =====================================================================
+     THE REPLICATION LAB
+     3 modes x 10 shares x 6 seeds; endpoint = mean diversity over the
+     final 50k updates (sampled every 10k). Fully seeded, no Math.random.
+  ===================================================================== */
+  var SHARES = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9];
+  var SEEDS  = [11,23,37,41,59,73];
+  var MODES  = ['mirror','anti','chall'];
+  var CHUNKS_TOTAL = 150;   // 150 x 1400 = 210,000 updates
+  var CHUNKS_BURNIN = 114;  // measure over the last 36 chunks (~50k updates)
+
+  function runCondition(m, s, seed){
+    reseed(seed);
+    var samples = [];
+    for(var c=0;c<CHUNKS_TOTAL;c++){
+      stepChunk(m, s);
+      if(c>=CHUNKS_BURNIN && (c-CHUNKS_BURNIN)%7===0) samples.push(diversity());
+    }
+    samples.push(diversity());
+    var sum=0; for(var i=0;i<samples.length;i++) sum+=samples[i];
+    return sum/samples.length;
+  }
+
+  function meanSd(arr){
+    var m=0; for(var i=0;i<arr.length;i++) m+=arr[i]; m/=arr.length;
+    var v=0; for(i=0;i<arr.length;i++) v+=(arr[i]-m)*(arr[i]-m);
+    return [m, Math.sqrt(v/(arr.length-1))];
+  }
+
+  var repBtn = document.getElementById('repBtn');
+  var repProg = document.getElementById('repProg');
+  var repOut = document.getElementById('repOut');
+
+  function replicate(done){
+    if(experimentRunning) return;
+    experimentRunning = true;
+    repBtn.disabled = true;
+    var t0 = performance.now();
+    var jobs = [];
+    MODES.forEach(function(m){ SHARES.forEach(function(s){ SEEDS.forEach(function(seed){
+      jobs.push([m,s,seed]);
+    });});});
+    var results = {}; // mode -> share -> [values]
+    MODES.forEach(function(m){ results[m]={}; SHARES.forEach(function(s){ results[m][s]=[]; }); });
+    var idx = 0;
+
+    // placebo: share 0, identical seed, mirror vs challenger must match exactly
+    var placebo = null;
+
+    function chunk(){
+      var t = performance.now();
+      while(idx < jobs.length && performance.now()-t < 120){
+        var j = jobs[idx];
+        results[j[0]][j[1]].push(runCondition(j[0], j[1], j[2]));
+        idx++;
+      }
+      repProg.textContent = 'running… ' + idx + ' / ' + jobs.length + ' experiments';
+      if(idx < jobs.length){
+        setTimeout(chunk, 0);
+      } else {
+        var pm = runCondition('mirror', 0, 999);
+        var pc = runCondition('chall', 0, 999);
+        placebo = [pm, pc];
+        var secs = ((performance.now()-t0)/1000).toFixed(1);
+        renderResults(results, placebo, secs);
+        window.__suiteResults = {results:results, placebo:placebo, secs:secs};
+        repProg.textContent = '';
+        repBtn.disabled = false;
+        repBtn.textContent = 'Replicate again';
+        experimentRunning = false;
+        // restore a fresh live field
+        reseed(); draw(); updateMetrics();
+        if(done) done(window.__suiteResults);
+      }
+    }
+    repProg.textContent = 'running…';
+    setTimeout(chunk, 20);
+  }
+  repBtn.addEventListener('click', function(){ replicate(); });
+
+  /* ---------- results rendering ---------- */
+  function renderResults(res, placebo, secs){
+    repOut.style.display = 'block';
+
+    // chart
+    var c = document.getElementById('doseChart');
+    var g = c.getContext('2d');
+    var W = c.width, H = c.height;
+    var padL=52, padR=16, padT=18, padB=44;
+    var pw = W-padL-padR, ph = H-padT-padB;
+    g.clearRect(0,0,W,H);
+    g.font = '12px "Segoe UI",sans-serif';
+    // axes + grid
+    g.strokeStyle='#D7DCE3'; g.fillStyle='#646E7C'; g.lineWidth=1;
+    for(var gy=0; gy<=4; gy++){
+      var y = padT + ph - gy/4*ph;
+      g.beginPath(); g.moveTo(padL,y+.5); g.lineTo(W-padR,y+.5); g.stroke();
+      g.fillText((gy/4).toFixed(2), 14, y+4);
+    }
+    SHARES.forEach(function(s,i){
+      var x = padL + i/(SHARES.length-1)*pw;
+      g.fillText((s*100|0)+'%', x-10, H-22);
+    });
+    g.fillText('consultation rate →', padL+pw/2-52, H-6);
+    g.save(); g.translate(12,padT+ph/2+30); g.rotate(-Math.PI/2); g.fillText('diversity of the field →',0,0); g.restore();
+
+    var styles = {
+      mirror:{stroke:'#9C6716', band:'rgba(156,103,22,.15)', label:'✗ mirror'},
+      anti:  {stroke:'#8A93A3', band:'rgba(138,147,163,.15)', label:'anti-mirror (ablation)'},
+      chall: {stroke:'#2C5AA8', band:'rgba(44,90,168,.14)', label:'✓ challenger'}
+    };
+
+    MODES.forEach(function(m){
+      var pts = SHARES.map(function(s,i){
+        var ms = meanSd(res[m][s]);
+        return {x:padL+i/(SHARES.length-1)*pw, yM:padT+ph-ms[0]*ph, yLo:padT+ph-Math.max(0,ms[0]-ms[1])*ph, yHi:padT+ph-Math.min(1,ms[0]+ms[1])*ph};
+      });
+      // sd band
+      g.fillStyle = styles[m].band;
+      g.beginPath();
+      pts.forEach(function(p,i){ if(i===0) g.moveTo(p.x,p.yHi); else g.lineTo(p.x,p.yHi); });
+      for(var i=pts.length-1;i>=0;i--) g.lineTo(pts[i].x, pts[i].yLo);
+      g.closePath(); g.fill();
+      // mean line
+      g.strokeStyle = styles[m].stroke; g.lineWidth = 2;
+      g.beginPath();
+      pts.forEach(function(p,i){ if(i===0) g.moveTo(p.x,p.yM); else g.lineTo(p.x,p.yM); });
+      g.stroke();
+      pts.forEach(function(p){ g.fillStyle=styles[m].stroke; g.beginPath(); g.arc(p.x,p.yM,2.6,0,TWO_PI); g.fill(); });
+    });
+    // legend
+    var lx = padL+10, ly = padT+12;
+    MODES.forEach(function(m){
+      g.fillStyle = styles[m].stroke;
+      g.fillRect(lx, ly-8, 16, 3);
+      g.fillStyle = '#39414E';
+      g.fillText(styles[m].label, lx+22, ly-2);
+      ly += 18;
+    });
+
+    // table
+    var tbl = document.getElementById('repTable');
+    var html = '<tr><th>Consultation rate</th><th>✗ mirror</th><th>anti-mirror</th><th>✓ challenger</th></tr>';
+    [0,0.3,0.5,0.7,0.9].forEach(function(s){
+      var mm=meanSd(res.mirror[s]), aa=meanSd(res.anti[s]), cc=meanSd(res.chall[s]);
+      html += '<tr><td>'+(s*100|0)+'%</td>'+
+        '<td class="mir">'+mm[0].toFixed(3)+' ± '+mm[1].toFixed(3)+'</td>'+
+        '<td>'+aa[0].toFixed(3)+' ± '+aa[1].toFixed(3)+'</td>'+
+        '<td class="cha">'+cc[0].toFixed(3)+' ± '+cc[1].toFixed(3)+'</td></tr>';
+    });
+    tbl.innerHTML = html;
+
+    // separation statement at 70%
+    var mir70 = res.mirror[0.7].slice().sort(function(a,b){return a-b;});
+    var cha70 = res.chall[0.7].slice().sort(function(a,b){return a-b;});
+    var sep = mir70[mir70.length-1] < cha70[0];
+
+    var pl = document.getElementById('placeboLine');
+    pl.innerHTML = '<b>Placebo check:</b> at 0% consultation the two modes share every executed line of code — same seed (999) gives diversity '
+      + placebo[0].toFixed(6) + ' vs ' + placebo[1].toFixed(6)
+      + (Math.abs(placebo[0]-placebo[1])<1e-12 ? ' — <b>bit-identical</b>. The difference between the curves exists only when the machine is actually consulted.' : ' — difference ' + Math.abs(placebo[0]-placebo[1]).toExponential(2) + '.')
+      + (sep ? ' At 70% consultation the two distributions do not overlap: every mirror run ends below every challenger run (6 seeds each).' : '');
+
+    document.getElementById('runstamp').textContent =
+      'Computed in this browser just now, in ' + secs + ' s · seeds ' + SEEDS.join(', ') + ' · 210,000 updates per experiment · endpoint = mean diversity over the final ~50,000 updates. Re-running gives the same numbers: that is what the seeds are for.';
+  }
+
+  /* test hook */
+  window.__field = {
+    stepChunk: function(n, m, s){ for(var i=0;i<n;i++) stepChunk(m||mode, s===undefined?aiShare:s); },
+    runCondition: runCondition, diversity: diversity, reseed: reseed,
+    setMode: setMode, setAi: function(v){ aiShare=v; },
+    pause: function(){ setRunning(false); },
+    replicate: replicate
+  };
+
+  reseed();
+  draw();
+  updateMetrics();
+  if(reduce){ setRunning(false); }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
