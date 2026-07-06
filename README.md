@@ -1,7 +1,8 @@
 # TAH Day 2 — Navigating the AI Landscape · public course artifacts
 
 Participant materials for **Art-Tech for Higher Education, Day 2** (Prague, July 2026):
-the course companion, four mini-apps, the skills & agents cookbook, a 25-minute lecture, and a short radio play.
+the course companion, four mini-apps, the skills & agents cookbook, a 25-minute lecture, a short
+radio play — and the critical-thinking foundations trio, the epistemic ground beneath the day.
 
 **Browse everything:** https://michalie.github.io/tah-day2/
 
@@ -18,6 +19,9 @@ and carries its own AI-use disclosure. Built the way the course teaches.
 | [cookbook.html](https://michalie.github.io/tah-day2/cookbook.html) | 26 ready-to-run skills + 3 example subagents, filterable, copy button on every entry |
 | [the-standard.html](https://michalie.github.io/tah-day2/the-standard.html) | *The Standard, Not the Source* — a 25-minute lecture by Claude, audio + transcript in one file |
 | [the_retraction.html](https://michalie.github.io/tah-day2/the_retraction.html) | *The Retraction* — a ~12-minute radio play by Claude on AI in science. Fiction on the surface; every disaster in it is footnoted to a real, documented case. A companion piece to the lecture above. |
+| [foundations/critical-thinking-guide.html](https://michalie.github.io/tah-day2/foundations/critical-thinking-guide.html) | *Thinking for Yourself in the Age of the Machine* — the foundations: how science works, how your mind and the machine mislead you, AI as challenger, not mirror. 27 peer-reviewed sources, author-verified |
+| [foundations/ask-this-not-that.html](https://michalie.github.io/tah-day2/foundations/ask-this-not-that.html) | *Ask This, Not That* — eighteen mirror→challenger prompt pairs, copy-ready |
+| [foundations/practice-room.html](https://michalie.github.io/tah-day2/foundations/practice-room.html) | *The Practice Room* — nine calibrated scenarios + the two-prompt experiment on your own hypothesis |
 
 One more app joins after the course: the Track 4 citation-audit trainer — it carries the
 audit's answers, so it unlocks once everyone has had the hunt.

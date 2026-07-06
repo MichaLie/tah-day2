@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Practice Room — Test Yourself</title>
+<meta name="description" content="Nine research scenarios with confidence calibration, plus the two-prompt experiment on your own hypothesis — retrieval practice for the critical-thinking guide.">
+</head>
+<body>
+<style>
+  :root{
+    --paper:#F5F6F8;
+    --paper-2:#FBFBFD;
+    --card:#FFFFFF;
+    --ink:#161A22;
+    --ink-soft:#39414E;
+    --muted:#646E7C;
+    --hair:#D7DCE3;
+    --hair-soft:#E7EAF0;
+    --blue:#1E3A63;
+    --blue-bright:#2C5AA8;
+    --blue-deep:#132339;
+    --blue-wash:#EAEEF5;
+    --ochre:#9C6716;
+    --ochre-deep:#7A4F10;
+    --ochre-wash:#F3EBDD;
+
+    --serif:"Palatino Linotype","Book Antiqua",Palatino,Georgia,Cambria,"Times New Roman",serif;
+    --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --mono:"Cascadia Code",Consolas,"SF Mono","Roboto Mono",ui-monospace,monospace;
+
+    --measure:70ch;
+    --pad:clamp(1.25rem,5vw,2.75rem);
+  }
+
+  *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:1.15rem;
+    line-height:1.66;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  .col{
+    width:100%;
+    max-width:calc(var(--measure) + 2 * var(--pad));
+    margin-inline:auto;
+    padding-inline:var(--pad);
+  }
+
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:.72rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:.18em;
+    color:var(--blue-bright);margin:0;
+  }
+
+  a{color:var(--blue-bright);text-decoration:none;border-bottom:1px solid rgba(44,90,168,.35);}
+  a:hover{border-bottom-color:var(--blue-bright);}
+  a:focus-visible{outline:2px solid var(--blue-bright);outline-offset:3px;border-radius:2px;}
+
+  /* ---------- top nav ---------- */
+  .topnav{
+    border-bottom:1px solid var(--hair);
+    background:var(--paper-2);
+    font-family:var(--sans);
+  }
+  .topnav .col{
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    padding-block:.85rem;
+  }
+  .topnav .home{
+    font-size:.85rem;color:var(--muted);border:none;
+    display:inline-flex;align-items:center;gap:.45rem;
+  }
+  .topnav .home:hover{color:var(--blue-bright);}
+  .topnav .kicker{
+    font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;
+    color:var(--blue);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;background:var(--blue-deep);color:#EAEEF5;overflow:hidden;border-bottom:1px solid #0c1626;}
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(120,150,200,.10) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(120,150,200,.10) 1px,transparent 1px);
+    background-size:26px 26px;
+    mask-image:radial-gradient(ellipse 90% 80% at 50% 25%,#000 45%,transparent 100%);
+    -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 25%,#000 45%,transparent 100%);
+    pointer-events:none;
+  }
+  .hero .col{position:relative;padding-top:clamp(2.75rem,7vw,4.5rem);padding-bottom:clamp(2.5rem,6vw,3.75rem);}
+  .hero .eyebrow{color:#8FB0E0;}
+  .hero h1{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(2.4rem,6.5vw,4.1rem);line-height:1.02;letter-spacing:-.015em;
+    text-wrap:balance;margin:.55rem 0 0;
+  }
+  .hero h1 em{font-style:italic;color:#9CC0F2;}
+  .standfirst{
+    font-size:clamp(1.12rem,2.3vw,1.36rem);line-height:1.5;color:#C4D2E8;
+    max-width:54ch;margin:1.4rem 0 0;text-wrap:pretty;
+  }
+  .hero-meta{
+    display:flex;flex-wrap:wrap;gap:.5rem 1.75rem;
+    margin-top:2rem;
+    font-family:var(--sans);
+    font-size:.82rem;letter-spacing:.02em;color:#8AA0C0;
+    border-top:1px solid rgba(140,170,215,.22);
+    padding-top:1.15rem;
+  }
+  .hero-meta b{color:#C4D2E8;font-weight:600;}
+
+  /* ---------- how it works ---------- */
+  .how{padding:clamp(2rem,5vw,3rem) 0 .5rem;}
+  .how .big{
+    font-size:1.26rem;line-height:1.5;color:var(--blue);
+    margin:0 0 1.4rem;max-width:var(--measure);text-wrap:pretty;
+  }
+  .steps{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));
+    gap:.85rem;margin:0 0 1.2rem;
+  }
+  .step{
+    background:var(--card);border:1px solid var(--hair);border-top:2px solid var(--blue-bright);
+    border-radius:6px;padding:.95rem 1.05rem;
+    font-family:var(--sans);font-size:.88rem;line-height:1.5;color:var(--ink-soft);
+  }
+  .step b{
+    display:flex;align-items:center;gap:.5rem;
+    color:var(--blue);font-size:.95rem;margin-bottom:.3rem;
+  }
+  .step b .n{
+    display:flex;align-items:center;justify-content:center;
+    width:1.4rem;height:1.4rem;border-radius:50%;flex:none;
+    background:var(--blue);color:#fff;
+    font-size:.7rem;font-weight:700;font-variant-numeric:tabular-nums;
+  }
+  .honesty{
+    font-family:var(--sans);font-size:.9rem;line-height:1.55;color:var(--muted);
+    margin:0;max-width:var(--measure);
+  }
+  .honesty b{color:var(--ochre-deep);font-weight:700;}
+
+  /* ---------- quiz ---------- */
+  .quiz{padding:clamp(1.75rem,4vw,2.5rem) 0;}
+  .qprogress{
+    display:flex;align-items:center;gap:.45rem;
+    margin:0 0 1rem;
+    font-family:var(--sans);font-size:.78rem;font-weight:600;color:var(--muted);
+  }
+  .qprogress .segs{display:flex;gap:.3rem;flex:1;}
+  .qprogress .seg{
+    height:.35rem;flex:1;border-radius:99px;
+    background:var(--hair);
+  }
+  .qprogress .seg.done{background:var(--blue-bright);}
+  .qprogress .seg.cur{background:var(--blue-wash);box-shadow:inset 0 0 0 1px var(--blue-bright);}
+
+  .scenario{
+    background:var(--card);border:1px solid var(--hair);border-radius:10px;
+    box-shadow:0 1px 2px rgba(20,30,50,.04),0 12px 30px -18px rgba(20,30,50,.25);
+    padding:clamp(1.4rem,4vw,2rem);
+    scroll-margin-top:1.2rem;
+  }
+  .s-eyebrow{
+    font-family:var(--sans);font-size:.72rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.14em;color:var(--blue-bright);
+    margin:0 0 .8rem;
+  }
+  .s-text{margin:0 0 1.3rem;font-size:1.12rem;line-height:1.6;text-wrap:pretty;}
+
+  .opts{display:grid;gap:.6rem;margin:0;}
+  .opt{
+    text-align:left;cursor:pointer;
+    font-family:var(--sans);font-size:.94rem;line-height:1.5;color:var(--ink-soft);
+    background:var(--paper-2);border:1px solid var(--hair);border-radius:7px;
+    padding:.85rem 1rem;
+    display:flex;gap:.7rem;align-items:baseline;
+    transition:border-color .12s ease,background .12s ease;
+  }
+  .opt:hover{border-color:var(--blue-bright);}
+  .opt:focus-visible{outline:2px solid var(--blue-bright);outline-offset:2px;}
+  .opt b{
+    font-family:var(--sans);font-weight:700;font-size:.78rem;
+    color:var(--blue-bright);flex:none;min-width:1.1rem;
+  }
+  .opt.sel{background:var(--blue-wash);border-color:var(--blue-bright);}
+  .opt.correct{background:var(--blue-wash);border-color:var(--blue-bright);box-shadow:inset 0 0 0 1px var(--blue-bright);}
+  .opt.wrong{background:var(--ochre-wash);border-color:var(--ochre);}
+  .opt:disabled{cursor:default;}
+  .opt .mark{margin-left:auto;font-weight:700;flex:none;}
+  .opt.correct .mark{color:var(--blue-bright);}
+  .opt.wrong .mark{color:var(--ochre-deep);}
+
+  .conf{
+    margin:1.2rem 0 0;padding-top:1.1rem;border-top:1px dashed var(--hair);
+    display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;
+  }
+  .conf .lbl{font-family:var(--sans);font-size:.85rem;font-weight:600;color:var(--ink-soft);margin-right:.2rem;}
+  .confbtn{
+    font-family:var(--sans);font-size:.8rem;font-weight:600;cursor:pointer;
+    background:var(--card);color:var(--blue);border:1px solid var(--hair);border-radius:999px;
+    padding:.4rem .9rem;transition:border-color .12s ease,background .12s ease;
+  }
+  .confbtn:hover{border-color:var(--blue-bright);}
+  .confbtn:focus-visible{outline:2px solid var(--blue-bright);outline-offset:2px;}
+  .conf .hint{flex-basis:100%;font-family:var(--sans);font-size:.78rem;color:var(--muted);margin:0;}
+
+  .fb{
+    margin:1.3rem 0 0;border-radius:7px;padding:1.1rem 1.2rem;
+    font-family:var(--sans);font-size:.92rem;line-height:1.6;color:var(--ink-soft);
+    border:1px solid var(--hair);background:var(--paper-2);
+    border-left:3px solid var(--blue-bright);
+  }
+  .fb.missed{border-left-color:var(--ochre);}
+  .fb .verdict{
+    display:block;font-size:.7rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.14em;margin-bottom:.45rem;
+  }
+  .fb .verdict.good{color:var(--blue-bright);}
+  .fb .verdict.bad{color:var(--ochre-deep);}
+  .fb p{margin:0 0 .6rem;}
+  .fb p:last-child{margin-bottom:0;}
+  .fb .reread{font-weight:600;}
+
+  .qnav{margin:1.4rem 0 0;display:flex;justify-content:flex-end;}
+  .nextbtn{
+    font-family:var(--sans);font-size:.9rem;font-weight:600;cursor:pointer;
+    border:none;border-radius:6px;padding:.65rem 1.2rem;
+    background:var(--blue-bright);color:#fff;
+    transition:background .15s ease,transform .1s ease;
+  }
+  .nextbtn:hover{background:var(--blue);}
+  .nextbtn:active{transform:translateY(1px);}
+  .nextbtn:focus-visible{outline:2px solid #9CC0F2;outline-offset:2px;}
+
+  /* ---------- results ---------- */
+  .results{
+    background:var(--card);border:1px solid var(--hair);border-radius:10px;
+    box-shadow:0 1px 2px rgba(20,30,50,.04),0 12px 30px -18px rgba(20,30,50,.25);
+    padding:clamp(1.4rem,4vw,2rem);
+  }
+  .results h2{
+    font-family:var(--serif);font-weight:600;font-size:clamp(1.5rem,3.2vw,2rem);
+    margin:0 0 .3rem;line-height:1.15;
+  }
+  .score{
+    font-family:var(--sans);font-weight:700;font-size:2.4rem;color:var(--blue);
+    font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+  }
+  .score small{font-size:1.1rem;color:var(--muted);font-weight:600;}
+  .r-sub{font-family:var(--sans);font-size:.9rem;color:var(--muted);margin:.2rem 0 1.4rem;}
+
+  .calib{margin:0 0 .4rem;}
+  .calib h3, .missed-list h3{
+    font-family:var(--sans);font-weight:700;font-size:.72rem;
+    text-transform:uppercase;letter-spacing:.15em;color:var(--blue);
+    margin:1.6rem 0 .6rem;
+  }
+  .calib table{
+    width:100%;border-collapse:collapse;
+    font-family:var(--sans);font-size:.9rem;color:var(--ink-soft);
+  }
+  .calib th{
+    text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--muted);
+    padding:.4rem 0;border-bottom:1px solid var(--hair);
+  }
+  .calib td{
+    padding:.55rem 0;border-bottom:1px solid var(--hair-soft);
+    font-variant-numeric:tabular-nums;
+  }
+  .calib td.hit{font-weight:700;color:var(--blue);}
+  .calib .note{
+    font-family:var(--sans);font-size:.82rem;line-height:1.55;color:var(--muted);
+    margin:.8rem 0 0;
+  }
+
+  .missed-list ul{list-style:none;margin:0;padding:0;}
+  .missed-list li{
+    font-family:var(--sans);font-size:.9rem;line-height:1.5;color:var(--ink-soft);
+    padding:.5rem 0;border-top:1px solid var(--hair-soft);
+    display:flex;gap:.6rem;align-items:baseline;flex-wrap:wrap;
+  }
+  .missed-list li:first-child{border-top:none;}
+  .missed-list .all-good{font-family:var(--sans);font-size:.92rem;color:var(--ink-soft);margin:0;}
+
+  .r-actions{margin:1.8rem 0 0;display:flex;flex-wrap:wrap;gap:.7rem;}
+  .ghostbtn{
+    font-family:var(--sans);font-size:.88rem;font-weight:600;cursor:pointer;
+    background:var(--card);color:var(--blue);border:1px solid var(--hair);border-radius:6px;
+    padding:.6rem 1.1rem;transition:border-color .15s ease;
+    text-decoration:none;display:inline-flex;align-items:center;gap:.45rem;
+  }
+  .ghostbtn:hover{border-color:var(--blue-bright);}
+  .ghostbtn:focus-visible{outline:2px solid var(--blue-bright);outline-offset:2px;}
+
+  /* ---------- experiment ---------- */
+  .exp{padding:clamp(2.5rem,6vw,4rem) 0 1rem;border-top:1px solid var(--hair);margin-top:2.5rem;scroll-margin-top:1rem;}
+  .exp-head h2{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(1.65rem,3.4vw,2.3rem);line-height:1.12;
+    margin:.4rem 0 .6rem;letter-spacing:-.01em;text-wrap:balance;
+  }
+  .exp-head p.dek{
+    font-family:var(--sans);font-size:1rem;line-height:1.55;color:var(--muted);
+    margin:0 0 1.8rem;max-width:58ch;
+  }
+
+  .xstep{margin:0 0 1.9rem;}
+  .xstep .xh{
+    display:flex;align-items:baseline;gap:.75rem;margin:0 0 .6rem;
+    font-family:var(--sans);font-weight:700;font-size:1rem;color:var(--blue);
+  }
+  .xstep .xh .n{
+    display:flex;align-items:center;justify-content:center;
+    width:1.6rem;height:1.6rem;border-radius:50%;flex:none;align-self:center;
+    background:var(--blue);color:#fff;
+    font-size:.74rem;font-weight:700;font-variant-numeric:tabular-nums;
+  }
+  .xstep .xd{
+    font-family:var(--sans);font-size:.9rem;line-height:1.55;color:var(--muted);
+    margin:0 0 .8rem;max-width:60ch;
+  }
+
+  .hypo{
+    width:100%;min-height:4.2rem;resize:vertical;
+    font-family:var(--serif);font-size:1.05rem;line-height:1.5;color:var(--ink);
+    background:var(--card);border:1px solid var(--hair);border-radius:7px;
+    padding:.85rem 1rem;
+  }
+  .hypo:focus-visible{outline:2px solid var(--blue-bright);outline-offset:1px;}
+
+  .xpair{
+    display:grid;grid-template-columns:1fr 1fr;gap:.85rem;
+  }
+  .xside{
+    border-radius:8px;padding:1.05rem 1.15rem;
+    display:flex;flex-direction:column;gap:.55rem;
+  }
+  .xside .tag{
+    font-family:var(--sans);font-size:.66rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.11em;
+  }
+  .xside .q{font-family:var(--mono);font-size:.9rem;line-height:1.55;margin:0;overflow-wrap:break-word;}
+  .xmirror{background:var(--ochre-wash);border:1px solid #E3D2B4;}
+  .xmirror .tag{color:var(--ochre-deep);}
+  .xmirror .q{color:var(--ochre-deep);}
+  .xchall{background:#11151d;border:1px solid #11151d;}
+  .xchall .tag{color:#7f9bc4;}
+  .xchall .q{color:#d3ddec;}
+  .xchall .q::before{content:"› ";color:#5f7fb0;}
+
+  .copybtn{
+    align-self:flex-start;margin-top:auto;
+    font-family:var(--sans);font-size:.72rem;font-weight:600;cursor:pointer;
+    border-radius:5px;padding:.3rem .6rem;transition:all .15s ease;
+  }
+  .xchall .copybtn{background:transparent;color:#7f9bc4;border:1px solid #2b3546;}
+  .xchall .copybtn:hover{color:#cdd9ea;border-color:#41506a;}
+  .xmirror .copybtn{background:transparent;color:var(--ochre-deep);border:1px solid #D9C296;}
+  .xmirror .copybtn:hover{border-color:var(--ochre);}
+  .copybtn:focus-visible{outline:2px solid var(--blue-bright);outline-offset:2px;}
+  .copybtn.done{color:#2e7d4f !important;border-color:#7fbf9a !important;}
+
+  .reflect{display:grid;gap:.9rem;}
+  .reflect .f{display:flex;flex-direction:column;gap:.35rem;}
+  .reflect label{
+    font-family:var(--sans);font-size:.86rem;font-weight:600;color:var(--ink-soft);
+  }
+  .reflect textarea{
+    width:100%;min-height:3.6rem;resize:vertical;
+    font-family:var(--sans);font-size:.94rem;line-height:1.5;color:var(--ink);
+    background:var(--card);border:1px solid var(--hair);border-radius:7px;
+    padding:.75rem .9rem;
+  }
+  .reflect textarea:focus-visible{outline:2px solid var(--blue-bright);outline-offset:1px;}
+  .exp-actions{margin:1.2rem 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:.7rem;}
+  .exp-actions .saved{font-family:var(--sans);font-size:.78rem;color:var(--muted);}
+
+  .sting{
+    margin:1.9rem 0 0;
+    padding:1.1rem 1.3rem;
+    background:var(--ochre-wash);border-left:3px solid var(--ochre);border-radius:4px;
+    font-family:var(--sans);font-size:.92rem;line-height:1.6;color:var(--ink-soft);
+  }
+  .sting b{color:var(--ochre-deep);}
+
+  /* ---------- closing ---------- */
+  .closing{background:var(--blue-deep);color:#DCE6F5;padding:clamp(2.5rem,6vw,4rem) 0;margin-top:3rem;}
+  .closing .eyebrow{color:#8FB0E0;}
+  .closing h2{
+    font-family:var(--serif);font-weight:600;font-size:clamp(1.7rem,3.6vw,2.4rem);
+    line-height:1.14;margin:.4rem 0 1.1rem;color:#fff;text-wrap:balance;
+  }
+  .closing p{color:#C4D2E8;max-width:var(--measure);margin:0 0 1rem;}
+  .closing strong{color:#fff;}
+  .linkrow{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem;}
+  .backlink{
+    display:inline-flex;align-items:center;gap:.5rem;
+    font-family:var(--sans);font-size:.92rem;font-weight:600;
+    color:#9CC0F2;border:1px solid rgba(140,170,215,.35);border-radius:6px;
+    padding:.6rem 1rem;
+  }
+  .backlink:hover{border-color:#9CC0F2;background:rgba(120,150,200,.08);}
+
+  footer.end{padding:2rem 0 3.5rem;font-family:var(--sans);font-size:.78rem;color:var(--muted);border-top:1px solid var(--hair);}
+
+  /* ---------- back to top ---------- */
+  .totop{
+    position:fixed;right:1.1rem;bottom:1.1rem;z-index:60;
+    width:2.7rem;height:2.7rem;border-radius:50%;
+    border:1px solid var(--hair);
+    background:var(--card);color:var(--blue);
+    font-family:var(--sans);font-size:1.05rem;font-weight:700;
+    cursor:pointer;
+    box-shadow:0 8px 20px -10px rgba(20,30,50,.4);
+    opacity:0;pointer-events:none;
+    transition:opacity .2s ease;
+  }
+  .totop.show{opacity:1;pointer-events:auto;}
+  .totop:hover{border-color:var(--blue-bright);color:var(--blue-bright);}
+  .totop:focus-visible{outline:2px solid var(--blue-bright);outline-offset:2px;}
+
+  @media (max-width:640px){
+    body{font-size:1.08rem;}
+    .xpair{grid-template-columns:1fr;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .totop,.nextbtn,.copybtn,.confbtn{transition:none;}
+  }
+</style>
+
+<nav class="topnav">
+  <div class="col">
+    <a class="home" href="critical-thinking-guide.html">← Back to the main guide</a>
+    <span class="kicker">Companion · Practice Room</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="col">
+    <p class="eyebrow">Retrieval practice for critical thinking</p>
+    <h1>The Practice <em>Room</em></h1>
+    <p class="standfirst">Reading the guide produced the <em>feeling</em> of understanding. This page is where you find out. Nine research scenarios, honest confidence ratings — then one experiment on your own hypothesis.</p>
+    <div class="hero-meta">
+      <span><b>Format</b> &nbsp;9 scenarios · ~15 minutes</span>
+      <span><b>Grading</b> &nbsp;none — this is practice, not assessment</span>
+      <span><b>Privacy</b> &nbsp;nothing leaves your browser</span>
+    </div>
+  </div>
+</header>
+
+<section class="how">
+  <div class="col">
+    <p class="big">The guide's own Part IV explains why this page exists: you remember what you retrieve and generate, not what you reread. So don't reread — answer.</p>
+    <div class="steps">
+      <div class="step"><b><span class="n">1</span>Commit</b>Each scenario is a situation you will actually face. Pick the move you would really make — before anything is revealed.</div>
+      <div class="step"><b><span class="n">2</span>Rate your confidence</b>Say how sure you are. At the end you'll see how well your confidence tracked your accuracy — calibration is a skill of its own.</div>
+      <div class="step"><b><span class="n">3</span>Reveal &amp; reread</b>Get the reasoning, not just the answer — and a pointer to the part of the guide worth revisiting if it surprised you.</div>
+    </div>
+    <p class="honesty"><b>One rule:</b> commit before you peek. The learning is in the retrieval — reveal first, and this page becomes just more reading.</p>
+  </div>
+</section>
+
+<section class="quiz" aria-label="Scenario quiz">
+  <div class="col">
+    <div class="qprogress" id="qprogress" aria-hidden="true">
+      <span id="qcount">Scenario 1 of 9</span>
+      <span class="segs" id="segs"></span>
+    </div>
+    <div id="quizmount"></div>
+  </div>
+</section>
+
+<section class="exp" id="experiment">
+  <div class="col">
+    <div class="exp-head">
+      <p class="eyebrow">The final step</p>
+      <h2>Now do it for real: the two-prompt experiment</h2>
+      <p class="dek">Scenarios are rehearsal. This is the real thing — run the mirror and the challenger on <em>your own</em> hypothesis, in your own AI tool, and watch the difference with your own eyes. Takes about ten minutes.</p>
+    </div>
+
+    <div class="xstep">
+      <p class="xh"><span class="n">1</span>Write your hypothesis</p>
+      <p class="xd">One or two sentences. A working hypothesis, an interpretation of a result, a claim your thesis depends on — whatever you're currently most attached to. (Attachment is the point.)</p>
+      <textarea class="hypo" id="hypo" rows="2" placeholder="e.g. sleep loss impairs memory consolidation in adolescents" aria-label="Your hypothesis"></textarea>
+    </div>
+
+    <div class="xstep">
+      <p class="xh"><span class="n">2</span>Copy both prompts</p>
+      <p class="xd">They update as you type above. Same hypothesis, opposite jobs.</p>
+      <div class="xpair">
+        <div class="xside xmirror">
+          <span class="tag">✗ The mirror</span>
+          <p class="q" id="mirrorQ"></p>
+          <button class="copybtn" data-copy="mirrorQ" aria-label="Copy the mirror prompt">Copy</button>
+        </div>
+        <div class="xside xchall">
+          <span class="tag">✓ The challenger</span>
+          <p class="q" id="challQ"></p>
+          <button class="copybtn" data-copy="challQ" aria-label="Copy the challenger prompt">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="xstep">
+      <p class="xh"><span class="n">3</span>Run both — separately</p>
+      <p class="xd">Open your AI tool of choice and send each prompt in a <em>fresh</em> conversation, so the second answer isn't shaped by the first. Read the two answers side by side. Notice what the mirror's answer does to your confidence — and what it adds to your understanding. (Need more challenger phrasings? Steal from the <a href="ask-this-not-that.html">phrasebook</a>.)</p>
+    </div>
+
+    <div class="xstep">
+      <p class="xh"><span class="n">4</span>Write down what happened</p>
+      <p class="xd">Three sentences are enough. Your notes are saved in this browser, and only in this browser — use the copy button to move them into your own notes or lab book.</p>
+      <div class="reflect">
+        <div class="f">
+          <label for="r1">What did the mirror give you that felt good but taught you nothing?</label>
+          <textarea id="r1" rows="2"></textarea>
+        </div>
+        <div class="f">
+          <label for="r2">Which of the challenger's objections actually stings — the one you can't dismiss in one sentence?</label>
+          <textarea id="r2" rows="2"></textarea>
+        </div>
+        <div class="f">
+          <label for="r3">What will you check, read, or change in your project because of it?</label>
+          <textarea id="r3" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="exp-actions">
+        <button class="nextbtn" id="copyReflect">Copy my reflection</button>
+        <span class="saved" id="savedNote"></span>
+      </div>
+    </div>
+
+    <div class="sting">
+      <b>If nothing stung:</b> be suspicious. Either your hypothesis is unusually strong — or your challenger prompt let it off easy. Sharpen the prompt ("attack the assumption I am most likely to be blind to") and run it again. A challenger that finds nothing is usually a mirror wearing a costume.
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="col">
+    <p class="eyebrow">Before you go</p>
+    <h2>Nine scenarios is a start, not a certificate.</h2>
+    <p>These situations will read differently once they have <strong>happened to you</strong> — the seminar dismissal, the too-perfect paper, the chatbot's warm "excellent insight." Come back before your next supervision meeting or journal-club and run the room again. The habit is formed the day the challenger version is the one that comes to mind first.</p>
+    <div class="linkrow">
+      <a class="backlink" href="critical-thinking-guide.html">← Return to the main guide</a>
+      <a class="backlink" href="ask-this-not-that.html">Open the prompt phrasebook →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="end">
+  <div class="col">
+    Companion to <em>Thinking for Yourself in the Age of the Machine</em> · No grades, no tracking — the judgement you build here is the point.<br>
+    © 2026 Michaela Liegertová · drafted with Claude (Fable 5) and disclosed — the transparency is the point.
+  </div>
+</footer>
+
+<button class="totop" id="totop" aria-label="Back to top">↑</button>
+
+<script>
+  (function(){
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var GUIDE='critical-thinking-guide.html';
+
+    /* ================= scenarios ================= */
+    var S=[
+      {
+        part:'I', anchor:'part1', partName:'How science works',
+        text:'At a departmental seminar, a distinguished professor waves away your finding: “We tried this approach in the nineties. It doesn’t work.” The room goes quiet. What is the evidence-based move?',
+        opts:[
+          'Defer. Thirty years of experience outweighs one early-career result — shelve it.',
+          'Stand firm. Authority means nothing, so his comment carries no information at all.',
+          'Treat it as a lead, not a verdict: ask what exactly was tried, how it was designed, and whether it was published — then go and check.',
+          'Later that evening, ask an AI chatbot whether the professor is right.'
+        ],
+        correct:2,
+        fb:'<p>Eminence is not evidence — but an experienced scientist’s dismissal often <em>points at</em> evidence you haven’t seen yet. The move is to convert status into checkable claims: which studies, which designs, what results.</p><p>Deferring (A) accepts eminence as evidence; dismissing him entirely (B) throws away a genuine lead; asking a chatbot to adjudicate (D) just swaps one authority for another.</p>'
+      },
+      {
+        part:'II', anchor:'part2', partName:'The replication crisis',
+        text:'You find a paper in a respected journal whose conclusion supports your hypothesis beautifully. Sample: 23 participants. Not preregistered. You can find no replication. What do you do with it?',
+        opts:[
+          'Cite it as support — it survived peer review at a good journal, and that is what peer review is for.',
+          'Treat it as preliminary: note it, keep your confidence low, and go looking for larger, preregistered, or independently replicated tests of the same claim.',
+          'Discard it — small unregistered studies are worthless.',
+          'Cite it, but only in the discussion section, where the standards are looser.'
+        ],
+        correct:1,
+        fb:'<p>Calibration, not cynicism. Peer review means a paper entered the conversation — not that it is true. A small, unregistered, unreplicated study is <em>weak</em> evidence, which is different from <em>zero</em> evidence (C) and very different from proof (A).</p><p>Run the checklist every time: sample size, preregistration, independent replication, open data.</p>'
+      },
+      {
+        part:'I', anchor:'part1', partName:'How science works',
+        text:'A headline announces: “97% of scientists agree on X.” Suppose the underlying science really is trustworthy. What actually makes it so?',
+        opts:[
+          'The percentage itself — near-unanimity among qualified experts is the proof.',
+          'The seniority and reputation of the scientists who agree.',
+          'The fact that the claim has appeared in prestigious journals for many years.',
+          'That many independent lines of evidence — different methods, datasets, and groups, each able to fail in different ways — converge on the same answer.'
+        ],
+        correct:3,
+        fb:'<p>Consensus is the <em>symptom</em>; convergence is the <em>cause</em>. A show of hands can be wrong together — the same blind spot can run through a whole community. Independent methods rarely fail in the same direction, which is why their agreement carries weight.</p><p>When you evaluate a “consensus,” the question is never “how many agree?” but “how independent are the lines of evidence?”</p>'
+      },
+      {
+        part:'II', anchor:'part2', partName:'The replication crisis',
+        text:'You carefully replicate a famous published effect with a larger sample. The effect shows up — but at half the original size. What is the most likely explanation?',
+        opts:[
+          'You made a mistake somewhere; the original team knew the paradigm better than you do.',
+          'This is the typical pattern: first reports are often inflated by publication bias and analytic flexibility, so honest replications shrink.',
+          'The original result was probably fraudulent.',
+          'The effect has genuinely weakened in the years since the original study.'
+        ],
+        correct:1,
+        fb:'<p>In the landmark reproducibility project, replicated effects averaged about <em>half</em> the originally reported size. Journals select for striking results, and flexible analysis inflates first estimates — so shrinkage on honest re-testing is the norm, no fraud (C) or personal failure (A) required.</p><p>Your replication isn’t a problem. It <em>is</em> science self-correcting — with you doing the correcting.</p>'
+      },
+      {
+        part:'III', anchor:'part3', partName:'Metacognition & humility',
+        text:'Reviewing literature for your introduction, you notice you spent 40 minutes hunting for flaws in a paper that contradicts your hypothesis — and 5 minutes nodding along to one that supports it. What are you looking at?',
+        opts:[
+          'Confirmation bias in action — and knowing its name doesn’t switch it off. The fix is structural: run the same checklist, with the same rigour, on both papers.',
+          'Efficient reading — the contradicting paper genuinely deserved more scrutiny.',
+          'Evidence of your intellectual humility, since you engaged longer with the opposing paper.',
+          'Nothing meaningful — reading time naturally varies from paper to paper.'
+        ],
+        correct:0,
+        fb:'<p>Asymmetric scrutiny is exactly what confirmation bias feels like from the inside — it feels like diligence (B). And the bias blind spot means you’ll spot this pattern instantly in a labmate and miss it in yourself.</p><p>That’s why the correction has to be structural, not willpower: same checklist, same time, both directions of evidence.</p>'
+      },
+      {
+        part:'IV', anchor:'part4', partName:'AI & your cognition',
+        text:'Two students prepare for a methods exam. Anna asks an AI to explain every concept, reads the explanations, and highlights them. Boris writes his own rough explanation first, then asks the AI to find the errors in it. Who does better when the AI is gone — and why?',
+        opts:[
+          'Anna — she covered far more material in the same amount of time.',
+          'They perform about the same; the same information reached both of them.',
+          'Anna — Boris wasted effort producing errors that then had to be corrected.',
+          'Boris — generating an answer first, then correcting it, builds durable memory in a way that reading explanations cannot.'
+        ],
+        correct:3,
+        fb:'<p>This is the generation effect plus desirable difficulty: the struggle of producing your own version — errors included (C) — is the mechanism that builds lasting knowledge. Reading fluent explanations produces familiarity that feels like understanding and evaporates in the exam hall.</p><p>The field experiment in the guide found exactly this: unguarded AI help boosted practice performance and <em>hurt</em> exam performance.</p>'
+      },
+      {
+        part:'V', anchor:'part5', partName:'The agreeable machine',
+        text:'You paste your interpretation of a difficult result into a chatbot and ask: “Is my interpretation correct?” It replies: “Yes — an excellent insight,” followed by three supporting elaborations. What have you actually learned?',
+        opts:[
+          'Your interpretation is probably sound — it agreed and gave three reasons.',
+          'That the model understands your field well enough to judge the question.',
+          'Almost nothing about your interpretation: models are tuned to validate the framing they are handed. Re-ask for the strongest case against.',
+          'You should ask it once more, to check that the answer is stable.'
+        ],
+        correct:2,
+        fb:'<p>Sycophancy: agreement tells you about your <em>prompt</em>, not your idea. The supporting elaborations (A) are the model doing what it is optimised to do — being agreeable — and asking again (D) just samples the same mirror twice.</p><p>The information is in the inverted prompt: “Make the strongest case that my interpretation is wrong.”</p>'
+      },
+      {
+        part:'VI', anchor:'part6', partName:'Productive use',
+        text:'Your supervisor says: “Use AI for everything — human plus AI always beats either alone.” According to the meta-analytic evidence, is that true?',
+        opts:[
+          'No — on average, human–AI combinations performed worse than the better of the two alone. Synergy exists but depends on the task and on the human’s skill in directing the tool.',
+          'Yes — combining two kinds of intelligence reliably outperforms each on its own.',
+          'It is true for decision-making tasks but false for creative ones.',
+          'No — the evidence shows AI alone is now the best option for most research tasks.'
+        ],
+        correct:0,
+        fb:'<p>The 106-study meta-analysis found the average human–AI combination did <em>worse</em> than the better partner alone — with genuine synergy in some content-generation tasks and generally none in decision-making (so C has it backwards).</p><p>“Human plus AI” is not a free upgrade. Directing the tool well is a skill — which you can only build if your own judgement stays sharp enough to lead.</p>'
+      },
+      {
+        part:'VII', anchor:'part7', partName:'What is lost',
+        text:'Everyone in your cohort starts using the same AI model to frame their literature reviews. Each individual review gets noticeably sharper. What happens at the level of the field?',
+        opts:[
+          'The field improves — nine sharper reviews are simply better than nine rougher ones.',
+          'Nothing changes at field level; collective quality is just the sum of individual quality.',
+          'The reviews converge on similar framings, references, and blind spots — individually better, collectively narrower. And collective diversity is what error-correction runs on.',
+          'The field self-corrects faster, because everyone now shares one common standard.'
+        ],
+        correct:2,
+        fb:'<p>This is the monoculture risk: a controlled study found generative AI raised individual creativity while <em>reducing</em> the diversity of what the group produced as a whole. Everyone gets better and more alike — and alike means blind to the same things.</p><p>Science catches its errors through genuinely independent perspectives (A and B miss that quality isn’t additive; D has the direction of the effect backwards).</p>'
+      }
+    ];
+
+    var CONF=[
+      {key:0,label:'Just guessing (~55%)'},
+      {key:1,label:'Fairly sure (~70%)'},
+      {key:2,label:'Confident (~90%)'}
+    ];
+
+    /* ================= quiz engine ================= */
+    var mount=document.getElementById('quizmount');
+    var segs=document.getElementById('segs');
+    var qcount=document.getElementById('qcount');
+    var state={i:0,answers:[]}; // answers: {sel, conf, right}
+
+    function renderSegs(){
+      segs.innerHTML='';
+      for(var k=0;k<S.length;k++){
+        var s=document.createElement('span');
+        s.className='seg'+(k<state.i?' done':(k===state.i?' cur':''));
+        segs.appendChild(s);
+      }
+      qcount.textContent = state.i<S.length ? ('Scenario '+(state.i+1)+' of '+S.length) : 'Complete';
+    }
+
+    function letter(n){return String.fromCharCode(65+n);}
+
+    function renderQuestion(){
+      renderSegs();
+      var sc=S[state.i];
+      var card=document.createElement('div');
+      card.className='scenario';
+      card.innerHTML =
+        '<p class="s-eyebrow">Scenario '+(state.i+1)+' of '+S.length+'</p>'+
+        '<p class="s-text"></p>'+
+        '<div class="opts" role="group" aria-label="Answer options"></div>'+
+        '<div class="conf" hidden><span class="lbl">How sure are you?</span></div>'+
+        '<div class="fb" hidden aria-live="polite"></div>'+
+        '<div class="qnav" hidden><button class="nextbtn"></button></div>';
+      card.querySelector('.s-text').innerHTML=sc.text;
+
+      var optsEl=card.querySelector('.opts');
+      var confEl=card.querySelector('.conf');
+      var fbEl=card.querySelector('.fb');
+      var navEl=card.querySelector('.qnav');
+      var nextBtn=card.querySelector('.nextbtn');
+      var sel=-1, revealed=false;
+      var optBtns=[];
+
+      sc.opts.forEach(function(t,idx){
+        var b=document.createElement('button');
+        b.className='opt';b.type='button';
+        var lab=document.createElement('b');lab.textContent=letter(idx);
+        var span=document.createElement('span');span.textContent=t;
+        b.appendChild(lab);b.appendChild(span);
+        b.addEventListener('click',function(){
+          if(revealed)return;
+          sel=idx;
+          optBtns.forEach(function(o,j){o.classList.toggle('sel',j===idx);});
+          confEl.hidden=false;
+        });
+        optsEl.appendChild(b);optBtns.push(b);
+      });
+
+      CONF.forEach(function(c){
+        var b=document.createElement('button');
+        b.className='confbtn';b.type='button';b.textContent=c.label;
+        b.addEventListener('click',function(){
+          if(revealed||sel<0)return;
+          revealed=true;
+          var right=(sel===sc.correct);
+          state.answers.push({sel:sel,conf:c.key,right:right});
+          optBtns.forEach(function(o,j){
+            o.disabled=true;
+            o.classList.remove('sel');
+            if(j===sc.correct){
+              o.classList.add('correct');
+              var m=document.createElement('span');m.className='mark';m.textContent='✓';o.appendChild(m);
+            }else if(j===sel){
+              o.classList.add('wrong');
+              var m2=document.createElement('span');m2.className='mark';m2.textContent='✗';o.appendChild(m2);
+            }
+          });
+          confEl.hidden=true;
+          fbEl.className='fb'+(right?'':' missed');
+          fbEl.innerHTML=
+            '<span class="verdict '+(right?'good':'bad')+'">'+(right?'Right — and here is why it matters':'Not this time — here is the reasoning')+'</span>'+
+            sc.fb+
+            '<p class="reread"><a href="'+GUIDE+'#'+sc.anchor+'" target="_blank" rel="noopener">Reread Part '+sc.part+' · '+sc.partName+' →</a></p>';
+          fbEl.hidden=false;
+          nextBtn.textContent=(state.i<S.length-1)?'Next scenario →':'See your results →';
+          navEl.hidden=false;
+          nextBtn.focus();
+        });
+        confEl.appendChild(b);
+      });
+      var hint=document.createElement('p');
+      hint.className='hint';
+      hint.textContent='Your rating is revealed to no one — it only feeds your calibration summary at the end.';
+      confEl.appendChild(hint);
+
+      nextBtn.addEventListener('click',function(){
+        state.i++;
+        if(state.i<S.length){renderQuestion();}else{renderResults();}
+        if(!reduce){mount.scrollIntoView({behavior:'smooth',block:'start'});}
+      });
+
+      mount.innerHTML='';
+      mount.appendChild(card);
+    }
+
+    function renderResults(){
+      renderSegs();
+      var right=state.answers.filter(function(a){return a.right;}).length;
+
+      var rows=CONF.map(function(c){
+        var got=state.answers.filter(function(a){return a.conf===c.key;});
+        var hit=got.filter(function(a){return a.right;}).length;
+        return {label:c.label,n:got.length,hit:hit};
+      });
+
+      var missed=[];
+      state.answers.forEach(function(a,idx){
+        if(!a.right){missed.push(idx);}
+      });
+
+      var card=document.createElement('div');
+      card.className='results';
+      var html=
+        '<p class="s-eyebrow">Your results</p>'+
+        '<h2>'+(right===S.length?'A clean sweep — now go do it for real.':(right>=6?'Solid — the habits are forming.':'Good news: now you know exactly what to reread.'))+'</h2>'+
+        '<div class="score">'+right+' <small>/ '+S.length+' scenarios</small></div>'+
+        '<p class="r-sub">Score matters less than what you do with the misses — and how honest your confidence was.</p>';
+
+      html+='<div class="calib"><h3>Your calibration</h3><table><tr><th>When you said…</th><th>Answered</th><th>Were right</th></tr>';
+      rows.forEach(function(r){
+        var pct=r.n>0?Math.round(100*r.hit/r.n)+'%':'—';
+        html+='<tr><td>'+r.label+'</td><td>'+r.n+'</td><td class="hit">'+(r.n>0?(r.hit+' of '+r.n+' ('+pct+')'):'—')+'</td></tr>';
+      });
+      html+='</table><p class="note">Well-calibrated means your ~90% answers land right about nine times in ten, and your ~55% ones only just better than chance. Nine questions is far too small a sample to judge that properly — which, you may notice, is itself a Part II lesson about small samples. Treat this as a first taste of a habit worth keeping: attach an honest confidence to every claim you make.</p></div>';
+
+      html+='<div class="missed-list"><h3>Worth rereading</h3>';
+      if(missed.length===0){
+        html+='<p class="all-good">Nothing — you took every scenario. The only thing left to test is the real world, below.</p>';
+      }else{
+        html+='<ul>';
+        missed.forEach(function(idx){
+          var sc=S[idx];
+          html+='<li><span>Scenario '+(idx+1)+':</span> <a href="'+GUIDE+'#'+sc.anchor+'" target="_blank" rel="noopener">Part '+sc.part+' · '+sc.partName+' →</a></li>';
+        });
+        html+='</ul>';
+      }
+      html+='</div>';
+
+      html+='<div class="r-actions">'+
+        '<a class="nextbtn" href="#experiment" style="text-decoration:none;border-bottom:none;">Go to the experiment ↓</a>'+
+        '<button class="ghostbtn" id="restart">Start over</button>'+
+        '</div>';
+
+      card.innerHTML=html;
+      mount.innerHTML='';
+      mount.appendChild(card);
+      card.querySelector('#restart').addEventListener('click',function(){
+        state={i:0,answers:[]};
+        renderQuestion();
+      });
+    }
+
+    renderQuestion();
+
+    /* ================= experiment ================= */
+    function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+    function read(k){try{return localStorage.getItem(k)||'';}catch(e){return '';}}
+
+    var hypo=document.getElementById('hypo');
+    var mirrorQ=document.getElementById('mirrorQ');
+    var challQ=document.getElementById('challQ');
+    var savedNote=document.getElementById('savedNote');
+    var R=[document.getElementById('r1'),document.getElementById('r2'),document.getElementById('r3')];
+
+    function updatePrompts(){
+      var h=hypo.value.trim()||'[your hypothesis]';
+      mirrorQ.textContent='Is my hypothesis that '+h+' a good hypothesis?';
+      challQ.textContent='Give me the three strongest reasons my hypothesis — that '+h+' — might be wrong, the most plausible rival explanations, and what evidence would distinguish them.';
+    }
+
+    hypo.value=read('pr_hypo');
+    R.forEach(function(t,i){t.value=read('pr_r'+(i+1));});
+    updatePrompts();
+
+    var saveTimer=null;
+    function noteSaved(){
+      savedNote.textContent='Saved in this browser.';
+      if(saveTimer)clearTimeout(saveTimer);
+      saveTimer=setTimeout(function(){savedNote.textContent='';},2000);
+    }
+    hypo.addEventListener('input',function(){store('pr_hypo',hypo.value);updatePrompts();noteSaved();});
+    R.forEach(function(t,i){
+      t.addEventListener('input',function(){store('pr_r'+(i+1),t.value);noteSaved();});
+    });
+
+    function legacyCopy(text){
+      return new Promise(function(resolve,reject){
+        try{
+          var ta=document.createElement('textarea');
+          ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+          document.body.appendChild(ta);ta.focus();ta.select();
+          document.execCommand('copy');document.body.removeChild(ta);resolve();
+        }catch(e){reject(e);}
+      });
+    }
+    function copyText(text){
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        return navigator.clipboard.writeText(text).catch(function(){return legacyCopy(text);});
+      }
+      return legacyCopy(text);
+    }
+
+    document.querySelectorAll('.copybtn[data-copy]').forEach(function(b){
+      b.addEventListener('click',function(){
+        var el=document.getElementById(b.getAttribute('data-copy'));
+        copyText(el.textContent.trim()).then(function(){
+          var old=b.textContent;
+          b.textContent='Copied ✓';b.classList.add('done');
+          setTimeout(function(){b.textContent=old;b.classList.remove('done');},1600);
+        }).catch(function(){
+          b.textContent='Select & copy';
+          setTimeout(function(){b.textContent='Copy';},1600);
+        });
+      });
+    });
+
+    document.getElementById('copyReflect').addEventListener('click',function(){
+      var btn=this;
+      var out='THE TWO-PROMPT EXPERIMENT\n'+
+        '\nMy hypothesis:\n'+(hypo.value.trim()||'—')+
+        '\n\nWhat the mirror gave me (felt good, taught nothing):\n'+(R[0].value.trim()||'—')+
+        '\n\nThe challenger objection that stings:\n'+(R[1].value.trim()||'—')+
+        '\n\nWhat I will check, read, or change:\n'+(R[2].value.trim()||'—')+'\n';
+      copyText(out).then(function(){
+        var old=btn.textContent;
+        btn.textContent='Copied ✓';
+        setTimeout(function(){btn.textContent=old;},1600);
+      }).catch(function(){
+        var old=btn.textContent;
+        btn.textContent='Copy blocked — try once more';
+        setTimeout(function(){btn.textContent=old;},1800);
+      });
+    });
+
+    /* ================= back to top ================= */
+    var top=document.getElementById('totop');
+    function onScroll(){
+      var h=document.documentElement;
+      var y=h.scrollTop||document.body.scrollTop;
+      top.classList.toggle('show',y>900);
+    }
+    document.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+    top.addEventListener('click',function(){
+      window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+    });
+  })();
+</script>
+</body>
+</html>

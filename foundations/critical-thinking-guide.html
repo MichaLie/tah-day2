@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thinking for Yourself in the Age of the Machine</title>
+<meta name="description" content="An evidence-grounded field guide for doctoral researchers: how science works, how your mind and the machine mislead you, and how to use AI as a challenger, not a mirror. 27 peer-reviewed sources.">
+</head>
+<body>
+<style>
+  :root{
+    --paper:#F5F6F8;
+    --paper-2:#FBFBFD;
+    --card:#FFFFFF;
+    --ink:#161A22;
+    --ink-soft:#39414E;
+    --muted:#646E7C;
+    --hair:#D7DCE3;
+    --hair-soft:#E7EAF0;
+    --blue:#1E3A63;
+    --blue-bright:#2C5AA8;
+    --blue-deep:#132339;
+    --blue-wash:#EAEEF5;
+    --ochre:#9C6716;
+    --ochre-wash:#F3EBDD;
+
+    --serif:"Palatino Linotype","Book Antiqua",Palatino,Georgia,Cambria,"Times New Roman",serif;
+    --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --mono:"Cascadia Code",Consolas,"SF Mono","Roboto Mono",ui-monospace,monospace;
+
+    --measure:66ch;
+    --pad:clamp(1.25rem,5vw,2.75rem);
+  }
+
+  *{box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:1.1875rem;
+    line-height:1.68;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ---------- reading progress ---------- */
+  .progress{
+    position:fixed;top:0;left:0;height:3px;width:0%;
+    background:linear-gradient(90deg,var(--blue-bright),var(--ochre));
+    z-index:50;transition:width .1s linear;
+  }
+
+  /* ---------- shared column ---------- */
+  .col{
+    width:100%;
+    max-width:calc(var(--measure) + 2 * var(--pad));
+    margin-inline:auto;
+    padding-inline:var(--pad);
+  }
+
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:.72rem;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.18em;
+    color:var(--blue-bright);
+    margin:0;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    background:var(--blue-deep);
+    color:#EAEEF5;
+    overflow:hidden;
+    border-bottom:1px solid #0c1626;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(120,150,200,.10) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(120,150,200,.10) 1px,transparent 1px);
+    background-size:26px 26px;
+    mask-image:radial-gradient(ellipse 90% 75% at 50% 30%,#000 45%,transparent 100%);
+    -webkit-mask-image:radial-gradient(ellipse 90% 75% at 50% 30%,#000 45%,transparent 100%);
+    pointer-events:none;
+  }
+  .hero .col{
+    position:relative;
+    padding-top:clamp(3.5rem,9vw,6rem);
+    padding-bottom:clamp(3rem,7vw,4.75rem);
+  }
+  .hero .eyebrow{color:#8FB0E0;}
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.5rem,6.2vw,4.3rem);
+    line-height:1.04;
+    letter-spacing:-.012em;
+    text-wrap:balance;
+    margin:.5rem 0 0;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:#9CC0F2;
+  }
+  .standfirst{
+    font-size:clamp(1.15rem,2.4vw,1.4rem);
+    line-height:1.5;
+    color:#C4D2E8;
+    max-width:54ch;
+    margin:1.5rem 0 0;
+    text-wrap:pretty;
+  }
+  .hero-meta{
+    display:flex;flex-wrap:wrap;gap:.5rem 1.75rem;
+    margin-top:2.25rem;
+    font-family:var(--sans);
+    font-size:.82rem;
+    letter-spacing:.02em;
+    color:#8AA0C0;
+    border-top:1px solid rgba(140,170,215,.22);
+    padding-top:1.25rem;
+  }
+  .hero-meta b{color:#C4D2E8;font-weight:600;}
+
+  /* ---------- orientation / lede ---------- */
+  .lede{padding:clamp(2.5rem,6vw,4rem) 0 .5rem;}
+  .lede .drop::first-letter{
+    initial-letter:3;
+    -webkit-initial-letter:3;
+    font-weight:600;
+    color:var(--blue);
+    margin-right:.6rem;
+  }
+  @supports not ((initial-letter:3) or (-webkit-initial-letter:3)){
+    .lede .drop::first-letter{
+      float:left;font-size:3.4em;line-height:.85;
+      padding:.06em .12em 0 0;font-weight:600;color:var(--blue);
+    }
+  }
+
+  main p{margin:0 0 1.15rem;text-wrap:pretty;}
+  main .col > p,
+  section .col > p,
+  section .col > ul{
+    max-width:var(--measure);
+  }
+
+  a{color:var(--blue-bright);text-decoration:none;border-bottom:1px solid rgba(44,90,168,.35);}
+  a:hover{border-bottom-color:var(--blue-bright);}
+  a:focus-visible{outline:2px solid var(--blue-bright);outline-offset:3px;border-radius:2px;}
+
+  strong{font-weight:600;}
+  em{font-style:italic;}
+
+  /* citation superscripts */
+  .cite{
+    font-family:var(--sans);
+    font-size:.62em;
+    font-weight:600;
+    vertical-align:super;
+    line-height:0;
+    color:var(--blue-bright);
+    padding:0 .1em;
+  }
+  .cite a{border:none;color:inherit;}
+
+  /* ---------- part sections ---------- */
+  .part{padding:clamp(2.5rem,6vw,4.25rem) 0;border-top:1px solid var(--hair);scroll-margin-top:1rem;}
+  .part-head{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:.35rem 1.4rem;
+    align-items:baseline;
+    margin-bottom:1.7rem;
+  }
+  .numeral{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:.95rem;
+    letter-spacing:.02em;
+    color:#fff;
+    background:var(--blue);
+    width:2.5rem;height:2.5rem;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+    align-self:center;
+    font-variant-numeric:tabular-nums;
+    grid-row:span 2;
+  }
+  .part-head h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(1.65rem,3.4vw,2.35rem);
+    line-height:1.12;
+    letter-spacing:-.01em;
+    text-wrap:balance;
+    margin:0;
+    grid-column:2;
+  }
+  .part-head .eyebrow{grid-column:2;order:-1;margin-bottom:.15rem;}
+  .part-dek{
+    grid-column:2;
+    font-family:var(--sans);
+    font-size:1rem;
+    line-height:1.55;
+    color:var(--muted);
+    margin:.55rem 0 0;
+    max-width:56ch;
+    text-wrap:pretty;
+  }
+
+  h3{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:1.02rem;
+    letter-spacing:.01em;
+    color:var(--blue);
+    margin:2.4rem 0 .6rem;
+    display:flex;align-items:center;gap:.8rem;
+  }
+  h3::after{content:"";flex:1;height:1px;background:var(--hair);min-width:2rem;}
+
+  /* ---------- pull quote / principle ---------- */
+  .principle{
+    margin:2rem 0;
+    padding:.2rem 0 .2rem 1.6rem;
+    border-left:3px solid var(--blue-bright);
+    font-size:clamp(1.3rem,2.8vw,1.62rem);
+    line-height:1.34;
+    font-style:italic;
+    color:var(--blue);
+    text-wrap:pretty;
+  }
+
+  /* ---------- key-term cards (study apparatus) ---------- */
+  .terms{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+    gap:.85rem;
+    margin:1.8rem 0;
+  }
+  .term{
+    background:var(--card);
+    border:1px solid var(--hair);
+    border-top:2px solid var(--blue-bright);
+    border-radius:6px;
+    padding:.95rem 1.05rem;
+    font-family:var(--sans);
+    font-size:.86rem;
+    line-height:1.5;
+    color:var(--ink-soft);
+  }
+  .term .k{
+    display:block;
+    font-size:.62rem;font-weight:700;
+    letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:.35rem;
+  }
+  .term b{
+    display:block;
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:600;
+    font-size:1.04rem;
+    color:var(--blue);
+    margin-bottom:.3rem;
+  }
+
+  /* ---------- takeaway box (end of each part) ---------- */
+  .takeaway{
+    margin:2.4rem 0 0;
+    background:var(--blue-wash);
+    border:1px solid #C9D6EA;
+    border-left:3px solid var(--blue-bright);
+    border-radius:6px;
+    padding:1.2rem 1.4rem;
+  }
+  .takeaway .tag{
+    display:block;
+    font-family:var(--sans);
+    font-size:.68rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.15em;
+    color:var(--blue-bright);
+    margin-bottom:.5rem;
+  }
+  .takeaway p{margin:0;font-size:1.06rem;line-height:1.55;color:var(--ink);}
+  .takeaway .try{
+    margin-top:.75rem;padding-top:.75rem;
+    border-top:1px dashed rgba(30,58,99,.28);
+    font-family:var(--sans);
+    font-size:.92rem;line-height:1.55;color:var(--ink-soft);
+  }
+  .takeaway .try b{color:var(--blue);font-weight:700;}
+
+  /* ---------- checklist card ---------- */
+  .checklist{
+    background:var(--card);
+    border:1px solid var(--hair);
+    border-radius:6px;
+    padding:1.25rem 1.4rem;
+    margin:1.9rem 0;
+  }
+  .checklist .tag{
+    display:block;
+    font-family:var(--sans);
+    font-size:.68rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.15em;
+    color:var(--blue);
+    margin-bottom:.6rem;
+  }
+  .checklist label{
+    display:flex;gap:.75rem;align-items:flex-start;
+    padding:.5rem 0;
+    border-top:1px solid var(--hair-soft);
+    font-family:var(--sans);
+    font-size:.95rem;line-height:1.5;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .checklist label:first-of-type{border-top:none;}
+  .checklist input{
+    accent-color:var(--blue-bright);
+    width:1.05rem;height:1.05rem;
+    margin:.18rem 0 0;flex:none;
+  }
+  .checklist .foot{
+    margin:.7rem 0 0;
+    font-family:var(--sans);
+    font-size:.82rem;line-height:1.5;
+    color:var(--muted);
+  }
+
+  /* ---------- caution note (ochre) — a reading device, not an exercise ---------- */
+  .aside-note{
+    margin:2rem 0;
+    padding:1.25rem 1.4rem;
+    background:var(--ochre-wash);
+    border-radius:4px;
+    border-left:3px solid var(--ochre);
+    font-size:1.02rem;
+    line-height:1.55;
+  }
+  .aside-note .tag{
+    display:block;
+    font-family:var(--sans);
+    font-size:.68rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.15em;
+    color:var(--ochre);
+    margin-bottom:.4rem;
+  }
+  .aside-note p{margin:0;}
+  .aside-note p + p{margin-top:.7rem;}
+
+  /* ---------- data figure (stat) ---------- */
+  .figrow{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));
+    gap:1px;
+    background:var(--hair);
+    border:1px solid var(--hair);
+    border-radius:5px;
+    overflow:hidden;
+    margin:2rem 0;
+  }
+  .figrow .cell{background:var(--card);padding:1.15rem 1.2rem;}
+  .figrow .num{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:1.85rem;
+    letter-spacing:-.02em;
+    color:var(--blue);
+    font-variant-numeric:tabular-nums;
+    line-height:1;
+  }
+  .figrow .lab{
+    font-family:var(--sans);
+    font-size:.78rem;
+    line-height:1.35;
+    color:var(--muted);
+    margin-top:.5rem;
+  }
+
+  /* ---------- machine-register prompt line ---------- */
+  .prompt{
+    font-family:var(--mono);
+    font-size:.9rem;
+    line-height:1.5;
+    background:#11151d;
+    color:#cdd9ea;
+    padding:.7rem 1rem;
+    border-radius:4px;
+    margin:.6rem 0;
+    display:block;
+  }
+  .prompt::before{content:"› ";color:#5f7fb0;}
+  .prompt-group{margin:1.6rem 0;}
+  .prompt-group .k{
+    font-family:var(--sans);font-size:.8rem;color:var(--muted);
+    display:block;margin-bottom:.3rem;
+  }
+
+  /* ---------- companion call-to-action ---------- */
+  .cta{
+    display:block;
+    margin:2rem 0;
+    padding:1.35rem 1.5rem;
+    background:var(--blue-wash);
+    border:1px solid #C9D6EA;
+    border-left:3px solid var(--blue-bright);
+    border-radius:6px;
+    text-decoration:none;
+    color:inherit;
+    transition:border-color .15s ease,box-shadow .15s ease,transform .1s ease;
+  }
+  .cta:hover{
+    border-color:var(--blue-bright);
+    box-shadow:0 10px 26px -18px rgba(30,58,99,.55);
+  }
+  .cta:focus-visible{outline:2px solid var(--blue-bright);outline-offset:3px;}
+  .cta .cta-k{
+    display:block;font-family:var(--sans);font-size:.68rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.14em;color:var(--blue-bright);margin-bottom:.35rem;
+  }
+  .cta .cta-t{
+    display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+    font-family:var(--serif);font-size:1.22rem;font-weight:600;color:var(--blue);line-height:1.25;
+  }
+  .cta .cta-t .go{font-family:var(--sans);font-size:1.4rem;color:var(--blue-bright);flex:none;}
+  .cta .cta-d{
+    margin:.45rem 0 0;font-size:1rem;line-height:1.5;color:var(--ink-soft);max-width:56ch;
+  }
+
+  /* ---------- contents ---------- */
+  .toc{
+    background:var(--blue-wash);
+    border-radius:6px;
+    padding:1.5rem 1.6rem;
+    margin:2.5rem 0 .5rem;
+    scroll-margin-top:1rem;
+  }
+  .toc h2{
+    font-family:var(--sans);font-size:.72rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.16em;color:var(--blue);
+    margin:0 0 1rem;
+  }
+  .toc ol{margin:0;padding:0;list-style:none;counter-reset:toc;}
+  .toc li{
+    counter-increment:toc;
+    display:flex;gap:.85rem;align-items:baseline;
+    padding:.42rem 0;
+    border-top:1px solid rgba(30,58,99,.12);
+    font-size:1.02rem;
+  }
+  .toc li:first-child{border-top:none;}
+  .toc li::before{
+    content:counter(toc,upper-roman);
+    font-family:var(--sans);font-size:.72rem;font-weight:700;
+    color:var(--blue-bright);min-width:1.9rem;
+    letter-spacing:.03em;
+  }
+  .toc a{border:none;color:var(--ink);}
+  .toc a:hover{color:var(--blue-bright);}
+  .toc-note{
+    margin:1.1rem 0 0;padding-top:.9rem;
+    border-top:1px solid rgba(30,58,99,.12);
+    font-family:var(--sans);font-size:.85rem;line-height:1.5;color:var(--muted);
+  }
+  .toc-note b{color:var(--blue);font-weight:600;}
+
+  /* ---------- coda ---------- */
+  .coda{
+    background:var(--blue-deep);
+    color:#DCE6F5;
+    padding:clamp(2.75rem,7vw,4.5rem) 0;
+    margin-top:1rem;
+  }
+  .coda .eyebrow{color:#8FB0E0;}
+  .coda h2{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(1.7rem,3.6vw,2.4rem);
+    line-height:1.14;margin:.4rem 0 1.4rem;color:#fff;
+    text-wrap:balance;
+  }
+  .coda p{color:#C4D2E8;max-width:var(--measure);}
+  .coda strong{color:#fff;}
+  .creed{
+    list-style:none;margin:1.75rem 0 0;padding:0;
+    display:grid;gap:.1rem;
+  }
+  .creed li{
+    padding:.85rem 0;
+    border-top:1px solid rgba(140,170,215,.22);
+    font-size:1.12rem;line-height:1.4;
+    display:flex;gap:.9rem;align-items:baseline;
+  }
+  .creed li b{color:#9CC0F2;font-family:var(--sans);font-size:.8rem;font-weight:700;letter-spacing:.02em;min-width:1.3rem;font-variant-numeric:tabular-nums;}
+  .creed li span strong{color:#fff;font-weight:600;}
+  .coda .pin{
+    margin-top:1.6rem;
+    font-family:var(--sans);font-size:.82rem;color:#8AA0C0;
+  }
+  .coda .cta-dark{
+    display:block;margin-top:2rem;padding:1.3rem 1.4rem;
+    border:1px solid rgba(140,170,215,.35);border-left:3px solid #9CC0F2;border-radius:6px;
+    color:inherit;
+    transition:border-color .15s ease,background .15s ease;
+  }
+  .coda .cta-dark:hover{border-color:#9CC0F2;background:rgba(120,150,200,.08);}
+  .coda .cta-dark .k{
+    display:block;font-family:var(--sans);font-size:.68rem;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:#8FB0E0;margin-bottom:.35rem;
+  }
+  .coda .cta-dark .t{
+    display:flex;justify-content:space-between;gap:1rem;align-items:baseline;
+    font-family:var(--serif);font-size:1.22rem;font-weight:600;color:#fff;line-height:1.25;
+  }
+  .coda .cta-dark .t .go{font-family:var(--sans);font-size:1.4rem;color:#9CC0F2;flex:none;}
+  .coda .cta-dark .d{
+    display:block;margin-top:.45rem;font-size:.98rem;line-height:1.5;color:#C4D2E8;
+  }
+
+  /* ---------- references ---------- */
+  .refs{padding:clamp(2.5rem,6vw,4rem) 0 5rem;border-top:1px solid var(--hair);}
+  .refs h2{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(1.5rem,3vw,2rem);margin:0 0 .4rem;
+  }
+  .refs .note{font-family:var(--sans);font-size:.85rem;color:var(--muted);margin:0 0 2rem;max-width:60ch;}
+  .refgroup h3{margin-top:2rem;color:var(--blue);}
+  .refs ol{
+    margin:0;padding:0;list-style:none;counter-reset:ref;
+  }
+  .refs li{
+    counter-increment:ref;
+    position:relative;
+    padding:.7rem 0 .7rem 2.6rem;
+    border-top:1px solid var(--hair-soft);
+    font-family:var(--sans);
+    font-size:.86rem;
+    line-height:1.5;
+    color:var(--ink-soft);
+  }
+  .refs li::before{
+    content:counter(ref);
+    position:absolute;left:0;top:.72rem;
+    font-weight:700;font-size:.74rem;
+    color:var(--blue-bright);
+    font-variant-numeric:tabular-nums;
+  }
+  .refs li .src{color:var(--muted);}
+  .refs li b{color:var(--ink);font-weight:600;}
+  .refs .doi{color:var(--blue-bright);word-break:break-word;}
+
+  footer.end{
+    padding:2rem 0 3.5rem;
+    font-family:var(--sans);font-size:.78rem;color:var(--muted);
+    border-top:1px solid var(--hair);
+  }
+
+  /* ---------- back to top ---------- */
+  .totop{
+    position:fixed;right:1.1rem;bottom:1.1rem;z-index:60;
+    width:2.7rem;height:2.7rem;border-radius:50%;
+    border:1px solid var(--hair);
+    background:var(--card);color:var(--blue);
+    font-family:var(--sans);font-size:1.05rem;font-weight:700;
+    cursor:pointer;
+    box-shadow:0 8px 20px -10px rgba(20,30,50,.4);
+    opacity:0;pointer-events:none;
+    transition:opacity .2s ease;
+  }
+  .totop.show{opacity:1;pointer-events:auto;}
+  .totop:hover{border-color:var(--blue-bright);color:var(--blue-bright);}
+  .totop:focus-visible{outline:2px solid var(--blue-bright);outline-offset:2px;}
+
+  @media (max-width:640px){
+    body{font-size:1.09rem;}
+    .part-head{grid-template-columns:1fr;gap:.5rem;}
+    .numeral{align-self:start;grid-row:auto;}
+    .part-head h2,.part-head .eyebrow,.part-dek{grid-column:1;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .progress{transition:none;}
+    .totop{transition:none;}
+    .reveal{opacity:1 !important;transform:none !important;}
+  }
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+</style>
+
+<div class="progress" id="progress"></div>
+
+<header class="hero">
+  <div class="col">
+    <p class="eyebrow">A Field Guide for Doctoral Researchers</p>
+    <h1>Thinking for Yourself in the <em>Age of the Machine</em></h1>
+    <p class="standfirst">Critical thinking and scientific reasoning have never mattered more — precisely because a tool now exists that can imitate them without doing them. This is a guide to keeping the reasoning yours.</p>
+    <div class="hero-meta">
+      <span><b>For</b> &nbsp;PhD students &amp; early-career researchers</span>
+      <span><b>On</b> &nbsp;how science works · epistemic humility · using AI to think</span>
+      <span><b>Grounded in</b> &nbsp;peer-reviewed evidence, 2015–2026</span>
+      <span><b>Reading time</b> &nbsp;≈ 20 minutes · 7 parts</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="lede">
+    <div class="col">
+      <p class="drop">Something subtle has shifted in what it feels like to know something. You can now produce a fluent literature summary in seconds, a plausible hypothesis on request, a polished paragraph you didn't write. The output looks like the product of thought. Often it is not — not yours, and sometimes not anyone's.</p>
+
+      <p>That is a quiet hazard for a researcher in training, because the point of a doctorate is not to produce fluent outputs. It is to become a person who can tell the difference between a claim that is true and a claim that merely <em>sounds</em> true.</p>
+
+      <p>There are two easy ways to get the AI era wrong. The first is to refuse these tools and fall behind on genuinely useful capabilities. The second is quieter and more dangerous: to let them do your thinking — to accept the fluent answer, adopt the model's framing, and gradually lose the mental muscles a research career is supposed to build.</p>
+
+      <p>This guide argues for a third path: use AI deliberately, as an instrument that sharpens your reasoning rather than replaces it. Doing that well requires understanding two things most graduate training leaves implicit — how scientific knowledge actually works, and how your own mind, and a machine's, can quietly mislead you.</p>
+
+      <nav class="toc" aria-label="Contents" id="contents">
+        <h2>What this guide covers</h2>
+        <ol>
+          <li><a href="#part1">How science actually works — and what "consensus" really means</a></li>
+          <li><a href="#part2">The replication crisis as a lesson in humility</a></li>
+          <li><a href="#part3">Your mind has blind spots: metacognition and intellectual humility</a></li>
+          <li><a href="#part4">What AI does to your thinking: the offloading problem</a></li>
+          <li><a href="#part5">The agreeable machine: sycophancy and automation bias</a></li>
+          <li><a href="#part6">Where AI genuinely helps you think: the challenger, not the mirror</a></li>
+          <li><a href="#part7">What is lost when thinking is offloaded</a></li>
+        </ol>
+        <p class="toc-note"><b>In a hurry?</b> Every part ends with a boxed takeaway and one thing to try in your own work this week. Read those seven boxes first, then come back for the argument behind them. When you've finished, <a href="practice-room.html">test yourself in the Practice Room</a>.</p>
+      </nav>
+    </div>
+  </section>
+
+  <section class="part reveal" id="part1">
+    <div class="col">
+      <div class="part-head">
+        <span class="numeral">I</span>
+        <p class="eyebrow">How science works</p>
+        <h2>Science is a method for being wrong more slowly</h2>
+        <p class="part-dek">Before you can use AI well, you need a clear picture of where scientific authority actually comes from — and why "the experts agree" is not it.</p>
+      </div>
+
+      <h3>A method, not a truth machine</h3>
+
+      <p>The popular image of science is a machine that manufactures truth. The working reality is humbler and more interesting: science is a fallible, self-questioning social process for <em>reducing error over time</em>. Individual studies are provisional. Individual scientists are biased.</p>
+
+      <p>What gives the enterprise its authority is not the reliability of any one result but the collective, adversarial scrutiny that results are subjected to over years — replication, criticism, competing explanations, and the slow convergence of independent lines of evidence.</p>
+
+      <h3>Consensus is not a vote</h3>
+
+      <p>That word <em>convergence</em> matters more than the word most people reach for, which is <em>consensus</em>. In 2025 the editor-in-chief of <em>Science</em> argued that the phrase "scientific consensus" actively misleads the public, who hear it as an opinion poll or a negotiated agreement among experts.<span class="cite"><a href="#r-thorp">1</a></span></p>
+
+      <p>Consensus in science is not a show of hands. It is what happens when many independent methods, datasets, and research groups — each with different assumptions and different ways of being wrong — nonetheless arrive at the same conclusion. The strength of a scientific claim comes from that <em>independence</em> of the converging evidence, not from the number of people who assert it or the eminence of who asserts it.</p>
+
+      <div class="terms">
+        <div class="term"><span class="k">Key term</span><b>Convergence of evidence</b>Confidence earned when independent methods, datasets and groups — each able to be wrong in <em>different</em> ways — keep arriving at the same answer.</div>
+        <div class="term"><span class="k">Key term</span><b>Eminence-based reasoning</b>Accepting a claim because of <em>who</em> said it — a professor, a famous lab, a confident AI — instead of what evidence supports it.</div>
+      </div>
+
+      <p class="principle">A claim earns its standing from the evidence and the scrutiny it has survived — never from the status of the person making it.</p>
+
+      <h3>Evidence over eminence</h3>
+
+      <p>This is the distinction between <strong>evidence-based</strong> and <strong>eminence-based</strong> reasoning, and it is the single most important habit to internalise early. A senior professor's intuition, a famous lab's preprint, a confident answer from a language model — none of these carry weight because of their source. They carry weight only to the degree that they can point to evidence that would survive a skeptic's examination.</p>
+
+      <p>Treating authority as a substitute for evidence is how fields go wrong. Treating evidence as the final authority — even when it contradicts eminent opinion — is how they correct themselves.</p>
+
+      <p>Uncertainty, in this picture, is not a failure of science to be resolved away. It is the normal and permanent condition of working at the frontier, and learning to reason well <em>under</em> uncertainty — to hold calibrated degrees of belief rather than binary certainties — is much of what research training is for.</p>
+
+      <aside class="takeaway">
+        <span class="tag">Takeaway · Part I</span>
+        <p>Weigh every claim — from a professor, a paper, or a chatbot — by the evidence and scrutiny behind it, never by the confidence or status of the source.</p>
+        <p class="try"><b>Try it:</b> next time a claim persuades you, pause and ask: am I convinced by the evidence — or by who said it, and how fluently they said it?</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="part reveal" id="part2">
+    <div class="col">
+      <div class="part-head">
+        <span class="numeral">II</span>
+        <p class="eyebrow">The replication crisis</p>
+        <h2>What a decade of failed replications should teach you</h2>
+        <p class="part-dek">When researchers systematically re-ran published studies, a large share of the findings did not hold up. Here is why that happens — and how to read papers accordingly.</p>
+      </div>
+
+      <h3>What the replication projects found</h3>
+
+      <p>If science self-corrects, the last fifteen years have shown that it does so slowly, unevenly, and only when people do the unglamorous work of checking. Beginning around 2011, large coordinated efforts tried to reproduce well-known published findings — and a startling fraction did not hold up.</p>
+
+      <p>In the landmark Reproducibility Project in psychology, 100 studies from top journals were repeated with high statistical power. While 97% of the original studies had reported statistically significant effects, only 36% of the replications did — and the replicated effects were on average about half the size of the originals.<span class="cite"><a href="#r-osc">2</a></span> Pooling across hundreds of replication attempts since, roughly two-thirds reproduce in the same direction, with effect sizes materially smaller than first reported.<span class="cite"><a href="#r-nosek22">3</a></span> In 2026 a coordinated effort across the social and behavioural sciences replicated only about 55% of tested claims, with the median effect shrinking from r ≈ 0.25 to r ≈ 0.10.<span class="cite"><a href="#r-tyner">4</a></span></p>
+
+      <div class="figrow" role="group" aria-label="Key replication statistics">
+        <div class="cell"><div class="num">36%</div><div class="lab">of 100 landmark psychology findings reached significance when repeated (vs. 97% originally)<span class="cite"><a href="#r-osc">2</a></span></div></div>
+        <div class="cell"><div class="num">~½</div><div class="lab">the typical size of a replicated effect relative to its original report<span class="cite"><a href="#r-osc">2</a></span></div></div>
+        <div class="cell"><div class="num">70</div><div class="lab">independent teams analysing one brain-imaging dataset reached divergent conclusions<span class="cite"><a href="#r-narps">5</a></span></div></div>
+        <div class="cell"><div class="num">&lt;50%</div><div class="lab">typical statistical power in published research — persistently, for decades<span class="cite"><a href="#r-munafo">6</a></span></div></div>
+      </div>
+
+      <h3>Why it happens — structure, not scandal</h3>
+
+      <p>The causes are now well understood, and they are structural rather than a matter of a few bad actors. Statistical power has sat below 50% for decades, meaning many studies are too small to reliably detect the effects they claim.<span class="cite"><a href="#r-munafo">6</a></span> Journals prefer positive, novel results, so negative findings vanish from the record. And researchers enjoy enormous undocumented flexibility in how they collect and analyse data — the "researcher degrees of freedom" that let a well-intentioned scientist find a significant result almost anywhere.</p>
+
+      <p>The most vivid demonstration: when 70 independent teams were given the <em>same</em> brain-imaging dataset and the <em>same</em> nine hypotheses, they reached noticeably different conclusions, simply because they made different defensible analytic choices.<span class="cite"><a href="#r-narps">5</a></span></p>
+
+      <div class="terms">
+        <div class="term"><span class="k">Key term</span><b>Statistical power</b>The probability that a study would detect an effect that is really there. Low power makes results unreliable in <em>both</em> directions — missed effects and inflated ones.</div>
+        <div class="term"><span class="k">Key term</span><b>Researcher degrees of freedom</b>The many small, individually defensible choices in collecting and analysing data that can quietly add up to a false positive.</div>
+        <div class="term"><span class="k">Key term</span><b>Registered report</b>A study peer-reviewed and accepted on its <em>design</em>, before any results exist — which removes the pressure to find something publishable.</div>
+      </div>
+
+      <h3>How to read a published claim now</h3>
+
+      <p>The comforting phrase "science is self-correcting" deserves scrutiny of its own. Scholars who have examined the mechanisms argue that the traditional safeguards — journal peer review and institutional oversight — have been inadequate at catching errors, and that self-correction is something a field has to actively build, not something it can assume.<span class="cite"><a href="#r-vazire">7</a></span></p>
+
+      <p>The practical lesson for you is not cynicism but <em>calibration</em>. Do not treat "it was published in a good journal" as proof that a finding is real. Assess credibility claim by claim and field by field:</p>
+
+      <div class="checklist">
+        <span class="tag">Before you lean on a finding, ask</span>
+        <label><input type="checkbox"> How large was the sample — and is it big enough to detect the effect it claims?</label>
+        <label><input type="checkbox"> Was the analysis preregistered — or could the result reflect flexible, after-the-fact choices?</label>
+        <label><input type="checkbox"> Has it been replicated by an independent group?</label>
+        <label><input type="checkbox"> Are the data and code openly available?</label>
+        <p class="foot">No single "no" is fatal — but each unanswered question should lower your confidence in the claim. Good papers make these answers easy to find.</p>
+      </div>
+
+      <p>Reforms like registered reports — where a study is reviewed and accepted <em>before</em> the results exist — measurably improve rigour,<span class="cite"><a href="#r-soderberg">8</a></span> and their existence tells you what ordinary results lack. Your own future findings will contain false positives too; the goal is to build the habits that catch them.</p>
+
+      <aside class="takeaway">
+        <span class="tag">Takeaway · Part II</span>
+        <p>"Published" means "entered the scientific conversation" — not "true". Judge each claim on sample size, preregistration, independent replication, and open data.</p>
+        <p class="try"><b>Try it:</b> run the four checklist questions on the paper your own project most depends on. Write down what you find.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="part reveal" id="part3">
+    <div class="col">
+      <div class="part-head">
+        <span class="numeral">III</span>
+        <p class="eyebrow">Metacognition &amp; humility</p>
+        <h2>You cannot see your own blind spots — which is exactly the problem</h2>
+        <p class="part-dek">The biases that distorted whole literatures live in every individual mind, including yours — and they are invisible from the inside. Intellectual humility is the evidence-backed response, and it is a strength.</p>
+      </div>
+
+      <h3>The blind spot you can't see</h3>
+
+      <p>The replication crisis is, at bottom, a story about human cognition operating at scale. The same biases that distort a single experiment distort whole literatures. And the most treacherous feature of these biases is that they are invisible from the inside.</p>
+
+      <p>In controlled studies people readily detect bias in others while rating themselves as less susceptible than average — the "bias blind spot", which replicates robustly across many distinct biases.<span class="cite"><a href="#r-bbs">9</a></span> Confirmation bias — the tendency to seek and credit evidence that fits what we already believe — operates not only in individuals but across entire fields, when researchers unconsciously chase the hypotheses their available data happen to support.<span class="cite"><a href="#r-confirm">10</a></span> Knowing about these biases does not exempt you from them. That is the humbling part.</p>
+
+      <div class="terms">
+        <div class="term"><span class="k">Key term</span><b>Bias blind spot</b>Seeing biases clearly in other people while believing you are less affected than average. It replicates across many biases — and intelligence does not protect against it.</div>
+        <div class="term"><span class="k">Key term</span><b>Confirmation bias</b>The pull toward evidence that fits what you already believe — in what you search for, what you notice, and what you find convincing.</div>
+      </div>
+
+      <h3>Humility, precisely defined</h3>
+
+      <p>The antidote that psychology has studied most closely is <strong>intellectual humility</strong>: the metacognitive recognition that your beliefs and knowledge are limited and may be wrong.<span class="cite"><a href="#r-porter">11</a></span> This is not self-doubt or timidity — the evidence is clear that it is a cognitive strength.</p>
+
+      <p>People higher in intellectual humility distinguish strong arguments from weak ones more accurately, even when the strong argument cuts against their own position; they scrutinise misinformation more carefully, are more receptive to corrective feedback, and, in educational settings, tend to learn more.<span class="cite"><a href="#r-porter">11</a></span> An authoritative review locates the common core of the trait in that single metacognitive act: noticing the edge of what you actually know.</p>
+
+      <p class="principle">Intellectual humility is not thinking less of yourself. It is thinking accurately about the limits of what you know — and treating those limits as information.</p>
+
+      <h3>Two honest caveats</h3>
+
+      <p>First, the research culture you are entering does not reward humility — it rewards confident, clean, positive stories, which is part of what drove the replication crisis in the first place. Being transparent about the limitations of your own work is a discipline you will have to practise <em>against</em> the incentives.<span class="cite"><a href="#r-hoekstra">12</a></span></p>
+
+      <p>Second, humility is harder to cultivate than motivational writing suggests: it fluctuates with context and is not reliably installed by a single lecture or exercise. The best-supported approach is structured, <em>self-distanced</em> reflection — stepping back and evaluating your reasoning as if it were someone else's.<span class="cite"><a href="#r-porter">11</a></span></p>
+
+      <h3>The skill AI cannot do for you</h3>
+
+      <p>There is one more skill this section is really about, and it is the hardest to teach: asking the right question. A doctorate is often described as producing answers, but its deeper craft is <em>problem formulation</em> — sensing which question is both important and tractable, and framing it so an answer would actually mean something. This ability resists rote instruction, and it is precisely the part of research that AI, for all its fluency, cannot do for you, because it requires judgement about what matters. Which brings us to the machine.</p>
+
+      <aside class="takeaway">
+        <span class="tag">Takeaway · Part III</span>
+        <p>You cannot introspect your way past your biases — you need habits and structures that catch them. Accurately tracking the limits of your own knowledge is a measurable advantage, not a weakness.</p>
+        <p class="try"><b>Try it:</b> once a week, re-read one of your decisions or interpretations as if a colleague had produced it. Note the first question you would ask them — then answer it.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="part reveal" id="part4">
+    <div class="col">
+      <div class="part-head">
+        <span class="numeral">IV</span>
+        <p class="eyebrow">AI &amp; your cognition</p>
+        <h2>What you gain in speed you can lose in understanding</h2>
+        <p class="part-dek">AI is the most powerful cognitive-offloading device ever built. The evidence says: offload the struggle, and you offload the learning that lives inside it.</p>
+      </div>
+
+      <h3>Offloading is old — the scale is new</h3>
+
+      <p>Handing mental work to an external tool is not new, and it is not inherently bad — we have always offloaded memory to notebooks and arithmetic to calculators. Cognitive scientists call this <em>cognitive offloading</em>, and it comes with a documented trade-off.<span class="cite"><a href="#r-risko">13</a></span></p>
+
+      <p>As far back as 2011, experiments showed that when people expect to be able to look information up later, they remember the information itself less well, while remembering <em>where to find it</em> better.<span class="cite"><a href="#r-sparrow">14</a></span> Offloading reshapes what your memory retains — and it tends to weaken the deeper, relational encoding that understanding is built from. A language model is the most powerful offloading device ever built, and it invites you to offload not just facts but reasoning itself.</p>
+
+      <h3>Difficulty is not friction — it is the mechanism</h3>
+
+      <p>Why does that matter for learning? Because a large body of work shows that <em>difficulty is often where learning happens</em>. The "generation effect" — the robust finding that you remember material far better when you generate it yourself than when you simply read it — has been confirmed across hundreds of experiments.<span class="cite"><a href="#r-mccurdy">15</a></span></p>
+
+      <p>Cognitive scientists call these productive struggles "desirable difficulties": the effort of retrieving, generating, and working through a problem is not friction to be eliminated but the very process that builds durable skill.<span class="cite"><a href="#r-bjork">16</a></span> When an AI hands you a finished answer, it frictionlessly removes exactly the difficulty that would have taught you something.</p>
+
+      <div class="terms">
+        <div class="term"><span class="k">Key term</span><b>Cognitive offloading</b>Using an external tool — notebook, calculator, chatbot — to do mental work. It trades internal skill and memory for convenience.</div>
+        <div class="term"><span class="k">Key term</span><b>Generation effect</b>You remember and understand material far better when you produce it yourself than when you read it ready-made.</div>
+        <div class="term"><span class="k">Key term</span><b>Desirable difficulty</b>Effort that feels like it slows you down but actually builds the skill — retrieving, generating, struggling <em>before</em> seeing the answer.</div>
+      </div>
+
+      <h3>A tale of two tutors</h3>
+
+      <p>A carefully designed field experiment makes the stakes concrete. Nearly a thousand high-school students were given access to GPT-4 tutors during maths practice. While the AI was available, performance jumped. But when it was taken away for the exam, students who had used an <em>unguarded</em> ChatGPT-style tutor performed <em>worse</em> than classmates who had never had AI at all — they had leaned on it without learning.</p>
+
+      <p>Crucially, a version with pedagogical guardrails, designed to prompt rather than answer, eliminated that harm.<span class="cite"><a href="#r-bastani">17</a></span> The tool was neither good nor bad; <em>how</em> it was used determined whether learning occurred. That difference — how, not whether — is the entire point of this guide.</p>
+
+      <h3>It happens to professionals too</h3>
+
+      <p>The pattern shows up in working professionals as well. A survey of 319 knowledge workers found that the more confidence people placed in the AI for a task, the <em>less</em> critical thinking they reported doing — while those who had more confidence in their own judgement, and in their ability to evaluate the AI's output, did more.<span class="cite"><a href="#r-lee">18</a></span> Over-trust displaces scrutiny; competence and healthy skepticism preserve it.</p>
+
+      <div class="aside-note">
+        <span class="tag">A cautionary tale about reading science</span>
+        <p>You may have seen headlines that using ChatGPT "damages your brain", citing an MIT study that used EEG while people wrote essays with or without AI. Handle it carefully — and let it teach you twice. The study reported that AI users showed weaker neural connectivity and less ownership of their essays, which gestures at real offloading concerns.</p>
+        <p>But it enrolled only ~54 people, was posted as a preprint that has <em>not</em> been peer-reviewed, and its most-quoted claim rested on a handful of participants. A formal critique from other researchers challenged its methods and concluded it does <em>not</em> demonstrate cognitive harm.<span class="cite"><a href="#r-mit">19</a></span><span class="cite"><a href="#r-stankovic">20</a></span> The lesson cuts both ways: offloading may carry real costs — <em>and</em> a small, unreviewed, virally-reported study is exactly the kind of evidence this guide is teaching you to read skeptically.</p>
+      </div>
+
+      <aside class="takeaway">
+        <span class="tag">Takeaway · Part IV</span>
+        <p>Every offload trades understanding for speed. Sometimes that trade is right — but make it a conscious decision each time, not a default.</p>
+        <p class="try"><b>Try it:</b> before you prompt, write your own rough answer first — even two sentences. Then compare. The comparison is where the learning lives.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="part reveal" id="part5">
+    <div class="col">
+      <div class="part-head">
+        <span class="numeral">V</span>
+        <p class="eyebrow">The agreeable machine</p>
+        <h2>Your most dangerous collaborator is the one that always agrees</h2>
+        <p class="part-dek">The model is trained to agree with you, and you are wired to believe fluent, confident output. Together, those two facts form a trap.</p>
+      </div>
+
+      <h3>Sycophancy: trained to please you</h3>
+
+      <p>Here is the feature of language models that should most concern a researcher, and it is not that they sometimes make things up. It is that they are built to be agreeable. Trained to satisfy users, they exhibit <strong>sycophancy</strong> — a tendency to tell you what you seem to want to hear, to validate your framing, and to echo your errors back to you with fluent confidence.</p>
+
+      <p>This is not a rare glitch; it is a systematic property of how the systems are optimised. A 2026 study in <em>Nature</em> found that tuning a model to be warmer and more likeable measurably <em>increased</em> its sycophancy and <em>reduced</em> its accuracy — the agreeableness you find pleasant is in direct tension with correctness.<span class="cite"><a href="#r-ibrahim">21</a></span> In medical tests, models will comply with illogical requests and, when a user inserts an incorrect assumption, will often abandon a correct answer to agree with it.<span class="cite"><a href="#r-chen">22</a></span></p>
+
+      <h3>Automation bias: fluency reads as competence</h3>
+
+      <p>Layer onto this a well-documented human weakness: <strong>automation bias</strong>, our tendency to over-trust the output of an automated system precisely because it is automated. AI makes this worse because its output is so fluent — grammatical, confident, well-organised — and fluency reads to us as competence.</p>
+
+      <p>But fluency is not accuracy. In a meta-analysis of dozens of studies, general-purpose AI achieved diagnostic accuracy around 52%, statistically indistinguishable from non-specialist physicians and well below experts.<span class="cite"><a href="#r-takita">23</a></span> A system can be articulate and wrong at the same time, and it will not signal the difference.</p>
+
+      <div class="terms">
+        <div class="term"><span class="k">Key term</span><b>Sycophancy</b>A model's tendency to tell you what you seem to want to hear — validating your framing and echoing your errors back to you, fluently.</div>
+        <div class="term"><span class="k">Key term</span><b>Automation bias</b>The human tendency to over-trust output because it comes from a system — especially when it is fluent, confident and well-organised.</div>
+      </div>
+
+      <p class="principle">If you ask an AI to confirm your idea, it usually will. That tells you about the prompt, not the idea.</p>
+
+      <h3>The compound trap</h3>
+
+      <p>The two failure modes compound into a single trap. Because the model is sycophantic, the way you ask shapes what you get; because of automation bias, you are primed to accept it. A researcher who uses AI to check whether their hypothesis is sound, by asking "is this a good hypothesis?", has essentially asked a mirror to nod. The output will feel like validation. It is nothing of the kind. Escaping the trap requires inverting how you use the tool — which is the subject of the next section.</p>
+
+      <aside class="takeaway">
+        <span class="tag">Takeaway · Part V</span>
+        <p>An AI's agreement tells you about your prompt, not your idea. Fluency is not accuracy, and confidence is not evidence.</p>
+        <p class="try"><b>Try it:</b> take one thing an AI told you this week and verify its most load-bearing claim in a primary source. Notice how the answer's confidence compared with its accuracy.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="part reveal" id="part6">
+    <div class="col">
+      <div class="part-head">
+        <span class="numeral">VI</span>
+        <p class="eyebrow">Productive use</p>
+        <h2>Use AI as a challenger, not a mirror</h2>
+        <p class="part-dek">One inversion fixes most of the problem: stop asking the machine to confirm you, and make it argue with you instead. Then keep the judgement for yourself.</p>
+      </div>
+
+      <h3>Productive friction</h3>
+
+      <p>Everything in the previous two sections points to one reframing, and it is the most useful idea in this guide. The value of AI to a thinking researcher is not agreement — it is <em>productive friction</em>. A model that will happily validate you is worthless as a validator, but the very same model, pointed the other way, becomes a tireless and fearless sparring partner. Do not ask it whether you are right. Ask it to show you how you might be wrong.</p>
+
+      <h3>What a challenger can do for you</h3>
+
+      <p>Turned toward challenge, an AI can do things that are genuinely hard to arrange otherwise. It will argue the strongest case against your interpretation without getting defensive or tired. It will steelman — argue the strongest version of — a position you dislike, surface assumptions you did not notice you were making, generate rival explanations for your data, and play the role of a hostile reviewer before a real one does. Because it has no ego in your project, it will attack it as readily as defend it — you simply have to <em>ask it to</em>. The register of these prompts is deliberately adversarial:</p>
+
+      <div class="prompt-group">
+        <span class="k">Prompts that make the machine work against you, not for you</span>
+        <span class="prompt">Make the strongest possible case that my hypothesis is wrong.</span>
+        <span class="prompt">What would a hostile peer reviewer say about this design?</span>
+        <span class="prompt">What evidence would falsify this claim — and does it exist?</span>
+        <span class="prompt">Give me three alternative explanations for this result that I haven't considered.</span>
+        <span class="prompt">What is the strongest version of the view I'm arguing against?</span>
+      </div>
+
+      <p>One refinement makes every prompt above sharper: run the critique in a <em>fresh conversation</em> that has not seen how you reached your conclusions. A reviewer — human or machine — who watched the argument being built tends to anchor on that reasoning and agree with it. A reviewer who meets only the finished work has to reconstruct the case from scratch, which is exactly where the weaknesses show. The session that helped you build something should never be the session that judges it.</p>
+
+      <a class="cta" href="ask-this-not-that.html">
+        <span class="cta-k">Companion · Try it yourself</span>
+        <span class="cta-t"><span>Ask This, Not That — a prompt phrasebook</span><span class="go">→</span></span>
+        <span class="cta-d">Eighteen paired prompts for framing hypotheses, reading papers, interpreting results and more — each showing how one rewording turns the machine from a mirror into a challenger. Copy-ready.</span>
+      </a>
+
+      <h3>Expansion, with judgement</h3>
+
+      <p>Used this way, AI is also a legitimate engine for <em>expanding</em> your thinking. In a blind-review study, research ideas generated by a language model were judged by over a hundred expert reviewers to be <em>more novel</em> than those written by human researchers — though slightly less feasible.<span class="cite"><a href="#r-si">24</a></span> That asymmetry is the instruction manual: let the machine widen the space of possibilities, and reserve for yourself the judgement of which possibilities are actually worth pursuing. AI is good at generating options; you remain responsible for discernment.</p>
+
+      <h3>The partnership is not magic</h3>
+
+      <p>But do not romanticise the partnership, because the evidence resists it. A systematic review and meta-analysis of 106 studies found that, on average, human–AI combinations performed <em>worse</em> than the better of the human alone or the AI alone — genuine synergy appeared for some content-generation tasks but generally <em>not</em> for decision-making.<span class="cite"><a href="#r-vaccaro">25</a></span> "Human plus AI" is not automatically better than either; whether the pairing helps depends entirely on the task and on the human's skill in directing it. Using AI well is itself a competence you have to build — which is only possible if you have kept your own judgement sharp enough to lead.</p>
+
+      <a class="cta" href="https://github.com/MichaLie/research-companion">
+        <span class="cta-k">From principles to practice</span>
+        <span class="cta-t"><span>Habits decay. Architecture doesn't.</span><span class="go">→</span></span>
+        <span class="cta-d">Everything in this guide can be built into your tools instead of your willpower: a gate that blocks analysis until you have signed the decision in your own words, an automatic log of every analysis run — the honest record of your researcher degrees of freedom — and a blind reviewer that never saw your reasoning. The Research Companion is a worked, open (MIT) example for Claude Code.</span>
+      </a>
+
+      <aside class="takeaway">
+        <span class="tag">Takeaway · Part VI</span>
+        <p>AI is at its best when it widens your options and attacks your reasoning — and at its worst when it validates and narrows. Direction and judgement stay with you.</p>
+        <p class="try"><b>Try it:</b> pick one piece of current work and prompt: <em>"You are a hostile reviewer — write the most damaging critique of this that you honestly can."</em> Act on one objection.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="part reveal" id="part7">
+    <div class="col">
+      <div class="part-head">
+        <span class="numeral">VII</span>
+        <p class="eyebrow">What is lost</p>
+        <h2>The costs you won't see on any given day</h2>
+        <p class="part-dek">The private cost of offloaded thinking is skill and ownership. The shared cost is a science that thinks alike — and therefore misses the same things.</p>
+      </div>
+
+      <h3>The quiet personal costs</h3>
+
+      <p>Some of what is lost when thinking is offloaded is personal and quiet. When you let a model draft your reasoning, you forgo the understanding that only comes from constructing an argument yourself — the tacit, hard-won feel for a problem that lets an experienced researcher sense when a result is <em>off</em> before they can say why.</p>
+
+      <p>You lose ownership, and with it the ability to defend, extend, and troubleshoot the work when the model is no longer in the loop. Studies already find that heavy AI users report a diminished sense of authorship over what they produce.<span class="cite"><a href="#r-mit">19</a></span> Skill does not form in the absence of struggle, and struggle is precisely what these tools are designed to remove.</p>
+
+      <p>There is a blunt self-test for this, worth adopting now. Before anything is submitted, presented, or defended: can you explain, unaided, what was done and why? Call it the <em>corridor test</em> — if you could not defend the method to a colleague between two doors, it is not your work yet. Failing it is not a verdict but a signal: the moment to go back and have the machine teach you what you skipped, before a reviewer discovers it for you.</p>
+
+      <h3>The monoculture problem</h3>
+
+      <p>But the deepest cost is collective, and it is easy to miss because no individual feels it. If every researcher consults the same handful of models, trained on overlapping data and tuned toward similar outputs, then everyone is nudged toward the same framings, the same references, the same hypotheses — and blind to the same things.</p>
+
+      <p>Two scholars have named this the risk of scientific <strong>monoculture</strong> and of "illusions of understanding": a future in which AI helps us <em>produce more but understand less</em>, and in which the apparent breadth of our exploration masks a quiet narrowing of it.<span class="cite"><a href="#r-messeri">26</a></span> The concern is not speculative. A controlled study found that generative AI raised the creativity of individual writers while <em>reducing the collective diversity</em> of what the group as a whole produced — more novel on average, more similar to one another.<span class="cite"><a href="#r-doshi">27</a></span></p>
+
+      <p class="principle">Intellectual diversity is not a nicety of science — it is the mechanism by which science corrects its errors. A field that thinks alike cannot catch what it collectively misses.</p>
+
+      <p>This reframes the individual choices in this guide as something larger than personal productivity. When you keep your own reasoning active — when you use AI to diversify your thinking rather than to converge on the median answer — you are not only protecting your own development. You are helping preserve the variety of independent perspectives that the whole error-correcting enterprise of science depends on. The convergence of evidence from genuinely independent minds is what makes a scientific conclusion trustworthy. That independence is worth protecting, one researcher at a time.</p>
+
+      <aside class="takeaway">
+        <span class="tag">Takeaway · Part VII</span>
+        <p>Thinking for yourself is not just self-development — it preserves the independent perspectives science needs in order to catch its own mistakes.</p>
+        <p class="try"><b>Try it:</b> before you ask AI for a framing, write down the framing you would have used yourself. Keep both, and notice which one survives scrutiny.</p>
+      </aside>
+    </div>
+  </section>
+
+</main>
+
+<section class="coda">
+  <div class="col">
+    <p class="eyebrow">A way of working</p>
+    <h2>Remain the thinker</h2>
+    <p>The aim of this guide was never to tell you to use AI less, or more. It was to keep <em>you</em> — your judgement, your understanding, your capacity to tell true from merely fluent — at the centre of your own work. The tools will keep improving. What must not erode is the mind that decides what to do with them. Seven principles, one per part, to carry out of here:</p>
+    <ul class="creed">
+      <li><b>1</b><span><strong>Evidence over eminence.</strong> Weigh claims by what supports them and what scrutiny they've survived — never by who made them, human or machine.</span></li>
+      <li><b>2</b><span><strong>Published is not proven.</strong> Assess credibility study by study: sample size, preregistration, independent replication, open data.</span></li>
+      <li><b>3</b><span><strong>Humility is a discipline, not a mood.</strong> Name the limits of your work out loud, against the incentives to hide them.</span></li>
+      <li><b>4</b><span><strong>Keep the friction that teaches.</strong> Offload the drudgery; do the thinking that builds skill yourself.</span></li>
+      <li><b>5</b><span><strong>Make the machine argue with you.</strong> Never ask it to confirm — ask it to refute, to steelman the other side, to find what you missed.</span></li>
+      <li><b>6</b><span><strong>Fluent is not correct.</strong> A confident, well-written answer can be wrong; verify before you trust.</span></li>
+      <li><b>7</b><span><strong>Protect the diversity of your thinking.</strong> Use AI to widen your view, not to converge on everyone else's.</span></li>
+    </ul>
+    <p class="pin">Worth printing, or pinning above your desk.</p>
+    <a class="cta-dark" href="practice-room.html">
+      <span class="k">Companion · Practice Room</span>
+      <span class="t"><span>Test yourself — nine scenarios, one experiment</span><span class="go">→</span></span>
+      <span class="d">Retrieval beats rereading. Commit to answers, rate your confidence, see your calibration — then run the two-prompt experiment on your own hypothesis.</span>
+    </a>
+  </div>
+</section>
+
+<section class="refs">
+  <div class="col">
+    <h2>Sources &amp; further reading</h2>
+    <p class="note">Selected from peer-reviewed literature, with emphasis on high-tier venues (2015–2026). Two entries are cited deliberately as contested, non-peer-reviewed work — an illustration, not an endorsement.</p>
+
+    <div class="refgroup">
+      <h3>How science works &amp; the replication crisis</h3>
+      <ol>
+        <li id="r-thorp"><b>Thorp, H. H.</b> (2025). Convergence and consensus. <span class="src"><em>Science</em> 388(6745):339.</span> <span class="doi">doi:10.1126/science.ady3211</span></li>
+        <li id="r-osc"><b>Open Science Collaboration</b> (2015). Estimating the reproducibility of psychological science. <span class="src"><em>Science</em> 349:aac4716.</span> <span class="doi">doi:10.1126/science.aac4716</span></li>
+        <li id="r-nosek22"><b>Nosek, B. A., et al.</b> (2022). Replicability, robustness, and reproducibility in psychological science. <span class="src"><em>Annual Review of Psychology</em> 73:719–748.</span> <span class="doi">doi:10.1146/annurev-psych-020821-114157</span></li>
+        <li id="r-tyner"><b>Tyner, A. H., et al.</b> (2026). Investigating the replicability of the social and behavioural sciences. <span class="src"><em>Nature</em>.</span> <span class="doi">doi:10.1038/s41586-025-10078-y</span></li>
+        <li id="r-narps"><b>Botvinik-Nezer, R., et al.</b> (2020). Variability in the analysis of a single neuroimaging dataset by many teams. <span class="src"><em>Nature</em> 582:84–88.</span> <span class="doi">doi:10.1038/s41586-020-2314-9</span></li>
+        <li id="r-munafo"><b>Munafò, M. R., et al.</b> (2017). A manifesto for reproducible science. <span class="src"><em>Nature Human Behaviour</em> 1:0021.</span> <span class="doi">doi:10.1038/s41562-016-0021</span></li>
+        <li id="r-vazire"><b>Vazire, S. &amp; Holcombe, A. O.</b> (2022). Where are the self-correcting mechanisms in science? <span class="src"><em>Review of General Psychology</em> 26(2):212–223.</span> <span class="doi">doi:10.1177/10892680211033912</span></li>
+        <li id="r-soderberg"><b>Soderberg, C. K., et al.</b> (2021). Initial evidence of research quality of registered reports compared with the standard publishing model. <span class="src"><em>Nature Human Behaviour</em> 5:990–997.</span> <span class="doi">doi:10.1038/s41562-021-01142-4</span></li>
+      </ol>
+    </div>
+
+    <div class="refgroup">
+      <h3>Cognitive bias &amp; intellectual humility</h3>
+      <ol start="9">
+        <li id="r-bbs"><b>Chandrashekar, S. P., et al.</b> (2022). Hypothesized drivers of the bias blind spot. <span class="src"><em>Judgment and Decision Making</em> 17(6):1392–1428.</span></li>
+        <li id="r-confirm"><b>Nuzzo, R.</b> (2015). How scientists fool themselves — and how they can stop. <span class="src"><em>Nature</em> 526:182–185.</span> <span class="doi">doi:10.1038/526182a</span></li>
+        <li id="r-porter"><b>Porter, T., et al.</b> (2022). Predictors and consequences of intellectual humility. <span class="src"><em>Nature Reviews Psychology</em> 1:524–536.</span> <span class="doi">doi:10.1038/s44159-022-00081-9</span></li>
+        <li id="r-hoekstra"><b>Hoekstra, R. &amp; Vazire, S.</b> (2021). Aspiring to greater intellectual humility in science. <span class="src"><em>Nature Human Behaviour</em> 5:1602–1607.</span> <span class="doi">doi:10.1038/s41562-021-01203-8</span></li>
+      </ol>
+    </div>
+
+    <div class="refgroup">
+      <h3>AI &amp; human cognition</h3>
+      <ol start="13">
+        <li id="r-risko"><b>Risko, E. F. &amp; Gilbert, S. J.</b> (2016). Cognitive offloading. <span class="src"><em>Trends in Cognitive Sciences</em> 20(9):676–688.</span> <span class="doi">doi:10.1016/j.tics.2016.07.002</span></li>
+        <li id="r-sparrow"><b>Sparrow, B., Liu, J. &amp; Wegner, D. M.</b> (2011). Google effects on memory. <span class="src"><em>Science</em> 333:776–778.</span> <span class="doi">doi:10.1126/science.1207745</span></li>
+        <li id="r-mccurdy"><b>McCurdy, M. P., et al.</b> (2020). Theories of the generation effect and the impact of generation constraint: a meta-analytic review. <span class="src"><em>Psychonomic Bulletin &amp; Review</em> 27:1139–1165.</span> <span class="doi">doi:10.3758/s13423-020-01762-3</span></li>
+        <li id="r-bjork"><b>Bjork, R. A. &amp; Kroll, J. F.</b> (2015). Desirable difficulties in vocabulary learning. <span class="src"><em>American Journal of Psychology</em> 128(2):241–252.</span> <span class="doi">doi:10.5406/amerjpsyc.128.2.0241</span></li>
+        <li id="r-bastani"><b>Bastani, H., et al.</b> (2024). Generative AI can harm learning. <span class="src">Randomised controlled field trial, ~1,000 students. <em>The Wharton School / SSRN 4895486.</em></span></li>
+        <li id="r-lee"><b>Lee, H.-P., et al.</b> (2025). The impact of generative AI on critical thinking: self-reported reductions in cognitive effort... from a survey of knowledge workers. <span class="src"><em>Proc. CHI Conference on Human Factors in Computing Systems.</em></span> <span class="doi">doi:10.1145/3706598.3713778</span></li>
+        <li id="r-mit"><b>Kosmyna, N., et al.</b> (2025). Your brain on ChatGPT. <span class="src"><em>arXiv:2506.08872</em> — preprint, not peer-reviewed; cited here as a contested example.</span></li>
+        <li id="r-stankovic"><b>Stanković, M., et al.</b> (2026). Comment on "Your brain on ChatGPT." <span class="src"><em>arXiv:2601.00856</em> — formal methodological critique.</span></li>
+        <li id="r-ibrahim"><b>Ibrahim, L., Hafner, F. S. &amp; Rocher, L.</b> (2026). Training language models to be warm can reduce accuracy and increase sycophancy. <span class="src"><em>Nature</em> 652:1159–1165.</span> <span class="doi">doi:10.1038/s41586-026-10410-0</span></li>
+        <li id="r-chen"><b>Chen, S., et al.</b> (2025). When helpfulness backfires: LLMs and the risk of false medical information due to sycophantic behaviour. <span class="src"><em>npj Digital Medicine</em> 8:605.</span> <span class="doi">doi:10.1038/s41746-025-02008-z</span></li>
+        <li id="r-takita"><b>Takita, H., et al.</b> (2025). A systematic review and meta-analysis of diagnostic performance comparison between generative AI and physicians. <span class="src"><em>npj Digital Medicine</em> 8:175.</span> <span class="doi">doi:10.1038/s41746-025-01543-z</span></li>
+      </ol>
+    </div>
+
+    <div class="refgroup">
+      <h3>Productive use, synergy &amp; the monoculture risk</h3>
+      <ol start="24">
+        <li id="r-si"><b>Si, C., Yang, D. &amp; Hashimoto, T.</b> (2024). Can LLMs generate novel research ideas? <span class="src"><em>arXiv:2409.04109</em> — large-scale blind expert review (&gt;100 reviewers).</span></li>
+        <li id="r-vaccaro"><b>Vaccaro, M., Almaatouq, A. &amp; Malone, T.</b> (2024). When combinations of humans and AI are useful: a systematic review and meta-analysis. <span class="src"><em>Nature Human Behaviour</em> 8:2293–2303.</span> <span class="doi">doi:10.1038/s41562-024-02024-1</span></li>
+        <li id="r-messeri"><b>Messeri, L. &amp; Crockett, M. J.</b> (2024). Artificial intelligence and illusions of understanding in scientific research. <span class="src"><em>Nature</em> 627:49–58.</span> <span class="doi">doi:10.1038/s41586-024-07146-0</span></li>
+        <li id="r-doshi"><b>Doshi, A. R. &amp; Hauser, O. P.</b> (2024). Generative AI enhances individual creativity but reduces the collective diversity of novel content. <span class="src"><em>Science Advances</em> 10:eadn5290.</span> <span class="doi">doi:10.1126/sciadv.adn5290</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer class="end">
+  <div class="col">
+    Prepared as an evidence-grounded guide for doctoral training · Reasoning and judgement are yours to keep.<br>
+    © 2026 Michaela Liegertová · drafted with Claude (Fable 5) and disclosed — the transparency is the point · All 27 references verified by the author.
+  </div>
+</footer>
+
+<button class="totop" id="totop" aria-label="Back to top">↑</button>
+
+<script>
+  (function(){
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var bar=document.getElementById('progress');
+    var top=document.getElementById('totop');
+    function onScroll(){
+      var h=document.documentElement;
+      var y=h.scrollTop||document.body.scrollTop;
+      var max=h.scrollHeight-h.clientHeight;
+      bar.style.width=(max>0?y/max*100:0)+'%';
+      top.classList.toggle('show',y>900);
+    }
+    document.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+
+    top.addEventListener('click',function(){
+      window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+    });
+
+    if('IntersectionObserver' in window && !reduce){
+      var io=new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+      },{threshold:0.08});
+      document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});
+    }
+  })();
+</script>
+</body>
+</html>

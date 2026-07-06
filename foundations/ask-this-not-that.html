@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask This, Not That — a prompt phrasebook</title>
+<meta name="description" content="Sixteen paired prompts that turn AI from a mirror into a challenger — copy-ready phrasings for framing questions, reading literature, interpreting results, and writing.">
+</head>
+<body>
+<style>
+  :root{
+    --paper:#F5F6F8;
+    --paper-2:#FBFBFD;
+    --card:#FFFFFF;
+    --ink:#161A22;
+    --ink-soft:#39414E;
+    --muted:#646E7C;
+    --hair:#D7DCE3;
+    --hair-soft:#E7EAF0;
+    --blue:#1E3A63;
+    --blue-bright:#2C5AA8;
+    --blue-deep:#132339;
+    --blue-wash:#EAEEF5;
+    --ochre:#9C6716;
+    --ochre-deep:#7A4F10;
+    --ochre-wash:#F3EBDD;
+    --ochre-line:#E3D2B4;
+
+    --serif:"Palatino Linotype","Book Antiqua",Palatino,Georgia,Cambria,"Times New Roman",serif;
+    --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --mono:"Cascadia Code",Consolas,"SF Mono","Roboto Mono",ui-monospace,monospace;
+
+    --measure:70ch;
+    --pad:clamp(1.25rem,5vw,2.75rem);
+  }
+
+  *{box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:1.15rem;
+    line-height:1.66;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  .col{
+    width:100%;
+    max-width:calc(var(--measure) + 2 * var(--pad));
+    margin-inline:auto;
+    padding-inline:var(--pad);
+  }
+
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:.72rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:.18em;
+    color:var(--blue-bright);margin:0;
+  }
+
+  a{color:var(--blue-bright);text-decoration:none;border-bottom:1px solid rgba(44,90,168,.35);}
+  a:hover{border-bottom-color:var(--blue-bright);}
+  a:focus-visible{outline:2px solid var(--blue-bright);outline-offset:3px;border-radius:2px;}
+
+  /* ---------- top nav ---------- */
+  .topnav{
+    border-bottom:1px solid var(--hair);
+    background:var(--paper-2);
+    font-family:var(--sans);
+  }
+  .topnav .col{
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    padding-block:.85rem;
+  }
+  .topnav .home{
+    font-size:.85rem;color:var(--muted);border:none;
+    display:inline-flex;align-items:center;gap:.45rem;
+  }
+  .topnav .home:hover{color:var(--blue-bright);}
+  .topnav .kicker{
+    font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;
+    color:var(--blue);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;background:var(--blue-deep);color:#EAEEF5;overflow:hidden;border-bottom:1px solid #0c1626;}
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(120,150,200,.10) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(120,150,200,.10) 1px,transparent 1px);
+    background-size:26px 26px;
+    mask-image:radial-gradient(ellipse 90% 80% at 50% 25%,#000 45%,transparent 100%);
+    -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 25%,#000 45%,transparent 100%);
+    pointer-events:none;
+  }
+  .hero .col{position:relative;padding-top:clamp(2.75rem,7vw,4.5rem);padding-bottom:clamp(2.5rem,6vw,3.75rem);}
+  .hero .eyebrow{color:#8FB0E0;}
+  .hero h1{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(2.4rem,6.5vw,4.1rem);line-height:1.02;letter-spacing:-.015em;
+    text-wrap:balance;margin:.55rem 0 0;
+  }
+  .hero h1 .not{color:#D9A85C;font-style:italic;}
+  .hero h1 .this{color:#9CC0F2;}
+  .standfirst{
+    font-size:clamp(1.12rem,2.3vw,1.36rem);line-height:1.5;color:#C4D2E8;
+    max-width:52ch;margin:1.4rem 0 0;text-wrap:pretty;
+  }
+
+  /* ---------- the flip demo (the aha) ---------- */
+  .demo-wrap{background:var(--paper);border-bottom:1px solid var(--hair);}
+  .demo-wrap .col{padding-block:clamp(2.25rem,6vw,3.5rem);}
+  .demo-lead{
+    font-family:var(--sans);font-size:.78rem;font-weight:600;text-transform:uppercase;
+    letter-spacing:.14em;color:var(--muted);margin:0 0 1rem;text-align:center;
+  }
+  .demo{
+    background:var(--card);border:1px solid var(--hair);border-radius:10px;
+    box-shadow:0 1px 2px rgba(20,30,50,.04),0 12px 30px -18px rgba(20,30,50,.25);
+    overflow:hidden;
+  }
+  .demo-face{padding:clamp(1.4rem,4vw,2.1rem);}
+  .demo-state{
+    display:inline-flex;align-items:center;gap:.5rem;
+    font-family:var(--sans);font-size:.72rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.12em;margin:0 0 1rem;
+  }
+  .demo-state .dot{width:.6rem;height:.6rem;border-radius:50%;}
+  .demo.is-mirror .demo-state{color:var(--ochre-deep);}
+  .demo.is-mirror .demo-state .dot{background:var(--ochre);}
+  .demo:not(.is-mirror) .demo-state{color:var(--blue-bright);}
+  .demo:not(.is-mirror) .demo-state .dot{background:var(--blue-bright);}
+
+  .demo-q{
+    font-family:var(--mono);font-size:clamp(1.05rem,2.6vw,1.4rem);line-height:1.45;
+    margin:0;
+  }
+  .demo.is-mirror .demo-q{color:var(--ochre-deep);}
+  .demo:not(.is-mirror){background:linear-gradient(180deg,#11151d,#0d1119);}
+  .demo:not(.is-mirror) .demo-q{color:#cdd9ea;}
+  .demo:not(.is-mirror) .demo-q::before{content:"› ";color:#5f7fb0;}
+
+  .demo-why{
+    font-family:var(--sans);font-size:.92rem;line-height:1.55;
+    margin:1.1rem 0 0;padding-top:1.1rem;
+    border-top:1px dashed rgba(120,140,170,.35);
+  }
+  .demo:not(.is-mirror) .demo-why{color:#9FB4D2;border-top-color:rgba(120,150,200,.25);}
+  .demo.is-mirror .demo-why{color:var(--ochre-deep);}
+  .demo-why[hidden]{display:none;}
+
+  .demo-controls{
+    display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;
+    padding:1.1rem clamp(1.4rem,4vw,2.1rem);
+    background:var(--paper-2);border-top:1px solid var(--hair);
+  }
+  .demo:not(.is-mirror) .demo-controls{background:#0d1119;border-top-color:#1c2534;}
+  .flipbtn{
+    font-family:var(--sans);font-size:.9rem;font-weight:600;cursor:pointer;
+    border:none;border-radius:6px;padding:.6rem 1.1rem;
+    background:var(--blue-bright);color:#fff;transition:background .15s ease,transform .1s ease;
+  }
+  .flipbtn:hover{background:var(--blue);}
+  .flipbtn:active{transform:translateY(1px);}
+  .flipbtn:focus-visible{outline:2px solid #9CC0F2;outline-offset:2px;}
+  .demo:not(.is-mirror) .flip-hint{color:#7f93b3;}
+  .flip-hint{font-family:var(--sans);font-size:.82rem;color:var(--muted);}
+
+  /* ---------- intro strip ---------- */
+  .intro{padding:clamp(2.25rem,5vw,3.25rem) 0 .5rem;}
+  .intro p{margin:0 0 1.1rem;max-width:var(--measure);text-wrap:pretty;}
+  .intro .big{font-size:1.28rem;line-height:1.5;color:var(--blue);}
+
+  /* ---------- balance note ---------- */
+  .balance{
+    margin:1.6rem 0 0;
+    padding:1.15rem 1.3rem;
+    background:var(--ochre-wash);
+    border-left:3px solid var(--ochre);
+    border-radius:4px;
+    font-family:var(--sans);
+    font-size:.95rem;line-height:1.6;color:var(--ink-soft);
+    max-width:var(--measure);
+  }
+  .balance .tag{
+    display:block;
+    font-size:.68rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.15em;
+    color:var(--ochre-deep);
+    margin-bottom:.4rem;
+  }
+  .balance p{margin:0;max-width:none;}
+
+  /* ---------- jump nav ---------- */
+  .jump{
+    display:flex;flex-wrap:wrap;gap:.5rem;
+    margin:1.8rem 0 .4rem;
+    font-family:var(--sans);
+  }
+  .jump a{
+    display:inline-flex;align-items:center;gap:.5rem;
+    font-size:.82rem;font-weight:600;color:var(--blue);
+    background:var(--blue-wash);
+    border:1px solid #C9D6EA;border-bottom:1px solid #C9D6EA;
+    border-radius:999px;
+    padding:.38rem .85rem .38rem .5rem;
+    transition:border-color .15s ease,background .15s ease;
+  }
+  .jump a:hover{border-color:var(--blue-bright);background:#E0E8F4;}
+  .jump a b{
+    display:flex;align-items:center;justify-content:center;
+    width:1.35rem;height:1.35rem;border-radius:50%;
+    background:var(--blue);color:#fff;
+    font-size:.68rem;font-weight:700;font-variant-numeric:tabular-nums;
+  }
+
+  /* ---------- category ---------- */
+  .cat{padding:clamp(1.75rem,4vw,2.5rem) 0 .5rem;scroll-margin-top:1rem;}
+  .cat-head{display:flex;align-items:baseline;gap:.9rem;margin:1.5rem 0 .4rem;}
+  .cat-head .n{
+    font-family:var(--sans);font-weight:700;font-size:.8rem;color:#fff;background:var(--blue);
+    width:1.7rem;height:1.7rem;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    flex:none;font-variant-numeric:tabular-nums;
+  }
+  .cat-head h2{
+    font-family:var(--serif);font-weight:600;font-size:clamp(1.4rem,3vw,1.85rem);
+    line-height:1.15;margin:0;letter-spacing:-.01em;text-wrap:balance;
+  }
+  .cat > .col > .catsub{
+    font-family:var(--sans);font-size:.95rem;color:var(--muted);
+    margin:.1rem 0 1.4rem 2.6rem;max-width:58ch;
+  }
+
+  /* ---------- pair card ---------- */
+  .pair{
+    background:var(--card);border:1px solid var(--hair);border-radius:9px;
+    overflow:hidden;margin:0 0 1.15rem;
+    box-shadow:0 1px 2px rgba(20,30,50,.03);
+  }
+  .pair-grid{
+    display:grid;
+    grid-template-columns:1fr 2.5rem 1fr;
+    align-items:stretch;
+  }
+  .side{padding:1.15rem 1.25rem;display:flex;flex-direction:column;gap:.55rem;}
+  .side .tag{
+    font-family:var(--sans);font-size:.66rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.11em;display:inline-flex;align-items:center;gap:.4rem;
+  }
+  .mirror{background:var(--ochre-wash);}
+  .mirror .tag{color:var(--ochre-deep);}
+  .mirror .q{color:var(--ochre-deep);}
+  .challenger{background:#11151d;}
+  .challenger .tag{color:#7f9bc4;}
+  .challenger .q{color:#d3ddec;}
+  .challenger .q::before{content:"› ";color:#5f7fb0;}
+  .q{font-family:var(--mono);font-size:.92rem;line-height:1.5;margin:0;}
+
+  .arrow{
+    display:flex;align-items:center;justify-content:center;
+    background:var(--paper-2);color:var(--blue-bright);font-size:1.2rem;font-weight:700;
+    border-inline:1px solid var(--hair);
+  }
+
+  .copybtn{
+    align-self:flex-start;margin-top:auto;
+    font-family:var(--sans);font-size:.72rem;font-weight:600;cursor:pointer;
+    background:transparent;color:#7f9bc4;border:1px solid #2b3546;border-radius:5px;
+    padding:.3rem .6rem;transition:all .15s ease;
+  }
+  .copybtn:hover{color:#cdd9ea;border-color:#41506a;}
+  .copybtn:focus-visible{outline:2px solid #5f7fb0;outline-offset:2px;}
+  .copybtn.done{color:#8fd0a0;border-color:#356b45;}
+
+  .why{
+    padding:.85rem 1.25rem;background:var(--paper-2);border-top:1px solid var(--hair);
+    font-family:var(--sans);font-size:.86rem;line-height:1.55;color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;
+  }
+  .why b{color:var(--ink);font-weight:600;}
+  .why .txt{flex:1 1 60%;min-width:15rem;}
+  .chip{
+    font-family:var(--sans);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--blue);background:var(--blue-wash);border-radius:20px;padding:.22rem .65rem;white-space:nowrap;
+  }
+
+  @media (max-width:640px){
+    body{font-size:1.08rem;}
+    .pair-grid{grid-template-columns:1fr;}
+    .arrow{border-inline:none;border-block:1px solid var(--hair);padding:.35rem;}
+    .arrow span{display:inline-block;transform:rotate(90deg);}
+    .cat > .col > .catsub{margin-left:0;}
+  }
+
+  /* ---------- closing ---------- */
+  .closing{background:var(--blue-deep);color:#DCE6F5;padding:clamp(2.5rem,6vw,4rem) 0;margin-top:2.5rem;}
+  .closing .eyebrow{color:#8FB0E0;}
+  .closing h2{
+    font-family:var(--serif);font-weight:600;font-size:clamp(1.7rem,3.6vw,2.4rem);
+    line-height:1.14;margin:.4rem 0 1.1rem;color:#fff;text-wrap:balance;
+  }
+  .closing p{color:#C4D2E8;max-width:var(--measure);margin:0 0 1rem;}
+  .closing strong{color:#fff;}
+  .the-move{
+    font-family:var(--mono);font-size:clamp(1.1rem,2.6vw,1.45rem);line-height:1.4;
+    color:#9CC0F2;margin:1.5rem 0 0;padding:1.1rem 1.3rem;
+    background:rgba(120,150,200,.08);border-left:3px solid #9CC0F2;border-radius:4px;
+  }
+  .backlink{
+    display:inline-flex;align-items:center;gap:.5rem;margin-top:2rem;
+    font-family:var(--sans);font-size:.92rem;font-weight:600;
+    color:#9CC0F2;border:1px solid rgba(140,170,215,.35);border-radius:6px;
+    padding:.6rem 1rem;
+  }
+  .backlink:hover{border-color:#9CC0F2;background:rgba(120,150,200,.08);}
+  .linkrow{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem;}
+  .linkrow .backlink{margin-top:0;}
+
+  footer.end{padding:2rem 0 3.5rem;font-family:var(--sans);font-size:.78rem;color:var(--muted);border-top:1px solid var(--hair);}
+
+  /* ---------- back to top ---------- */
+  .totop{
+    position:fixed;right:1.1rem;bottom:1.1rem;z-index:60;
+    width:2.7rem;height:2.7rem;border-radius:50%;
+    border:1px solid var(--hair);
+    background:var(--card);color:var(--blue);
+    font-family:var(--sans);font-size:1.05rem;font-weight:700;
+    cursor:pointer;
+    box-shadow:0 8px 20px -10px rgba(20,30,50,.4);
+    opacity:0;pointer-events:none;
+    transition:opacity .2s ease;
+  }
+  .totop.show{opacity:1;pointer-events:auto;}
+  .totop:hover{border-color:var(--blue-bright);color:var(--blue-bright);}
+  .totop:focus-visible{outline:2px solid var(--blue-bright);outline-offset:2px;}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .flipbtn,.copybtn,.totop{transition:none;}
+  }
+</style>
+
+<nav class="topnav">
+  <div class="col">
+    <a class="home" href="critical-thinking-guide.html">← Back to the main guide</a>
+    <span class="kicker">Companion · Prompt Phrasebook</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="col">
+    <p class="eyebrow">Using AI to sharpen your thinking</p>
+    <h1>Ask <span class="this">This</span>,<br>Not <span class="not">That</span></h1>
+    <p class="standfirst">The same question, asked two ways, has opposite effects on your mind. One prompt makes the machine flatter you. The other makes it fight you — and that is where the thinking happens.</p>
+  </div>
+</header>
+
+<section class="demo-wrap">
+  <div class="col">
+    <p class="demo-lead">Watch what one rewording does</p>
+    <div class="demo is-mirror" id="demo">
+      <div class="demo-face">
+        <p class="demo-state"><span class="dot"></span><span id="demoLabel">The mirror — this quietly decreases your thinking</span></p>
+        <p class="demo-q" id="demoQ">Is my hypothesis that sleep loss impairs memory consolidation a good hypothesis?</p>
+        <p class="demo-why" id="demoWhy" hidden></p>
+      </div>
+      <div class="demo-controls">
+        <button class="flipbtn" id="flipBtn" aria-controls="demo">Flip it →</button>
+        <span class="flip-hint" id="flipHint">You asked it to agree. It will.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="intro">
+  <div class="col">
+    <p class="big">Every prompt you write is a choice between two machines: a mirror that reflects your assumptions back at you, or a challenger that tests them.</p>
+    <p>Language models are built to be agreeable — they tend to tell you what you seem to want to hear. So if you ask <em>"is this right?"</em>, you will almost always get a yes, and you will walk away more confident and no wiser. The fix is not to use AI less. It is to point it the other way: ask it to disagree, to disprove, to find what you missed. Below are eighteen paired prompts for doing exactly that, organised by the seven situations where researchers most often reach for AI. Copy the ones you like. Notice, each time, how the <em>challenger</em> version forces <strong>you</strong> to stay the one doing the thinking.</p>
+
+    <div class="balance">
+      <span class="tag">When is it fine to just ask?</span>
+      <p>This is not a rule against ever asking directly. For mechanical chores — formatting a citation, converting units, boilerplate code you could write in your sleep — a plain prompt is fine and sensible. These pairs are for the moments when the answer will <em>shape your thinking</em>: framing, reading, interpreting, arguing, writing. That is when the mirror costs you.</p>
+    </div>
+
+    <nav class="jump" aria-label="Jump to a situation">
+      <a href="#c1"><b>1</b>Framing a question</a>
+      <a href="#c2"><b>2</b>Reading the literature</a>
+      <a href="#c3"><b>3</b>Interpreting results</a>
+      <a href="#c4"><b>4</b>Stress-testing</a>
+      <a href="#c5"><b>5</b>Learning</a>
+      <a href="#c6"><b>6</b>Writing up</a>
+      <a href="#c7"><b>7</b>When you're stuck</a>
+    </nav>
+  </div>
+</section>
+
+<section class="cat" id="c1">
+  <div class="col">
+    <div class="cat-head"><span class="n">1</span><h2>Framing a question or hypothesis</h2></div>
+    <p class="catsub">The riskiest moment to be flattered is at the start — a confirmed bad question wastes months.</p>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Is my hypothesis that X causes Y a good hypothesis?</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Give me three reasons my hypothesis that X causes Y might be wrong, and what evidence would tell them apart.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> "Is this good?" invites the model to validate your framing. Asking for disconfirmation makes it work against you.</span><span class="chip">Sycophancy</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">What are the key open questions in my field?</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">What does my field treat as settled that a skeptic might question — and what would it take to overturn it?</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> The first hands you the consensus everyone already shares. The second points you toward the unclaimed ground.</span><span class="chip">Monoculture</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">What's the best method to study this?</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Here are three methods I'm weighing. Argue the case against each, then name the weakness hardest to defend to a reviewer.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> An open "what's best" gets a confident median answer. The adversarial framing surfaces the trade-offs you have to judge.</span><span class="chip">Automation bias</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cat" id="c2">
+  <div class="col">
+    <div class="cat-head"><span class="n">2</span><h2>Reading the literature</h2></div>
+    <p class="catsub">Summaries are the easiest thing to offload — and the understanding you lose is exactly the kind you needed.</p>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Summarise this paper for me.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">I read this paper and think its main claim is [my reading]. Where does my interpretation diverge from what the authors actually argue?</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> Summarise-for-me offloads the reading and the understanding with it. Stating your reading first keeps you the thinker and uses AI to check you.</span><span class="chip">Generation effect</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Find me papers that support my argument.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Find the strongest papers that challenge my argument — the ones a critical reviewer would cite against me.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> The first is confirmation bias with a search box. The second finds the holes before someone else does.</span><span class="chip">Confirmation bias</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">What does the evidence say about X?</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">What's the strongest evidence for X, the strongest against, and where do they genuinely conflict?</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> A single "what does it say" collapses a contested literature into false consensus. Forcing both sides preserves the disagreement that matters.</span><span class="chip">Convergence of evidence</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cat" id="c3">
+  <div class="col">
+    <div class="cat-head"><span class="n">3</span><h2>Interpreting your results</h2></div>
+    <p class="catsub">The moment a result looks like it confirms your hypothesis is the moment to reach for alternatives.</p>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Does this result mean my hypothesis is correct?</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">What are all the ways this result could arise without my hypothesis being true — confounds, artefacts, chance?</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> The first invites confirmation. The second is the alternative-explanations discipline that separates a finding from a fluke.</span><span class="chip">Confirmation bias</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Is this result statistically significant?</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Given my sample size and design, what can and can't this result support — and how would a statistician attack this analysis?</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> Fluent answers can be confidently wrong on statistics. Asking for the attack calibrates how much weight the result actually bears.</span><span class="chip">Fluent ≠ correct</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cat" id="c4">
+  <div class="col">
+    <div class="cat-head"><span class="n">4</span><h2>Stress-testing before a reviewer does</h2></div>
+    <p class="catsub">A tireless, egoless Reviewer 2 is on call. Use it while the cost of being wrong is still zero.</p>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Does this argument make sense?</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">You are Reviewer 2. Write the most damaging critique of this argument that you honestly can.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> "Does this make sense?" almost always earns a yes. A hostile-reviewer role gets you the objections before submission. Sharper still: run it in a <em>fresh chat</em> that never saw you build the argument — a reviewer who watched you reason will anchor and agree.</span><span class="chip">Sycophancy</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Improve this paragraph.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">What is this paragraph assuming that it hasn't justified, and what would a reader who disagrees latch onto?</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> "Improve" outsources the judgement. The reframe keeps you deciding what to change and why.</span><span class="chip">Stay the author</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cat" id="c5">
+  <div class="col">
+    <div class="cat-head"><span class="n">5</span><h2>Learning a concept or method</h2></div>
+    <p class="catsub">A clear explanation you read produces the <em>feeling</em> of understanding. Being tested produces the real thing.</p>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Explain [concept] to me.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Ask me questions to test whether I actually understand [concept], and correct me when I'm wrong.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> Reading an explanation creates the illusion of understanding. Being quizzed forces you to generate — which is what builds durable knowledge.</span><span class="chip">Illusion of understanding</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Write the code / derivation for X.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">I'll attempt the code/derivation for X. Watch, tell me where my reasoning breaks — but don't give me the answer.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> Getting the finished artefact removes the productive struggle that forms the skill. A coach who withholds the answer preserves it.</span><span class="chip">Desirable difficulty</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Do this exercise for me — I'll learn from reading your solution.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Tell me which parts of this task are the workout for me — and refuse to do those parts, even if I ask later.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> Reading a solution produces the feeling of learning, not the learning. Naming the workout parts up front protects the struggle that builds the skill — even against your own future shortcuts.</span><span class="chip">The workout rule</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cat" id="c6">
+  <div class="col">
+    <div class="cat-head"><span class="n">6</span><h2>Writing it up</h2></div>
+    <p class="catsub">Let it write, and you forfeit authorship and understanding at once. Let it critique, and you sharpen both.</p>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Write the introduction for my paper on X.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Here's my draft introduction. Point out where my logic jumps, where a claim lacks support, and where I'm hiding uncertainty.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> A drafted-for-you introduction is not yours to defend or extend. A critiqued draft is — and it comes out stronger.</span><span class="chip">Stay the author</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Rewrite this section to sound more academic.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Mark every sentence where my meaning is unclear or a reader could misread me, and tell me what's unclear — I'll do the rewriting.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> Borrowed polish is not yours to defend at the viva. Clarity you rebuild yourself is — and every sentence stays your own.</span><span class="chip">Stay the author</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Summarise what we did, so I can paste it into my methods section.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Quiz me on what we did and why — the method, its key assumption, its weakest point. I don't submit until I can answer unaided.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> If you can't explain the method between two doors, it isn't your work yet — the corridor test. The quiz finds that out while it's still cheap to fix.</span><span class="chip">Corridor test</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cat" id="c7">
+  <div class="col">
+    <div class="cat-head"><span class="n">7</span><h2>When you're stuck</h2></div>
+    <p class="catsub">Ask for the next step and you'll get the median one. Ask for divergence and you get room to think.</p>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">What should I do next in my project?</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Give me five genuinely different directions I could take this — including ones that contradict my current approach.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> One "what next" returns the safe average. Asking for divergence uses AI's real strength — breadth — while you keep the judgement of what's worth pursuing.</span><span class="chip">Expand, then judge</span></div>
+    </div>
+
+    <div class="pair">
+      <div class="pair-grid">
+        <div class="side mirror"><span class="tag">✗ Mirror · instead of</span><p class="q">Solve this problem for me.</p></div>
+        <div class="arrow"><span>→</span></div>
+        <div class="side challenger"><span class="tag">✓ Challenger · ask this</span><p class="q">Here is the problem and what I've tried so far. Don't solve it — ask me the questions a good supervisor would ask to help me see it differently.</p><button class="copybtn" aria-label="Copy the challenger prompt">Copy</button></div>
+      </div>
+      <div class="why"><span class="txt"><b>Why:</b> A handed solution ends the learning. Good questions restart your own reasoning — and that skill compounds long after this problem.</span><span class="chip">Desirable difficulty</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="col">
+    <p class="eyebrow">If you remember one thing</p>
+    <h2>Never ask it to agree. Ask it to argue.</h2>
+    <p>Notice the through-line in every pair above: the weak prompt asks the machine to <strong>close</strong> a question — to confirm, to summarise, to finish the work for you. The strong prompt asks it to <strong>open</strong> one — to disagree, to complicate, to hand the thinking back to you. The tool is the same. The only variable is whether you use it to end your thinking or to extend it.</p>
+    <p>That is the whole skill, and it is one you build the same way you build any other: by practising it until the challenger version is the one that comes to mind first.</p>
+    <p class="the-move">The test for any prompt: <br>Does this make me think more, or less?</p>
+    <div class="linkrow">
+      <a class="backlink" href="critical-thinking-guide.html">← Return to the main guide</a>
+      <a class="backlink" href="practice-room.html">Test yourself in the Practice Room →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="end">
+  <div class="col">
+    Companion to <em>Thinking for Yourself in the Age of the Machine</em> · The prompts are yours to keep and adapt.<br>
+    © 2026 Michaela Liegertová · drafted with Claude (Fable 5) and disclosed — the transparency is the point.
+  </div>
+</footer>
+
+<button class="totop" id="totop" aria-label="Back to top">↑</button>
+
+<script>
+  (function(){
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---- the flip demo ---- */
+    var demo=document.getElementById('demo');
+    var q=document.getElementById('demoQ');
+    var label=document.getElementById('demoLabel');
+    var why=document.getElementById('demoWhy');
+    var hint=document.getElementById('flipHint');
+    var btn=document.getElementById('flipBtn');
+
+    var MIRROR={
+      q:'Is my hypothesis that sleep loss impairs memory consolidation a good hypothesis?',
+      label:'The mirror — this quietly decreases your thinking',
+      hint:'You asked it to agree. It will.',
+      btn:'Flip it →'
+    };
+    var CHALLENGER={
+      q:'Give me the three strongest reasons my hypothesis — that sleep loss impairs memory consolidation — might be wrong, and what evidence would distinguish it from the alternatives.',
+      label:'The challenger — now it has to make you think',
+      why:'Same topic, opposite job. The first prompt asks the model to validate you, and a model built to be agreeable will oblige. The second forces it to hunt for disconfirming evidence — which is the work that actually moves your project forward.',
+      hint:'You asked it to disprove you. Now it’s useful.',
+      btn:'← Show the mirror'
+    };
+
+    var flipped=false;
+    function render(){
+      if(flipped){
+        demo.classList.remove('is-mirror');
+        q.textContent=CHALLENGER.q;
+        label.textContent=CHALLENGER.label;
+        why.textContent=CHALLENGER.why;
+        why.hidden=false;
+        hint.textContent=CHALLENGER.hint;
+        btn.textContent=CHALLENGER.btn;
+      }else{
+        demo.classList.add('is-mirror');
+        q.textContent=MIRROR.q;
+        label.textContent=MIRROR.label;
+        why.hidden=true;
+        hint.textContent=MIRROR.hint;
+        btn.textContent=MIRROR.btn;
+      }
+    }
+    btn.addEventListener('click',function(){flipped=!flipped;render();});
+    render();
+
+    /* ---- copy buttons ---- */
+    function copyText(text){
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        return navigator.clipboard.writeText(text);
+      }
+      return new Promise(function(resolve,reject){
+        try{
+          var ta=document.createElement('textarea');
+          ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+          document.body.appendChild(ta);ta.focus();ta.select();
+          document.execCommand('copy');document.body.removeChild(ta);resolve();
+        }catch(e){reject(e);}
+      });
+    }
+    document.querySelectorAll('.copybtn').forEach(function(b){
+      b.addEventListener('click',function(){
+        var card=b.closest('.challenger');
+        var text=card?card.querySelector('.q').textContent.trim():'';
+        copyText(text).then(function(){
+          var old=b.textContent;
+          b.textContent='Copied ✓';b.classList.add('done');
+          setTimeout(function(){b.textContent=old;b.classList.remove('done');},1600);
+        }).catch(function(){
+          b.textContent='Select & copy';
+          setTimeout(function(){b.textContent='Copy';},1600);
+        });
+      });
+    });
+
+    /* ---- back to top ---- */
+    var top=document.getElementById('totop');
+    function onScroll(){
+      var h=document.documentElement;
+      var y=h.scrollTop||document.body.scrollTop;
+      top.classList.toggle('show',y>900);
+    }
+    document.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+    top.addEventListener('click',function(){
+      window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+    });
+  })();
+</script>
+</body>
+</html>
