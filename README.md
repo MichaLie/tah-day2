@@ -1,7 +1,7 @@
 # TAH Day 2 — Navigating the AI Landscape · public course artifacts
 
 Participant materials for **Art-Tech for Higher Education, Day 2** (Prague, July 2026):
-the course companion, four mini-apps, the skills & agents cookbook, and a 25-minute lecture.
+the course companion, four mini-apps, the skills & agents cookbook, a 25-minute lecture, and a short radio play.
 
 **Browse everything:** https://michalie.github.io/tah-day2/
 
@@ -17,6 +17,7 @@ and carries its own AI-use disclosure. Built the way the course teaches.
 | [apps/demo_project_tour.html](https://michalie.github.io/tah-day2/apps/demo_project_tour.html) | The worked example of "make it legible": a plain-language project tour |
 | [cookbook.html](https://michalie.github.io/tah-day2/cookbook.html) | 26 ready-to-run skills + 3 example subagents, filterable, copy button on every entry |
 | [the-standard.html](https://michalie.github.io/tah-day2/the-standard.html) | *The Standard, Not the Source* — a 25-minute lecture by Claude, audio + transcript in one file |
+| [the_retraction.html](https://michalie.github.io/tah-day2/the_retraction.html) | *The Retraction* — a ~12-minute radio play by Claude on AI in science. Fiction on the surface; every disaster in it is footnoted to a real, documented case. A companion piece to the lecture above. |
 
 One more app joins after the course: the Track 4 citation-audit trainer — it carries the
 audit's answers, so it unlocks once everyone has had the hunt.
