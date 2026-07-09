@@ -1,13 +1,30 @@
 # TAH Day 2 — Navigating the AI Landscape · public course artifacts
 
 Participant materials for **Art-Tech for Higher Education, Day 2** (Prague, July 2026):
-the course companion, four mini-apps, the skills & agents cookbook, a 25-minute lecture, a short
-radio play — and the critical-thinking foundations trio, the epistemic ground beneath the day.
+the course companion, four mini-apps, live reference dashboards, the complete agent lab pack,
+the skills & agents cookbook, a 25-minute lecture, a short radio play — and the critical-thinking
+foundations trio, the epistemic ground beneath the day.
 
-**Browse everything:** https://michalie.github.io/tah-day2/
+**Monday 13 July · 10:00–16:00 (hard stop). Start here:** https://michalie.github.io/tah-day2/
 
-Every artifact is a single self-contained HTML file — it works offline, tracks nothing,
-and carries its own AI-use disclosure. Built the way the course teaches.
+## The participant path
+
+1. Open the GitHub Pages index above, then use the **Day 2 Course Companion** as the map for the day.
+2. Download the **[complete TAH Day 2 Agent Lab Pack](https://michalie.github.io/tah-day2/downloads/TAH_Day2_Agent_Lab_Pack.zip)** — handouts, safe sample files, and skills — and copy it to a safe working folder.
+3. For the lab, [install or update the **new ChatGPT desktop app**](https://chatgpt.com/download/), choose **Codex**, point it only at that copied folder, and follow the safety checklist. This route does not depend on ChatGPT Work reaching every account before Monday.
+
+The final hour is fixed: **14:55–15:05 break · 15:05–15:25 Build Your Own Agent · 15:25–15:40 peer exchange & failure clinic · 15:40–15:45 agent rule · 15:45–16:00 closing**.
+
+### July 9 product snapshot — useful context, not the curriculum
+
+The new desktop app combines **Chat** (quick questions, search, and conversation), **Work** (longer research, analysis, and finished deliverables), and **Codex** (local files, repositories, terminals, and developer tools). OpenAI launched [ChatGPT Work](https://openai.com/index/chatgpt-for-your-most-ambitious-work/) and made [GPT‑5.6 generally available](https://openai.com/index/gpt-5-6/) on 9 July; Work is still [rolling out by account](https://help.openai.com/en/articles/20001276), so it is optional in this workshop.
+
+**We are not moving Monday's materials to ChatGPT Sites.** Sites launched in public beta but is [not available in the EEA at launch](https://help.openai.com/en/articles/20001339). GitHub Pages remains the stable public home for these HTML artifacts.
+
+**Repository safety:** commit participant-facing or synthetic sample materials only; registration, attendance, admin, credential, or other personal data must never be committed.
+
+The core mini-apps and take-home artifacts are self-contained HTML files: they work offline, track nothing,
+and carry their own AI-use disclosure. The lab pack is a versioned download, and the FF UPCE dashboard keeps its two adjacent image assets. Built the way the course teaches.
 
 | Artifact | What it is |
 |---|---|

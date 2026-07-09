@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EU AI Act for Higher Education - Policy Orientation Dashboard</title>
+  <meta name="description" content="Research-grounded dashboard for universities and educators on the EU AI Act and higher education policy implications.">
+  <style>
+    :root {
+      --ink: #16202a;
+      --muted: #5e6b78;
+      --line: #d9e1ea;
+      --soft: #f4f7fa;
+      --panel: #ffffff;
+      --blue: #1f6f9f;
+      --teal: #0f7f79;
+      --green: #4b7f35;
+      --amber: #b86405;
+      --red: #b6253a;
+      --violet: #6651a5;
+      --shadow: 0 16px 42px rgba(22, 32, 42, 0.10);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--soft);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: #174f83;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner,
+    .hero-inner,
+    main,
+    .footer-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 800;
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .nav {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 7px;
+      padding: 7px 8px;
+      font-size: 0.92rem;
+    }
+
+    .nav a:hover,
+    .nav a:focus-visible {
+      color: var(--ink);
+      background: #eef3f8;
+      outline: none;
+    }
+
+    .hero {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-inner {
+      padding: 38px 0 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 0.82rem;
+      font-weight: 820;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4.6vw, 4.2rem);
+      line-height: 1.03;
+      letter-spacing: 0;
+      max-width: 860px;
+    }
+
+    .lead {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.8vw, 1.16rem);
+      max-width: 780px;
+    }
+
+    .notice {
+      margin-top: 18px;
+      padding: 13px 15px;
+      border-left: 5px solid var(--blue);
+      border: 1px solid #cfe0ee;
+      border-left-width: 5px;
+      border-radius: var(--radius);
+      background: #f4f9fd;
+      color: #27445c;
+      font-size: 0.95rem;
+      max-width: 820px;
+    }
+
+    .visual-panel {
+      background: linear-gradient(180deg, #ffffff 0%, #f5f8fb 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      display: grid;
+      align-content: center;
+      gap: 14px;
+    }
+
+    .risk-pyramid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .risk-row {
+      min-height: 48px;
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 760;
+      background: var(--accent);
+    }
+
+    .risk-row span {
+      font-size: 0.84rem;
+      text-transform: uppercase;
+    }
+
+    .risk-row p {
+      margin: 0;
+      font-weight: 650;
+      font-size: 0.92rem;
+    }
+
+    .hero-aside {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    main {
+      padding: 28px 0 52px;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .card,
+    .status-card,
+    .source-card,
+    .table-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 26px rgba(22, 32, 42, 0.06);
+    }
+
+    .status-card {
+      min-height: 138px;
+      padding: 16px;
+      border-top: 5px solid var(--accent, var(--blue));
+    }
+
+    .kicker {
+      display: block;
+      color: var(--muted);
+      font-size: 0.79rem;
+      font-weight: 820;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .status-card strong {
+      display: block;
+      font-size: clamp(1.35rem, 2.4vw, 1.95rem);
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+
+    .status-card p,
+    .card p,
+    .source-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .section {
+      margin-top: 34px;
+      scroll-margin-top: 84px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 2.7vw, 2.15rem);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .section-header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 570px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      padding: 17px;
+      border-top: 5px solid var(--accent, var(--blue));
+      min-height: 178px;
+    }
+
+    .card h3,
+    .source-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.04rem;
+      letter-spacing: 0;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      font-weight: 900;
+      color: var(--accent, var(--blue));
+      background: color-mix(in srgb, var(--accent, var(--blue)) 12%, #fff);
+    }
+
+    .card ul {
+      margin: 12px 0 0;
+      padding-left: 19px;
+      color: #344253;
+      font-size: 0.94rem;
+    }
+
+    .card li {
+      margin: 7px 0;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+      position: relative;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 14px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--accent, var(--blue));
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .date {
+      color: var(--accent, var(--blue));
+      font-weight: 850;
+    }
+
+    .timeline-item h3 {
+      margin: 0 0 4px;
+      font-size: 1rem;
+    }
+
+    .timeline-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      font-weight: 760;
+      color: #334456;
+      background: #fff;
+      margin: 3px 4px 3px 0;
+    }
+
+    .badge.law { border-color: #cddfed; color: #174f83; background: #f4f9fd; }
+    .badge.guidance { border-color: #d8d0ec; color: #4b3b83; background: #f8f5ff; }
+    .badge.watch { border-color: #f0d8ba; color: #7a4300; background: #fff8ef; }
+
+    .table-card {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    th,
+    td {
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+      padding: 13px 15px;
+      font-size: 0.94rem;
+    }
+
+    th {
+      background: #f0f4f8;
+      color: #344253;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .priority {
+      font-weight: 850;
+      color: var(--accent, var(--blue));
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .source-card {
+      padding: 17px;
+      border-top: 5px solid var(--accent, var(--blue));
+    }
+
+    .source-card ul {
+      margin: 12px 0 0;
+      padding-left: 19px;
+      color: #344253;
+      font-size: 0.93rem;
+    }
+
+    .source-card li {
+      margin: 7px 0;
+    }
+
+    .footer {
+      background: #fff;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      padding: 22px 0;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 1040px) {
+      .hero-inner,
+      .source-grid {
+        grid-template-columns: 1fr;
+      }
+      .status-grid,
+      .grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar { position: static; }
+      .topbar-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 12px 0;
+      }
+      .nav { justify-content: flex-start; }
+      .hero-inner { padding: 28px 0; }
+      .status-grid,
+      .grid-2,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+      .section-header { display: block; }
+      .section-header p { margin-top: 8px; }
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 5px;
+      }
+      .risk-row {
+        grid-template-columns: 1fr;
+      }
+      .table-card {
+        overflow: visible;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+      }
+      table,
+      thead,
+      tbody,
+      tr,
+      th,
+      td {
+        display: block;
+      }
+      table {
+        min-width: 0;
+        background: transparent;
+      }
+      thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+      tr {
+        margin-bottom: 12px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        box-shadow: 0 8px 26px rgba(22, 32, 42, 0.06);
+        overflow: hidden;
+      }
+      td {
+        display: grid;
+        grid-template-columns: minmax(96px, 34%) minmax(0, 1fr);
+        gap: 10px;
+        border-bottom: 1px solid var(--line);
+        padding: 11px 13px;
+      }
+      td::before {
+        content: attr(data-label);
+        color: var(--muted);
+        font-size: 0.74rem;
+        font-weight: 820;
+        text-transform: uppercase;
+      }
+      td:last-child {
+        border-bottom: 0;
+      }
+    }
+
+    @media print {
+      .topbar { display: none; }
+      body { background: #fff; }
+      .card,
+      .status-card,
+      .source-card,
+      .table-card,
+      .visual-panel {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar" aria-label="Dashboard navigation">
+    <div class="topbar-inner">
+      <a class="brand" href="#top"><span class="brand-mark">AI</span><span>AI Act for Higher Education</span></a>
+      <div class="nav">
+        <a href="#now">Now</a>
+        <a href="#high-risk">High Risk</a>
+        <a href="#roles">University Roles</a>
+        <a href="#educators">Educators</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#sources">Sources</a>
+      </div>
+    </div>
+  </nav>
+
+  <header id="top" class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">Research-grounded policy orientation - checked 9 July 2026</div>
+        <h1>EU AI Act Dashboard for Universities and Educators</h1>
+        <p class="lead">A practical overview of what the EU AI Act means for higher education policy, teaching, assessment, research support, procurement, and everyday educator use of AI.</p>
+        <div class="notice">
+          This is a course and policy-orientation aid, not legal advice. It distinguishes binding AI Act duties from official guidance and expert commentary. The most time-sensitive update is the 2026 delayed application of high-risk rules for education to 2 December 2027.
+        </div>
+      </div>
+      <aside class="visual-panel" aria-label="AI Act risk model">
+        <div class="risk-pyramid">
+          <div class="risk-row" style="--accent: var(--red);"><span>Prohibited</span><p>Some practices are banned, including emotion inference in education except medical or safety reasons.</p></div>
+          <div class="risk-row" style="--accent: var(--amber);"><span>High risk</span><p>Admissions, learning-outcome evaluation, educational level decisions, exam monitoring.</p></div>
+          <div class="risk-row" style="--accent: var(--blue);"><span>Transparency</span><p>Chatbots, deepfakes, public-interest generated text, synthetic content marking.</p></div>
+          <div class="risk-row" style="--accent: var(--green);"><span>Minimal risk</span><p>Most ordinary AI use remains allowed, but AI literacy and other laws still matter.</p></div>
+        </div>
+        <p class="hero-aside">The university task is not to ban AI globally. It is to classify use cases, protect rights, train people, document decisions, and keep human academic judgment visible.</p>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section id="now" class="status-grid" aria-label="Current action points">
+      <article class="status-card" style="--accent: var(--green);">
+        <span class="kicker">Applies now</span>
+        <strong>AI literacy</strong>
+        <p>Providers and deployers must take measures so staff and other relevant persons have sufficient AI literacy. Article 4 has applied since 2 February 2025.</p>
+      </article>
+      <article class="status-card" style="--accent: var(--red);">
+        <span class="kicker">Applies now</span>
+        <strong>Prohibitions</strong>
+        <p>Do not use AI for prohibited practices. For education, the clearest red line is biometric emotion inference, unless medical or safety reasons apply.</p>
+      </article>
+      <article class="status-card" style="--accent: var(--blue);">
+        <span class="kicker">2 Aug 2026</span>
+        <strong>Transparency</strong>
+        <p>Article 50 duties cover AI interaction notices, synthetic content marking, deepfake disclosure, and public-interest AI-generated text disclosures.</p>
+      </article>
+      <article class="status-card" style="--accent: var(--amber);">
+        <span class="kicker">2 Dec 2027</span>
+        <strong>High-risk HE</strong>
+        <p>Current official guidance says stand-alone high-risk systems in education apply from 2 December 2027, with possible earlier trigger if support tools are ready.</p>
+      </article>
+    </section>
+
+    <section id="high-risk" class="section">
+      <div class="section-header">
+        <h2>What Becomes High Risk in Higher Education</h2>
+        <p>Under Annex III, education and vocational training use cases are high-risk when AI is intended for gatekeeping, learning evaluation, educational-level decisions, or test monitoring.</p>
+      </div>
+      <div class="grid-4">
+        <article class="card" style="--accent: var(--amber);">
+          <div class="mark">1</div>
+          <h3>Access and Admission</h3>
+          <p>AI used to determine access, admission, or assignment to educational institutions or programmes.</p>
+          <ul>
+            <li>Admissions triage or ranking</li>
+            <li>Scholarship or placement screening</li>
+            <li>Automated programme assignment</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--amber);">
+          <div class="mark">2</div>
+          <h3>Learning Outcomes</h3>
+          <p>AI used to evaluate learning outcomes, including where results steer a learner's process.</p>
+          <ul>
+            <li>Automated grading or scoring</li>
+            <li>AI feedback that materially guides progression</li>
+            <li>Adaptive systems steering learning paths</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--amber);">
+          <div class="mark">3</div>
+          <h3>Level of Education</h3>
+          <p>AI used to assess what level of education a person will receive or be able to access.</p>
+          <ul>
+            <li>Placement into tracks or levels</li>
+            <li>Prerequisite or readiness decisions</li>
+            <li>Progression recommendations with real effect</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--amber);">
+          <div class="mark">4</div>
+          <h3>Exam Monitoring</h3>
+          <p>AI used to monitor or detect prohibited student behaviour during tests.</p>
+          <ul>
+            <li>AI proctoring</li>
+            <li>Cheating detection</li>
+            <li>Behavioural anomaly scoring in exams</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Immediate Policy Triage</h2>
+        <p>Use this as a first pass for university AI governance. The legal classification depends on intended purpose and actual context of use.</p>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>University activity</th>
+              <th>Likely AI Act lens</th>
+              <th>Policy action</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Activity">Lecturer uses a general chatbot to draft quiz questions, examples, slides, or feedback templates.</td>
+              <td data-label="AI Act lens">Usually not high-risk by itself. AI literacy, data protection, copyright, accuracy, and teaching policy still apply.</td>
+              <td data-label="Policy action">Provide role-based guidance: no sensitive student data in unapproved tools, verify outputs, disclose when course policy requires it.</td>
+              <td data-label="Priority" class="priority" style="--accent: var(--green);">Now</td>
+            </tr>
+            <tr>
+              <td data-label="Activity">AI tool scores assignments, evaluates learning outcomes, or affects progression.</td>
+              <td data-label="AI Act lens">Potential Annex III high-risk education use case.</td>
+              <td data-label="Policy action">Inventory, classify, assign human oversight, document input data, monitor operation, prepare FRIA/DPIA where required.</td>
+              <td data-label="Priority" class="priority" style="--accent: var(--amber);">2026-2027 readiness</td>
+            </tr>
+            <tr>
+              <td data-label="Activity">AI proctoring or automated cheating detection during exams.</td>
+              <td data-label="AI Act lens">Potential Annex III high-risk education use case. Biometric or emotion functions can add prohibitions or extra risk.</td>
+              <td data-label="Policy action">Require strict procurement review, necessity/proportionality test, student notice, human review, appeal route, and alternatives.</td>
+              <td data-label="Priority" class="priority" style="--accent: var(--red);">High scrutiny</td>
+            </tr>
+            <tr>
+              <td data-label="Activity">Admissions, programme allocation, scholarship screening, or student-risk prediction.</td>
+              <td data-label="AI Act lens">Likely high-risk if AI materially determines access, admission, assignment, or educational level.</td>
+              <td data-label="Policy action">Do not pilot informally. Treat as high-risk governance: documentation, human authority, explainability, bias checks, appeal process.</td>
+              <td data-label="Priority" class="priority" style="--accent: var(--red);">High scrutiny</td>
+            </tr>
+            <tr>
+              <td data-label="Activity">University chatbot answers student-service questions.</td>
+              <td data-label="AI Act lens">Transparency risk: users should know they are interacting with AI unless obvious.</td>
+              <td data-label="Policy action">Label the chatbot, define escalation to humans, control hallucination risk, log issues, avoid legal/medical/disciplinary advice without review.</td>
+              <td data-label="Priority" class="priority" style="--accent: var(--blue);">By Aug 2026</td>
+            </tr>
+            <tr>
+              <td data-label="Activity">Generated images, audio, video, or public-facing AI-generated text used in communications.</td>
+              <td data-label="AI Act lens">Article 50 transparency and synthetic-content marking/labelling duties may apply.</td>
+              <td data-label="Policy action">Create communications rules for AI-generated public-interest text, deepfakes, synthetic media, and approved labelling/icons.</td>
+              <td data-label="Priority" class="priority" style="--accent: var(--blue);">By Aug-Dec 2026</td>
+            </tr>
+            <tr>
+              <td data-label="Activity">Research group develops or fine-tunes an AI model and releases it or deploys it as a service.</td>
+              <td data-label="AI Act lens">Research/prototyping before market release may be exempt, but release, service deployment, or high-risk use can trigger obligations.</td>
+              <td data-label="Policy action">Map whether the university is provider, deployer, or downstream provider. Require pre-release compliance review.</td>
+              <td data-label="Priority" class="priority" style="--accent: var(--violet);">Case review</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="roles" class="section">
+      <div class="section-header">
+        <h2>University Roles Under the Act</h2>
+        <p>The same university can be a deployer, provider, downstream provider, employer, public body, purchaser, and publisher depending on the AI use case.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card" style="--accent: var(--blue);">
+          <div class="mark">D</div>
+          <h3>Deployer</h3>
+          <p>The university uses an AI system under its authority. This is the most common role for bought-in educational technology.</p>
+          <ul>
+            <li>Use according to instructions</li>
+            <li>Assign trained human oversight</li>
+            <li>Monitor operation and risks</li>
+            <li>Keep logs where under control</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--violet);">
+          <div class="mark">P</div>
+          <h3>Provider or Downstream Provider</h3>
+          <p>The university develops, substantially modifies, brands, or changes the intended purpose of an AI system.</p>
+          <ul>
+            <li>Risk management and documentation</li>
+            <li>Conformity assessment where required</li>
+            <li>Lifecycle monitoring and incident handling</li>
+            <li>Contractual access to technical information</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--green);">
+          <div class="mark">E</div>
+          <h3>Educator or Staff User</h3>
+          <p>Educators are often acting on behalf of the deployer. Their practical duties come through institutional policy, training, and tool rules.</p>
+          <ul>
+            <li>Use approved tools for student data</li>
+            <li>Check outputs before use</li>
+            <li>Keep human pedagogical judgment</li>
+            <li>Follow assessment disclosure rules</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="educators" class="section">
+      <div class="section-header">
+        <h2>What Educators Need to Know</h2>
+        <p>Educators do not need to become lawyers. They need a reliable classroom rule set for safe, critical, transparent AI use.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card" style="--accent: var(--green);">
+          <div class="mark">L</div>
+          <h3>AI Literacy Is Role-Based</h3>
+          <p>Training should be tailored to the tool and teaching context, not reduced to one generic webinar.</p>
+          <ul>
+            <li>What AI tools are approved?</li>
+            <li>What data may be entered?</li>
+            <li>What risks matter in this course?</li>
+            <li>How should students disclose AI use?</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--amber);">
+          <div class="mark">A</div>
+          <h3>Assessment Needs Human Judgment</h3>
+          <p>AI can support drafting rubrics, examples, or feedback, but high-stakes evaluation requires human authority and a clear challenge route.</p>
+          <ul>
+            <li>No hidden automated grading</li>
+            <li>No AI-only disciplinary conclusions</li>
+            <li>Document how AI supports feedback</li>
+            <li>Keep learning outcomes visible</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--red);">
+          <div class="mark">R</div>
+          <h3>Red Lines for Classrooms</h3>
+          <p>Some AI practices are unsuitable or unlawful in education contexts, especially where students are monitored or profiled.</p>
+          <ul>
+            <li>No emotion recognition in education except medical/safety reasons</li>
+            <li>Avoid biometric or behavioural surveillance by default</li>
+            <li>No uploading sensitive data to unapproved tools</li>
+            <li>No non-consensual intimate synthetic content</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="roadmap" class="section">
+      <div class="section-header">
+        <h2>Implementation Roadmap</h2>
+        <p>The delayed high-risk deadline gives universities time to prepare. It is not a reason to postpone inventories, procurement rules, or staff training.</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item" style="--accent: var(--green);">
+          <div class="date">Now</div>
+          <div>
+            <h3>Build the AI inventory</h3>
+            <p>Map tools used in teaching, assessment, admissions, proctoring, learning analytics, HR, research administration, student services, communications, and research release.</p>
+            <span class="badge law">Article 4</span><span class="badge law">Article 5</span><span class="badge guidance">EC AI literacy Q&A</span>
+          </div>
+        </div>
+        <div class="timeline-item" style="--accent: var(--blue);">
+          <div class="date">2026</div>
+          <div>
+            <h3>Prepare transparency and content rules</h3>
+            <p>Decide how chatbots, synthetic content, deepfakes, public-interest AI-generated text, and AI-generated communications will be labelled or reviewed.</p>
+            <span class="badge law">Article 50</span><span class="badge guidance">Transparency Code of Practice</span>
+          </div>
+        </div>
+        <div class="timeline-item" style="--accent: var(--amber);">
+          <div class="date">2026-2027</div>
+          <div>
+            <h3>Classify high-risk education systems</h3>
+            <p>Review admissions, grading, learning analytics, progression, and exam-monitoring systems. For each, decide whether the university is deployer, provider, or both.</p>
+            <span class="badge law">Annex III education</span><span class="badge guidance">Draft high-risk guidelines</span><span class="badge watch">Consultation open to 23 July 2026</span>
+          </div>
+        </div>
+        <div class="timeline-item" style="--accent: var(--violet);">
+          <div class="date">By Dec 2027</div>
+          <div>
+            <h3>Operationalise high-risk governance</h3>
+            <p>For high-risk systems, prepare instructions-for-use governance, human oversight, logs, monitoring, FRIA/DPIA workflows, student and staff notices, incident escalation, and appeal routes.</p>
+            <span class="badge law">Article 26</span><span class="badge law">Article 27</span><span class="badge law">Articles 8-15</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Policy Building Blocks</h2>
+        <p>A university AI policy should be operational enough for procurement, educators, IT, data protection, research units, and students.</p>
+      </div>
+      <div class="grid-2">
+        <article class="card" style="--accent: var(--blue);">
+          <div class="mark">G</div>
+          <h3>Institutional Governance</h3>
+          <ul>
+            <li>Single AI register with risk classification and owner for each tool.</li>
+            <li>Procurement checklist covering AI Act role, data protection, documentation, logging, human oversight, accessibility, and cybersecurity.</li>
+            <li>Escalation route for suspected high-risk, prohibited, or sensitive AI use.</li>
+            <li>Template for AI literacy records and tool-specific training.</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--green);">
+          <div class="mark">T</div>
+          <h3>Teaching and Assessment Rules</h3>
+          <ul>
+            <li>Course-level permitted AI use levels and student disclosure rules.</li>
+            <li>Assessment design that tests learning, not only output production.</li>
+            <li>Rules for AI-supported feedback, marking, oral checks, viva, and appeals.</li>
+            <li>Guidance on copyright, citation, hallucination, bias, and accessibility.</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--amber);">
+          <div class="mark">R</div>
+          <h3>Research and Innovation</h3>
+          <ul>
+            <li>Clarify when research/prototyping becomes release, deployment, or service provision.</li>
+            <li>Review fine-tuned models, student-facing research tools, and health/education deployments before launch.</li>
+            <li>Protect personal, confidential, unpublished, and partner data.</li>
+            <li>Document use of general-purpose models and downstream changes.</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--red);">
+          <div class="mark">S</div>
+          <h3>Student Rights and Safeguards</h3>
+          <ul>
+            <li>Clear notice when high-risk AI assists decisions about students.</li>
+            <li>Human review, challenge, and explanation process for consequential outputs.</li>
+            <li>Non-discriminatory alternatives where surveillance or accessibility concerns arise.</li>
+            <li>Protection against over-reliance, misinformation, bias, and undue profiling.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="section-header">
+        <h2>Clickable Source Base</h2>
+        <p>Primary legal and official EU sources first; expert sources are clearly marked as interpretation or sector evidence.</p>
+      </div>
+      <div class="source-grid">
+        <article class="source-card" style="--accent: var(--blue);">
+          <h3>Official Law and EU Guidance</h3>
+          <ul>
+            <li><a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng" target="_blank" rel="noopener">Regulation (EU) 2024/1689, Official Journal text</a> - binding AI Act text, including Articles 4, 5, 26, 50 and Annex III.</li>
+            <li><a href="https://digital-strategy.ec.europa.eu/en/faqs/navigating-ai-act" target="_blank" rel="noopener">European Commission: Navigating the AI Act</a> - official Q&A on scope, high-risk systems, GPAI, enforcement, and implementation.</li>
+            <li><a href="https://digital-strategy.ec.europa.eu/en/faqs/ai-literacy-questions-answers" target="_blank" rel="noopener">European Commission: AI Literacy Q&A</a> - Article 4 interpretation and minimum programme expectations.</li>
+            <li><a href="https://digital-strategy.ec.europa.eu/en/policies/guidelines-ai-high-risk-systems" target="_blank" rel="noopener">European Commission: Guidelines for high-risk AI systems</a> - current draft-guideline status and new high-risk timeline.</li>
+            <li><a href="https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content" target="_blank" rel="noopener">European Commission: Code of Practice on transparency of AI-generated content</a> - Article 50 support for marking and labelling.</li>
+          </ul>
+        </article>
+        <article class="source-card" style="--accent: var(--amber);">
+          <h3>2026 Timeline Updates</h3>
+          <ul>
+            <li><a href="https://www.consilium.europa.eu/en/press/press-releases/2026/06/29/artificial-intelligence-council-gives-final-green-light-to-simplify-and-streamline-rules/" target="_blank" rel="noopener">Council of the EU, 29 June 2026</a> - final green light to simplification, with new high-risk dates.</li>
+            <li><a href="https://www.europarl.europa.eu/news/en/press-room/20260611IPR45207/ai-act-ep-approves-simplification-measures-and-nudifier-app-ban" target="_blank" rel="noopener">European Parliament, June 2026</a> - approval of high-risk postponement and synthetic intimate-content ban.</li>
+            <li><a href="https://digital-strategy.ec.europa.eu/en/policies/ai-act-standardisation" target="_blank" rel="noopener">European Commission: AI Act standardisation</a> - standards context and latest application backstops.</li>
+            <li><a href="https://digital-strategy.ec.europa.eu/en/consultations/targeted-consultation-draft-guidelines-classification-high-risk-artificial-intelligence-systems" target="_blank" rel="noopener">Targeted consultation on draft high-risk guidelines</a> - open 19 May to 23 July 2026.</li>
+          </ul>
+        </article>
+        <article class="source-card" style="--accent: var(--green);">
+          <h3>Education and Teacher Guidance</h3>
+          <ul>
+            <li><a href="https://education.ec.europa.eu/focus-topics/digital-education/actions/plan/ethical-guidelines-for-educators-on-using-artificial-intelligence" target="_blank" rel="noopener">European Commission: Updated ethical AI and data guidelines for educators</a> - 2026 update with AI Act, GDPR, and AI literacy context.</li>
+            <li><a href="https://www.consilium.europa.eu/en/press/press-releases/2026/05/11/ai-in-education-council-calls-for-human-centred-approach/" target="_blank" rel="noopener">Council of the EU: Human-centred AI in education</a> - May 2026 conclusions on teachers, autonomy, equity, data protection, and AI literacy.</li>
+            <li><a href="https://www.unesco.org/en/articles/ai-competency-framework-teachers" target="_blank" rel="noopener">UNESCO AI Competency Framework for Teachers</a> - human-centred mindset, ethics, foundations, pedagogy, and professional learning.</li>
+            <li><a href="https://www.unesco.org/en/articles/ai-competency-framework-students" target="_blank" rel="noopener">UNESCO AI Competency Framework for Students</a> - human-centred, ethical, technical, and design competencies.</li>
+          </ul>
+        </article>
+        <article class="source-card" style="--accent: var(--violet);">
+          <h3>Higher-Education Sector Evidence</h3>
+          <ul>
+            <li><a href="https://www.eua.eu/our-work/topics/artificial-intelligence.html" target="_blank" rel="noopener">European University Association: AI in universities</a> - university values, human control, privacy, digital sovereignty, data quality, and culture.</li>
+            <li><a href="https://www.oecd.org/en/publications/oecd-digital-education-outlook-2026_062a7394-en.html" target="_blank" rel="noopener">OECD Digital Education Outlook 2026</a> - generative AI can support learning only when guided by clear teaching principles.</li>
+            <li><a href="https://www.educause.edu/research/2026/the-impact-of-ai-on-work-in-higher-education" target="_blank" rel="noopener">EDUCAUSE 2026: Impact of AI on Work in Higher Education</a> - staff/faculty policy awareness and risk evidence.</li>
+            <li><a href="https://uniwise.eu/resources/blog/the-eu-ai-act-and-assessment-december-2027-is-not-a-snooze-button" target="_blank" rel="noopener">UNIwise practitioner blog on AI Act and assessment</a> - useful non-official assessment-sector interpretation of the 2027 delay.</li>
+            <li><a href="https://rockinst.org/wp-content/uploads/2025/11/EU-AI-and-Higher-Education-web.pdf" target="_blank" rel="noopener">Rockefeller Institute policy brief</a> - higher-education implications for cross-border collaboration and accountability.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>Prepared as an English higher-education policy dashboard. Checked against official sources on 9 July 2026.</span>
+      <span>Not legal advice. Validate with institutional counsel and national competent-authority guidance.</span>
+    </div>
+  </footer>
+</body>
+</html>

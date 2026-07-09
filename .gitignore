@@ -1,2 +1,7 @@
 .DS_Store
 Thumbs.db
+
+# Private workshop administration — never publish participant records.
+registration*.csv
+*Form responses*.csv
+facilitator-private/

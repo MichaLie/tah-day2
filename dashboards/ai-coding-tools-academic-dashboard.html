@@ -1,0 +1,1637 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Coding Agents for Academic Work - July 2026 Dashboard</title>
+  <meta name="description" content="A source-grounded dashboard comparing ChatGPT Work and Codex, Claude Code and Cowork, and Google Antigravity 2.0 for academic work and non-programmer use.">
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #5d6876;
+      --paper: #ffffff;
+      --soft: #f4f6f5;
+      --line: #d7dfdd;
+      --deep: #111827;
+      --blue: #1f5d8c;
+      --blue-soft: #e7f0f7;
+      --teal: #08796f;
+      --teal-soft: #e2f4f1;
+      --green: #356f3f;
+      --green-soft: #e8f3ea;
+      --amber: #a86600;
+      --amber-soft: #fff1d8;
+      --plum: #6551a8;
+      --plum-soft: #eeeafa;
+      --red: #a43a3a;
+      --red-soft: #fae6e3;
+      --shadow: 0 16px 36px rgba(20, 31, 42, 0.10);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--soft);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: #174f83;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-inner,
+    .hero-inner,
+    main,
+    .footer-inner {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: var(--ink);
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: var(--teal);
+      color: white;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .brand span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: flex-end;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 8px;
+      border-radius: 7px;
+      font-size: 0.92rem;
+      font-weight: 650;
+    }
+
+    .nav a:hover,
+    .nav a:focus-visible {
+      color: var(--ink);
+      background: #eef3f2;
+      outline: none;
+    }
+
+    .hero {
+      color: white;
+      background:
+        linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(21, 45, 54, 0.96)),
+        #111827;
+      border-bottom: 1px solid #24333d;
+    }
+
+    .hero-inner {
+      min-height: 520px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 36px;
+      align-items: center;
+      padding: 64px 0 52px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      color: #dbeafe;
+      background: rgba(255, 255, 255, 0.07);
+      font-size: 0.86rem;
+      font-weight: 750;
+      width: fit-content;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      flex: 0 0 auto;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin-bottom: 18px;
+      font-size: clamp(2.35rem, 5vw, 5rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      color: #d4dde8;
+      font-size: 1.12rem;
+      max-width: 760px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .hero-actions a,
+    .source-link,
+    .mini-link {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      font-weight: 750;
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .hero-actions a {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.11);
+      color: white;
+    }
+
+    .hero-actions a:first-child {
+      background: #ffffff;
+      color: #111827;
+    }
+
+    .decision-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .decision-box h2 {
+      margin-bottom: 8px;
+      color: white;
+      font-size: 1.35rem;
+    }
+
+    .decision-list {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .decision-list li {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      color: #e6edf6;
+    }
+
+    .num {
+      width: 36px;
+      height: 36px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.13);
+      color: white;
+      font-weight: 900;
+    }
+
+    main {
+      padding: 36px 0 54px;
+    }
+
+    section {
+      scroll-margin-top: 78px;
+      margin-top: 28px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      margin-bottom: 4px;
+      font-size: clamp(1.55rem, 2.4vw, 2.4rem);
+      line-height: 1.08;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 720px;
+      margin-bottom: 0;
+    }
+
+    .stamp {
+      flex: 0 0 auto;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 0.88rem;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card,
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 24px rgba(20, 31, 42, 0.06);
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .card h3,
+    .panel h3 {
+      margin-bottom: 8px;
+      font-size: 1.06rem;
+      line-height: 1.2;
+    }
+
+    .card p,
+    .panel p,
+    .card li,
+    .panel li {
+      color: var(--muted);
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .accent {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex: 0 0 auto;
+    }
+
+    .accent.blue { background: var(--blue); }
+    .accent.teal { background: var(--teal); }
+    .accent.green { background: var(--green); }
+    .accent.amber { background: var(--amber); }
+    .accent.plum { background: var(--plum); }
+    .accent.red { background: var(--red); }
+
+    .chooser {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--line);
+      box-shadow: 0 10px 24px rgba(20, 31, 42, 0.06);
+    }
+
+    .choice {
+      background: var(--paper);
+      padding: 18px;
+      min-height: 166px;
+    }
+
+    .choice strong {
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .choice p {
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef3f2;
+      color: #334155;
+      font-size: 0.78rem;
+      font-weight: 750;
+      border: 1px solid #d8e0dd;
+    }
+
+    .tag.blue { background: var(--blue-soft); color: #174f83; border-color: #c9dcea; }
+    .tag.teal { background: var(--teal-soft); color: #06665f; border-color: #c2dfdc; }
+    .tag.green { background: var(--green-soft); color: #2d6637; border-color: #c8dfcc; }
+    .tag.amber { background: var(--amber-soft); color: #825000; border-color: #efd6a6; }
+    .tag.plum { background: var(--plum-soft); color: #55459a; border-color: #d6caef; }
+    .tag.red { background: var(--red-soft); color: #913232; border-color: #efc6c1; }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .tool-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 100%;
+    }
+
+    .tool-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+    }
+
+    .tool-title {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .score {
+      min-width: 66px;
+      text-align: center;
+      padding: 6px 8px;
+      border-radius: 7px;
+      font-size: 0.8rem;
+      font-weight: 850;
+      color: white;
+    }
+
+    .score.high { background: var(--green); }
+    .score.mid { background: var(--amber); }
+    .score.blue { background: var(--blue); }
+    .score.plum { background: var(--plum); }
+
+    .mini-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 9px;
+    }
+
+    .mini-list li {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .check {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      display: grid;
+      place-items: center;
+      margin-top: 2px;
+      background: #e6efed;
+      color: var(--teal);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 10px 24px rgba(20, 31, 42, 0.06);
+    }
+
+    table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+      background: var(--paper);
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      color: #334155;
+      background: #f8faf9;
+      font-size: 0.83rem;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    td strong {
+      color: var(--ink);
+    }
+
+    .learning-highlight td {
+      background: #fff6f5;
+      border-bottom-color: #efc6c1;
+    }
+
+    .learning-highlight td:first-child {
+      border-left: 5px solid var(--red);
+    }
+
+    .learning-highlight strong {
+      color: var(--red);
+    }
+
+    .surface-track {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .surface {
+      position: relative;
+      min-height: 220px;
+      padding: 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--paper);
+      overflow: hidden;
+    }
+
+    .surface:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 5px;
+      background: var(--teal);
+    }
+
+    .surface:nth-child(2):before { background: var(--blue); }
+    .surface:nth-child(3):before { background: var(--amber); }
+
+    .surface h3 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+    }
+
+    .surface p {
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .bar-set {
+      display: grid;
+      gap: 9px;
+      margin-top: auto;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      color: #475569;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: #e7eeec;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: var(--teal);
+    }
+
+    .bar.blue span { background: var(--blue); }
+    .bar.amber span { background: var(--amber); }
+    .bar.plum span { background: var(--plum); }
+
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .price-card {
+      padding: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .price-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.18rem;
+    }
+
+    .price-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .price-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid #edf2f0;
+      padding-top: 8px;
+      color: var(--muted);
+    }
+
+    .price-list li:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .price-list span:last-child {
+      color: var(--ink);
+      font-weight: 850;
+      text-align: right;
+    }
+
+    .limit-note {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 7px;
+      background: #f8faf9;
+      color: var(--muted);
+      border: 1px solid #e4ebe8;
+      font-size: 0.94rem;
+    }
+
+    .sandbox-map {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 14px;
+    }
+
+    .sandbox-visual {
+      display: grid;
+      gap: 10px;
+      padding: 20px;
+      border-radius: var(--radius);
+      background: var(--deep);
+      color: white;
+    }
+
+    .safe-box {
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .safe-box strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .safe-box span {
+      color: #cbd5e1;
+      font-size: 0.93rem;
+    }
+
+    .rule-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .callout {
+      border-left: 5px solid var(--teal);
+      background: #fff;
+      padding: 18px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      box-shadow: 0 10px 24px rgba(20, 31, 42, 0.06);
+    }
+
+    .callout h3 {
+      margin-bottom: 8px;
+    }
+
+    .callout p {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .step:before {
+      content: counter(step);
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+
+    .step h3 {
+      margin-bottom: 4px;
+      font-size: 1.02rem;
+    }
+
+    .step p {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 14px;
+    }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: #f8faf9;
+      border: 1px solid #e2e8e6;
+    }
+
+    .stat b {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--ink);
+      font-size: 1.75rem;
+      line-height: 1.05;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .source-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .source-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.02rem;
+    }
+
+    .source-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .source-list a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      color: #174f83;
+      font-weight: 700;
+    }
+
+    .footnote {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-top: 12px;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+      padding: 24px 0;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1050px) {
+      .hero-inner,
+      .tool-grid,
+      .price-grid,
+      .source-grid,
+      .grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-copy {
+        grid-column: 1 / -1;
+      }
+
+      .decision-box {
+        grid-column: 1 / -1;
+      }
+
+      .chooser,
+      .surface-track,
+      .sandbox-map,
+      .evidence-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 10px 0;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .hero-inner {
+        min-height: auto;
+        padding: 42px 0 36px;
+        grid-template-columns: 1fr;
+      }
+
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .tool-grid,
+      .price-grid,
+      .source-grid,
+      .stat-strip,
+      .rule-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .stamp {
+        display: inline-flex;
+        margin-top: 12px;
+        white-space: normal;
+      }
+
+      .bar-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="Dashboard home">
+        <span class="brand-mark">AI</span>
+        <span>Coding agents for academia</span>
+      </a>
+      <nav class="nav" aria-label="Dashboard sections">
+        <a href="#choose">Choose</a>
+        <a href="#tools">Tools</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#sandbox">Sandboxing</a>
+        <a href="#academic">Academic use</a>
+        <a href="#sources">Sources</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="dot"></span> Updated after the July 9, 2026 launch</div>
+        <h1>AI coding agents for academic work</h1>
+        <p>
+          A quick orientation dashboard for educators and researchers comparing ChatGPT Work and Codex, Claude Code
+          and Cowork, and Google Antigravity 2.0. The point is not to turn every academic into a programmer. The point is to make
+          research, teaching, and policy work easier to create, check, repeat, and share.
+        </p>
+        <div class="hero-actions" aria-label="Quick navigation">
+          <a href="#tools">Compare tools</a>
+          <a href="#starter">Start safely</a>
+          <a href="#sources">Open sources</a>
+        </div>
+      </div>
+
+      <aside class="decision-box" aria-label="Thirty second decision guide">
+        <h2>Thirty-second decision</h2>
+        <p>For most non-programmers, the friendliest entry point is a desktop agent with a dedicated project folder.</p>
+        <ol class="decision-list">
+          <li><span class="num">1</span><span><strong>Use a desktop app</strong> when you want visible work across files. In ChatGPT, choose Work for research and deliverables or Codex for a bounded project folder.</span></li>
+          <li><span class="num">2</span><span><strong>Use VS Code or a terminal</strong> when you need scripts that can be rerun, tested, or checked by a technical colleague.</span></li>
+          <li><span class="num">3</span><span><strong>Keep sandboxing on</strong> because these tools can run commands, change files, browse, and connect to services.</span></li>
+        </ol>
+      </aside>
+    </div>
+  </section>
+
+  <main>
+    <section id="choose">
+      <div class="section-head">
+        <div>
+          <h2>Choose by task, not by brand</h2>
+          <p>All of these options can help academics. The best choice depends on whether the work is mostly documents, data analysis, course material, code maintenance, or several agents working in parallel.</p>
+        </div>
+        <span class="stamp">Course view: simple first, technical second</span>
+      </div>
+
+      <div class="chooser">
+        <article class="choice">
+          <span class="kicker"><span class="accent teal"></span>Friendliest start</span>
+          <strong>Desktop agents</strong>
+          <p>Best for non-programmers because the work is visible, file based, and closer to normal office practice.</p>
+          <div class="tag-row">
+            <span class="tag teal">ChatGPT Work + Codex</span>
+            <span class="tag plum">Claude Cowork</span>
+            <span class="tag blue">Antigravity 2.0</span>
+          </div>
+        </article>
+
+        <article class="choice">
+          <span class="kicker"><span class="accent blue"></span>Most reproducible</span>
+          <strong>VS Code or terminal</strong>
+          <p>Best when the output must be rerun, tested, saved with version history, or reviewed by a technical collaborator.</p>
+          <div class="tag-row">
+            <span class="tag blue">Claude Code</span>
+            <span class="tag teal">Codex command line</span>
+            <span class="tag amber">Antigravity command line</span>
+          </div>
+        </article>
+
+        <article class="choice">
+          <span class="kicker"><span class="accent amber"></span>Most policy-relevant</span>
+          <strong>Sandbox + disclosure</strong>
+          <p>The policy question is not only "which model?" It is also what files the tool may read, what it may change, and how a human checks the result.</p>
+          <div class="tag-row">
+            <span class="tag amber">approved folders</span>
+            <span class="tag green">review steps</span>
+            <span class="tag red">no sensitive data by default</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="surfaces">
+      <div class="section-head">
+        <div>
+          <h2>How you use the tool matters</h2>
+          <p>The same capability can feel simple or intimidating depending on the surface. Desktop applications should be the default introduction in an AI for Academics course.</p>
+        </div>
+      </div>
+
+      <div class="surface-track">
+        <article class="surface">
+          <h3>Desktop app</h3>
+          <p>Closest to ordinary academic work: Chat for questions, Work for research and deliverables, and Codex for local folders, previews, and versioned projects.</p>
+          <div class="bar-set" aria-label="Desktop app fit">
+            <div class="bar-row"><span>Ease for beginners</span><div class="bar"><span style="width: 94%"></span></div></div>
+            <div class="bar-row"><span>Visible workflow</span><div class="bar"><span style="width: 88%"></span></div></div>
+            <div class="bar-row"><span>Code depth</span><div class="bar"><span style="width: 58%"></span></div></div>
+          </div>
+        </article>
+
+        <article class="surface">
+          <h3>VS Code or code editor</h3>
+          <p>Best middle ground for teams: the agent can explain files, edit code, show before/after changes, and help a researcher inspect work.</p>
+          <div class="bar-set" aria-label="IDE fit">
+            <div class="bar-row"><span>Ease for beginners</span><div class="bar blue"><span style="width: 60%"></span></div></div>
+            <div class="bar-row"><span>Visible workflow</span><div class="bar blue"><span style="width: 78%"></span></div></div>
+            <div class="bar-row"><span>Code depth</span><div class="bar blue"><span style="width: 88%"></span></div></div>
+          </div>
+        </article>
+
+        <article class="surface">
+          <h3>Terminal or command line</h3>
+          <p>Powerful and repeatable, but less friendly. Use when the class already knows basic commands or has a technical support person.</p>
+          <div class="bar-set" aria-label="Terminal fit">
+            <div class="bar-row"><span>Ease for beginners</span><div class="bar amber"><span style="width: 34%"></span></div></div>
+            <div class="bar-row"><span>Visible workflow</span><div class="bar amber"><span style="width: 54%"></span></div></div>
+            <div class="bar-row"><span>Code depth</span><div class="bar amber"><span style="width: 96%"></span></div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="tools">
+      <div class="section-head">
+        <div>
+          <h2>Tool comparison</h2>
+          <p>Use this as a first orientation. It is not enough for an institutional purchase decision, because data protection, contracts, and local support also matter.</p>
+        </div>
+        <span class="stamp">Prices and limits checked July 9, 2026</span>
+      </div>
+
+      <div class="tool-grid">
+        <article class="card tool-card">
+          <div class="tool-top">
+            <h3 class="tool-title">ChatGPT desktop: Work + Codex</h3>
+            <span class="score high">High ease</span>
+          </div>
+          <p>One desktop app now separates the job clearly: Chat for quick conversation, Work for longer research and finished materials, and Codex for local files, repositories, and software-backed artifacts.</p>
+          <ul class="mini-list">
+            <li><span class="check">OK</span><span>The new ChatGPT desktop app combines Chat, Work, and Codex on macOS and Windows; the former Codex app updates into it.</span></li>
+            <li><span class="check">OK</span><span>For a teaching lab, Codex mode remains the dependable default: open one safe folder, ask for a plan, and approve changes only there.</span></li>
+            <li><span class="check">!</span><span>ChatGPT Sites is not available in the EEA at launch. Keep Monday-critical public materials on an already tested host.</span></li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag teal">one desktop app</span>
+            <span class="tag blue">Work + Codex</span>
+            <span class="tag green">sandboxed workspace</span>
+          </div>
+        </article>
+
+        <article class="card tool-card">
+          <div class="tool-top">
+            <h3 class="tool-title">Claude Code</h3>
+            <span class="score blue">Deep code</span>
+          </div>
+          <p>Strong fit for understanding and changing larger code projects, fixing errors, testing, scripts, and method workflows.</p>
+          <ul class="mini-list">
+            <li><span class="check">OK</span><span>Ways to use it: terminal, code editors, desktop app, web, mobile, GitHub, Slack.</span></li>
+            <li><span class="check">OK</span><span>Sandboxed terminal commands can write only to the project folder and temporary session folder by default.</span></li>
+            <li><span class="check">OK</span><span>Anthropic research suggests domain expertise remains valuable: experts guide what to build; agents execute how.</span></li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag blue">codebases</span>
+            <span class="tag amber">terminal first</span>
+            <span class="tag green">configurable sandbox</span>
+          </div>
+        </article>
+
+        <article class="card tool-card">
+          <div class="tool-top">
+            <h3 class="tool-title">Claude Cowork</h3>
+            <span class="score plum">Office work</span>
+          </div>
+          <p>Most natural for non-programmers who want to hand off work across documents, folders, spreadsheets, research, web tasks, and scheduled workflows.</p>
+          <ul class="mini-list">
+            <li><span class="check">OK</span><span>Tell it the outcome; it can produce a deck, spreadsheet, document, or organized folder for review.</span></li>
+            <li><span class="check">OK</span><span>Works across desktop, web, and mobile for paid users; scheduled work can continue remotely.</span></li>
+            <li><span class="check">OK</span><span>Requires careful folder/tool permissions because it can read, write, browse, run code, and use apps.</span></li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag plum">non-programmer</span>
+            <span class="tag teal">documents</span>
+            <span class="tag red">permissions matter</span>
+          </div>
+        </article>
+
+        <article class="card tool-card">
+          <div class="tool-top">
+            <h3 class="tool-title">Google Antigravity 2.0</h3>
+            <span class="score mid">Multi-agent</span>
+          </div>
+          <p>Strong fit for a visual command center, several agents working at once, scheduled tasks, Google AI Studio, Android, Firebase, and Google Cloud pathways.</p>
+          <ul class="mini-list">
+            <li><span class="check">OK</span><span>Standalone desktop app plus code editor, command line, and developer toolkit options.</span></li>
+            <li><span class="check">OK</span><span>Google describes 2.0 as a central home for orchestrating multiple agents in parallel.</span></li>
+            <li><span class="check">OK</span><span>Project-level permissions and security presets make it suitable for controlled class experiments.</span></li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag amber">Google ecosystem</span>
+            <span class="tag blue">agents in parallel</span>
+            <span class="tag green">project permissions</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <div class="section-head">
+        <div>
+          <h2>Pricing and limits in plain English</h2>
+          <p>Plan pages change. Treat these as a July 9, 2026 snapshot and verify before an institutional purchase or course-wide recommendation.</p>
+        </div>
+      </div>
+
+      <div class="price-grid">
+        <article class="price-card">
+          <span class="kicker"><span class="accent teal"></span>ChatGPT Work and Codex</span>
+          <h3>From free to enterprise</h3>
+          <ul class="price-list">
+            <li><span>Free</span><span>$0/mo</span></li>
+            <li><span>Go</span><span>$8/mo</span></li>
+            <li><span>Plus</span><span>$20/mo</span></li>
+            <li><span>Pro</span><span>from $100/mo</span></li>
+            <li><span>Business</span><span>$20/user/mo annual</span></li>
+            <li><span>Edu/Enterprise</span><span>sales or credits</span></li>
+          </ul>
+          <p class="limit-note">GPT-5.6 Terra is the Work/Codex option for Free and Go. Paid plans can choose Sol, Terra, or Luna. Work and Codex share an agentic usage structure; exact included usage varies by plan and task, so check the live plan page before promising quotas.</p>
+        </article>
+
+        <article class="price-card">
+          <span class="kicker"><span class="accent plum"></span>Claude Code and Cowork</span>
+          <h3>Included in paid Claude plans</h3>
+          <ul class="price-list">
+            <li><span>Pro</span><span>$17 annual / $20 monthly</span></li>
+            <li><span>Max 5x</span><span>$100/mo</span></li>
+            <li><span>Max 20x</span><span>$200/mo</span></li>
+            <li><span>Team</span><span>$20/seat/mo</span></li>
+            <li><span>Enterprise</span><span>sales</span></li>
+            <li><span>Console/API</span><span>token pricing</span></li>
+          </ul>
+          <p class="limit-note">Claude limits are shared across Claude chat, Claude Code, desktop, and Cowork. Long tasks, tools, and Cowork use allowance faster than short chat. Claude does not publish the same fixed coding-message ranges as Codex.</p>
+        </article>
+
+        <article class="price-card">
+          <span class="kicker"><span class="accent amber"></span>Google Antigravity 2.0</span>
+          <h3>Free tier plus Google AI plans</h3>
+          <ul class="price-list">
+            <li><span>Individual</span><span>$0/mo</span></li>
+            <li><span>Google AI Pro</span><span>$19.99/mo</span></li>
+            <li><span>Google AI Ultra</span><span>starts at $100/mo</span></li>
+            <li><span>Organization</span><span>Google Cloud usage</span></li>
+            <li><span>Command line/editor/toolkit</span><span>varies by plan</span></li>
+            <li><span>Exact quotas</span><span>check app/plan</span></li>
+          </ul>
+          <p class="limit-note">If you already pay for Google AI Pro, that paid-plan access applies to Google AI coding tools such as Antigravity. Google says AI Ultra starts at $100/month and gives a 5x higher Antigravity limit than Pro.</p>
+        </article>
+      </div>
+
+      <div class="callout" style="margin-top: 14px;">
+        <h3>What limits mean in practice</h3>
+        <p>
+          A limit is not just "number of prompts." Long instructions, many files, browsing, code runs, images, and several agents working at once use more allowance than short questions. Work and Codex usage depends on the amount of work the agent performs. For folders, there is usually no simple "number of documents" limit: the practical limit is file size, reading time, plan allowance, and whether the PDFs or scans are readable.
+        </p>
+      </div>
+    </section>
+
+    <section id="sandbox">
+      <div class="section-head">
+        <div>
+          <h2>Sandboxing: why it is useful</h2>
+          <p>These tools do work, not just text. A sandbox gives the agent a controlled place to act, and approvals mark the moments where it wants to go beyond that place.</p>
+        </div>
+      </div>
+
+      <div class="sandbox-map">
+        <div class="sandbox-visual" aria-label="Sandbox concept">
+          <div class="safe-box">
+            <strong>Inside the sandbox</strong>
+            <span>Read project files, edit approved folders, run routine commands, and build previews.</span>
+          </div>
+          <div class="safe-box">
+            <strong>At the boundary</strong>
+            <span>Ask before internet access, sensitive folders, external accounts, new websites, or actions that could delete or overwrite work.</span>
+          </div>
+          <div class="safe-box">
+            <strong>Outside the sandbox</strong>
+            <span>Private records, passwords, student data, live systems, and institutional services unless formally approved.</span>
+          </div>
+        </div>
+
+        <div class="rule-grid">
+          <article class="card">
+            <span class="kicker"><span class="accent teal"></span>Codex</span>
+            <h3>Workspace boundary</h3>
+            <p>Default local settings allow reading and editing the current workspace and routine local commands; Codex asks before using the internet or going beyond the workspace.</p>
+          </article>
+
+          <article class="card">
+            <span class="kicker"><span class="accent blue"></span>Claude Code</span>
+            <h3>Sandboxed terminal</h3>
+            <p>By default, sandboxed commands can write only to the project folder and a temporary session folder. Websites and extra write locations can be controlled.</p>
+          </article>
+
+          <article class="card">
+            <span class="kicker"><span class="accent plum"></span>Claude Cowork</span>
+            <h3>Remote work plus your permission</h3>
+            <p>Cowork sessions run remotely, but Claude reaches local files, browsers, and apps through the desktop app. Use dedicated folders, backups, and regular review.</p>
+          </article>
+
+          <article class="card">
+            <span class="kicker"><span class="accent amber"></span>Antigravity 2.0</span>
+            <h3>Project permissions</h3>
+            <p>Google's codelab describes project-level settings and security presets. Google also announced Antigravity as a standalone app for managing several agents.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="academic">
+      <div class="section-head">
+        <div>
+          <h2>Most useful academic workflows</h2>
+          <p>The highest-value entry points are limited, visible, and easy to check. Avoid starting with sensitive data or autonomous high-stakes decisions.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-4">
+        <article class="card">
+          <span class="kicker"><span class="accent teal"></span>Teaching</span>
+          <h3>Course dashboards</h3>
+          <p>Create a plain-language dashboard, rubric explorer, policy preview, or interactive handout from approved sources.</p>
+        </article>
+        <article class="card">
+          <span class="kicker"><span class="accent blue"></span>Research</span>
+          <h3>Reproducible analysis</h3>
+          <p>Ask the agent to clean a public dataset, build repeatable scripts, rerun checks, and produce a short methods appendix.</p>
+        </article>
+        <article class="card">
+          <span class="kicker"><span class="accent green"></span>Data quality</span>
+          <h3>Spreadsheet inspection</h3>
+          <p>Find missing values, inconsistent labels, duplicate rows, and suspicious outliers before formal analysis begins.</p>
+        </article>
+        <article class="card">
+          <span class="kicker"><span class="accent amber"></span>Upskilling</span>
+          <h3>Explain old scripts</h3>
+          <p>Translate existing R, Python, SPSS, or shell scripts into readable steps and identify what must be checked by a human.</p>
+        </article>
+        <article class="card">
+          <span class="kicker"><span class="accent plum"></span>Policy</span>
+          <h3>Evidence maps</h3>
+          <p>Convert official guidance into a table with source links, risks, required decisions, and open questions.</p>
+        </article>
+        <article class="card">
+          <span class="kicker"><span class="accent red"></span>Integrity</span>
+          <h3>Verification logs</h3>
+          <p>Keep prompts, generated files, rejected outputs, checks performed, and final human decisions in the project folder.</p>
+        </article>
+        <article class="card">
+          <span class="kicker"><span class="accent teal"></span>Admin</span>
+          <h3>Folder organization</h3>
+          <p>Rename, sort, summarize, and flag documents in a controlled folder. This is especially suitable for Cowork-style workflows.</p>
+        </article>
+        <article class="card">
+          <span class="kicker"><span class="accent green"></span>Deep research</span>
+          <h3>Full-text work</h3>
+          <p>Ask an agent to find open-access full texts, or work with PDFs you place in a folder. It can extract claims, methods, tables, and citations for human checking. Follow library and copyright rules for paywalled texts.</p>
+        </article>
+        <article class="card">
+          <span class="kicker"><span class="accent blue"></span>Collaboration</span>
+          <h3>Bridge to developers</h3>
+          <p>Let non-programmers describe the domain and desired checks while technical partners review before/after changes, tests, and publishing.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="starter">
+      <div class="section-head">
+        <div>
+          <h2>Safe first-week protocol</h2>
+          <p>This is the practical minimum for a course exercise or department pilot.</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <article class="step">
+          <div>
+            <h3>Create a dedicated project folder</h3>
+            <p>Use public, synthetic, or already-approved data. Do not grant broad access to Desktop, Documents, email, or institutional drives.</p>
+          </div>
+        </article>
+        <article class="step">
+          <div>
+            <h3>Ask for a plan before action</h3>
+            <p>Start with: "Inspect the folder, identify risks, propose a plan, and do not edit files yet."</p>
+          </div>
+        </article>
+        <article class="step">
+          <div>
+            <h3>Keep sandboxing and approvals on</h3>
+            <p>Approve only actions you understand. If a tool asks to go outside the folder or access the internet, require a reason.</p>
+          </div>
+        </article>
+        <article class="step">
+          <div>
+            <h3>Verify the result with an independent check</h3>
+            <p>Rerun scripts, inspect source links, test dashboards on a small screen, compare totals, and ask for limitations.</p>
+          </div>
+        </article>
+        <article class="step">
+          <div>
+            <h3>Document AI use</h3>
+            <p>Record the tool, date, data used, prompts or instructions, generated files, checks, rejected outputs, and final human judgment.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="policy">
+      <div class="section-head">
+        <div>
+          <h2>What universities should decide</h2>
+          <p>Tool choice is only one part of policy. The governance layer should define who may use what, on which data, with what review, and how use is disclosed.</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Decision area</th>
+              <th>Policy question</th>
+              <th>Practical course guidance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Data classification</strong></td>
+              <td>Which data may be opened in desktop agents, cloud agents, browser tools, or local-only workflows?</td>
+              <td>Start with public/synthetic data. Require review before student records, identifiable participants, unpublished research data, exams, or contracts.</td>
+            </tr>
+            <tr>
+              <td><strong>Approved tools</strong></td>
+              <td>Which plans, vendors, and deployment routes meet institutional purchasing and privacy requirements?</td>
+              <td>Separate personal experimentation from institutional use. Enterprise/Edu plans may offer admin controls that individual plans do not.</td>
+            </tr>
+            <tr>
+              <td><strong>Disclosure</strong></td>
+              <td>How should AI assistance be disclosed in coursework, teaching material, publications, and research files?</td>
+              <td>Use a lightweight log: tool, date, purpose, input type, output used, checks performed, and responsible human.</td>
+            </tr>
+            <tr>
+              <td><strong>Assessment</strong></td>
+              <td>When is agent assistance permitted, required, restricted, or part of the learning outcome?</td>
+              <td>Assess process evidence, critique, verification, and domain reasoning. Avoid relying only on finished work.</td>
+            </tr>
+            <tr>
+              <td><strong>Equity</strong></td>
+              <td>Will access depend on who can pay for Pro, Max, Ultra, or API credits?</td>
+              <td>Provide common baselines, shared labs, or approved free-tier exercises. Teach limits openly so hidden advantage is reduced.</td>
+            </tr>
+            <tr>
+              <td><strong>Security defaults</strong></td>
+              <td>Which sandbox, permission, network, and folder settings should be recommended by default?</td>
+              <td>Prefer project-scoped folders, deny broad file access, require approval for internet and external accounts, and keep backups.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="evidence">
+      <div class="section-head">
+        <div>
+          <h2>Research and pedagogy signals</h2>
+          <p>The strongest evidence base is still emerging. These sources are useful because they discuss actual research use, expertise, and learner risk rather than only product marketing.</p>
+        </div>
+      </div>
+
+      <div class="evidence-grid">
+        <article class="panel">
+          <span class="kicker"><span class="accent plum"></span>Anthropic social-science survey</span>
+          <h3>Coding agents are relevant, but adoption is uneven</h3>
+          <p>
+            Anthropic surveyed 1,260 quantitative social scientists in February and March 2026. Most had tried AI chatbots for research, but only a minority used coding agents regularly. The authors stress that productivity differences are descriptive, not causal.
+          </p>
+          <div class="stat-strip">
+            <div class="stat"><b>1,260</b><span>surveyed social scientists</span></div>
+            <div class="stat"><b>81%</b><span>had tried AI chatbots in research</span></div>
+            <div class="stat"><b>20%</b><span>regular coding-agent adoption</span></div>
+          </div>
+          <p class="footnote">Policy implication: training and access matter, because early adoption patterns can widen existing gaps between fields, career stages, and institutions.</p>
+        </article>
+
+        <div class="grid">
+          <article class="card">
+            <span class="kicker"><span class="accent blue"></span>Claude Code practice study</span>
+            <h3>Domain expertise still matters</h3>
+            <p>A 2026 Anthropic analysis of around 400,000 Claude Code sessions argues that people often decide what should be done while the agent decides how to execute it. That supports academic use: the domain expert remains central.</p>
+          </article>
+
+          <article class="card">
+            <span class="kicker"><span class="accent teal"></span>Carpentries guidance</span>
+            <h3>Do not skip fundamentals</h3>
+            <p>Carpentries warns that researchers still need enough computational understanding to inspect, evaluate, maintain, and responsibly use generated code and analysis.</p>
+          </article>
+
+          <article class="card">
+            <span class="kicker"><span class="accent green"></span>OpenAI life-science use cases</span>
+            <h3>Concrete science workflows exist</h3>
+            <p>OpenAI's Codex use-case collection shows examples in bulk RNA-seq, single-cell RNA-seq, target prioritization, and protein-folding architecture search.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="learning">
+      <div class="section-head">
+        <div>
+          <h2>Learning resources and courses</h2>
+          <p>These resources are not official policy evidence. They are useful starting points for workshops, self-study, and examples. The highlighted rows are especially relevant for academic researchers. GitHub stars were checked through the GitHub API on July 9, 2026.</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Resource</th>
+              <th>Why it helps academics</th>
+              <th>July 9, 2026 signal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener noreferrer">Microsoft Generative AI for Beginners</a></strong></td>
+              <td>Good first AI-literacy curriculum for non-specialists before moving into agents.</td>
+              <td>112,802 stars; MIT license.</td>
+            </tr>
+            <tr>
+              <td><strong><a href="https://github.com/mlabonne/llm-course" target="_blank" rel="noopener noreferrer">LLM Course</a></strong></td>
+              <td>More technical roadmaps and notebooks for educators who want deeper model and application context.</td>
+              <td>80,788 stars; Apache-2.0.</td>
+            </tr>
+            <tr>
+              <td><strong><a href="https://github.com/Shubhamsaboo/awesome-llm-apps" target="_blank" rel="noopener noreferrer">Awesome LLM Apps</a></strong></td>
+              <td>Examples of agent and document-search applications that can inspire class demonstrations.</td>
+              <td>116,987 stars; Apache-2.0.</td>
+            </tr>
+            <tr>
+              <td><strong><a href="https://github.com/carlvellotti/claude-code-pm-course" target="_blank" rel="noopener noreferrer">Claude Code PM Course</a></strong></td>
+              <td>Helpful because it teaches agent use to non-engineers who still need to direct technical work.</td>
+              <td>2,129 stars; community course.</td>
+            </tr>
+            <tr>
+              <td><strong><a href="https://github.com/carlvellotti/claude-code-everyone-course" target="_blank" rel="noopener noreferrer">Claude Code for Everyone</a></strong></td>
+              <td>Useful for beginners who need the mental model before using Claude Code in real projects.</td>
+              <td>549 stars; community course.</td>
+            </tr>
+            <tr>
+              <td><strong><a href="https://github.com/ykdojo/claude-code-tips" target="_blank" rel="noopener noreferrer">Claude Code Tips</a></strong></td>
+              <td>Practical patterns for prompting, context management, and everyday use.</td>
+              <td>9,127 stars; community guide.</td>
+            </tr>
+            <tr class="learning-highlight">
+              <td><strong>Claude Code for academic researchers</strong><br>
+                <a href="https://www.linkedin.com/pulse/claude-code-101-academic-researchers-mushtaq-bilal-phd-h6cke" target="_blank" rel="noopener noreferrer">101</a> /
+                <a href="https://www.linkedin.com/pulse/claude-code-102-academic-researchers-mushtaq-bilal-phd-qiure" target="_blank" rel="noopener noreferrer">102</a> /
+                <a href="https://www.linkedin.com/pulse/claude-code-103-academic-researchers-mushtaq-bilal-phd-47tye" target="_blank" rel="noopener noreferrer">103</a> /
+                <a href="https://x.com/MushtaqBilalPhD/article/2058888916858544472" target="_blank" rel="noopener noreferrer">104</a>
+              </td>
+              <td>Plain-language practitioner series focused on researchers, project folders, PDFs, drafts, transcripts, datasets, and research-assistant workflows.</td>
+              <td>Mushtaq Bilal, PhD; 101-103 on LinkedIn, 104 on X.</td>
+            </tr>
+            <tr class="learning-highlight">
+              <td><strong><a href="https://github.com/ballesterogh/Practitioner-Guide-Agentic-AI/blob/main/slides_ballestero_lecture_agentic_coding.pdf" target="_blank" rel="noopener noreferrer">Agentic coding lecture slides</a></strong></td>
+              <td>Lecture-style guide to agentic coding, useful for explaining the wider practice beyond one vendor.</td>
+              <td>GitHub-hosted PDF from Practitioner Guide Agentic AI.</td>
+            </tr>
+            <tr class="learning-highlight">
+              <td><strong>Codex for academic researchers</strong><br>
+                <a href="https://x.com/MushtaqBilalPhD/status/2054565093430493609" target="_blank" rel="noopener noreferrer">Codex 101 post</a> /
+                <a href="https://x.com/MushtaqBilalPhD" target="_blank" rel="noopener noreferrer">author profile</a> /
+                <a href="https://x.com/JeremyNguyenPhD/status/2055263698953146879" target="_blank" rel="noopener noreferrer">Codex 102 reference</a>
+              </td>
+              <td>Researcher-facing social posts and references for getting started with Codex in academic workflows.</td>
+              <td>X links may require sign-in.</td>
+            </tr>
+            <tr>
+              <td><strong><a href="https://github.com/openai/codex" target="_blank" rel="noopener noreferrer">OpenAI Codex repository</a></strong></td>
+              <td>Official tool repository for technical users and support staff.</td>
+              <td>96,536 stars; Apache-2.0.</td>
+            </tr>
+            <tr>
+              <td><strong><a href="https://github.com/google-gemini/gemini-cli" target="_blank" rel="noopener noreferrer">Google Gemini command-line repository</a></strong></td>
+              <td>Relevant for understanding Google's command-line tools for agentic work.</td>
+              <td>105,865 stars; Apache-2.0.</td>
+            </tr>
+            <tr>
+              <td><strong><a href="https://github.com/hesreallyhim/awesome-claude-code" target="_blank" rel="noopener noreferrer">Awesome Claude Code</a></strong></td>
+              <td>Large curated community list; useful for discovery, not for policy claims.</td>
+              <td>49,614 stars; community list.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="section-head">
+        <div>
+          <h2>Sources used</h2>
+          <p>Grouped by authority. Official vendor sources support product, pricing, limits, and safety claims. Research and pedagogy sources support academic interpretation. Researcher-facing guides are highlighted above in Learning resources.</p>
+        </div>
+      </div>
+
+      <div class="source-grid">
+        <article class="source-card">
+          <h3>OpenAI ChatGPT Work and Codex</h3>
+          <ul class="source-list">
+            <li><a href="https://openai.com/index/chatgpt-for-your-most-ambitious-work/" target="_blank" rel="noopener noreferrer">ChatGPT Work launch and desktop app</a></li>
+            <li><a href="https://openai.com/index/gpt-5-6/" target="_blank" rel="noopener noreferrer">GPT-5.6 launch and availability</a></li>
+            <li><a href="https://help.openai.com/en/articles/20001276" target="_blank" rel="noopener noreferrer">Moving to the new ChatGPT desktop app</a></li>
+            <li><a href="https://help.openai.com/en/articles/20001339" target="_blank" rel="noopener noreferrer">ChatGPT Sites availability and management</a></li>
+            <li><a href="https://developers.openai.com/codex/pricing" target="_blank" rel="noopener noreferrer">Codex pricing and limits</a></li>
+            <li><a href="https://developers.openai.com/codex/concepts/sandboxing" target="_blank" rel="noopener noreferrer">Codex sandboxing</a></li>
+            <li><a href="https://developers.openai.com/codex/app" target="_blank" rel="noopener noreferrer">Codex app overview</a></li>
+            <li><a href="https://developers.openai.com/codex/use-cases/collections/life-sciences" target="_blank" rel="noopener noreferrer">Codex life-science use cases</a></li>
+            <li><a href="https://developers.openai.com/community/students" target="_blank" rel="noopener noreferrer">Codex for Students</a></li>
+          </ul>
+        </article>
+
+        <article class="source-card">
+          <h3>Anthropic Claude</h3>
+          <ul class="source-list">
+            <li><a href="https://claude.com/product/claude-code" target="_blank" rel="noopener noreferrer">Claude Code product and pricing</a></li>
+            <li><a href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener noreferrer">Claude Code sandboxing</a></li>
+            <li><a href="https://code.claude.com/docs/en/security" target="_blank" rel="noopener noreferrer">Claude Code security</a></li>
+            <li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work" target="_blank" rel="noopener noreferrer">Claude usage and length limits</a></li>
+            <li><a href="https://claude.com/product/cowork" target="_blank" rel="noopener noreferrer">Claude Cowork product and pricing</a></li>
+            <li><a href="https://support.claude.com/en/articles/13364135-use-claude-cowork-safely" target="_blank" rel="noopener noreferrer">Claude Cowork safety guide</a></li>
+          </ul>
+        </article>
+
+        <article class="source-card">
+          <h3>Google Antigravity</h3>
+          <ul class="source-list">
+            <li><a href="https://antigravity.google/pricing" target="_blank" rel="noopener noreferrer">Antigravity pricing</a></li>
+            <li><a href="https://antigravity.google/product/antigravity-2" target="_blank" rel="noopener noreferrer">Antigravity 2.0 product page</a></li>
+            <li><a href="https://codelabs.developers.google.com/getting-started-google-antigravity" target="_blank" rel="noopener noreferrer">Google Antigravity codelab</a></li>
+            <li><a href="https://antigravity.google/docs/permissions" target="_blank" rel="noopener noreferrer">Antigravity permissions docs</a></li>
+            <li><a href="https://blog.google/innovation-and-ai/technology/developers-tools/google-io-2026-developer-highlights/" target="_blank" rel="noopener noreferrer">Google I/O 2026 developer highlights</a></li>
+            <li><a href="https://gemini.google/subscriptions/" target="_blank" rel="noopener noreferrer">Google AI Pro subscription price</a></li>
+            <li><a href="https://support.google.com/googleone/answer/14534406?hl=en" target="_blank" rel="noopener noreferrer">Google AI Pro benefits and credits</a></li>
+          </ul>
+        </article>
+
+        <article class="source-card">
+          <h3>Research signals</h3>
+          <ul class="source-list">
+            <li><a href="https://www.anthropic.com/research/coding-agents-social-sciences" target="_blank" rel="noopener noreferrer">Coding agents in the social sciences</a></li>
+            <li><a href="https://www.anthropic.com/research/claude-code-expertise" target="_blank" rel="noopener noreferrer">Claude Code and returns to expertise</a></li>
+          </ul>
+        </article>
+
+        <article class="source-card">
+          <h3>Pedagogy</h3>
+          <ul class="source-list">
+            <li><a href="https://carpentries.org/blog/2026/06/genai-in-workshops-a-bonus-module-to-instructor-training/" target="_blank" rel="noopener noreferrer">Carpentries GenAI in workshops</a></li>
+            <li><a href="https://carpentries.org/blog/2025/08/genai-curriculum-discussions/" target="_blank" rel="noopener noreferrer">Carpentries AI curriculum discussion</a></li>
+            <li><a href="https://carpentries.org/blog/2025/03/essential-knowledge-and-common-misconceptions/" target="_blank" rel="noopener noreferrer">Carpentries misconceptions and essentials</a></li>
+          </ul>
+        </article>
+
+        <article class="source-card">
+          <h3>How to cite this dashboard</h3>
+          <p class="footnote">
+            Source snapshot refreshed after the July 9, 2026 GPT-5.6 and ChatGPT Work launch. Prices, plan names, rollout status, limits, and product capabilities can change; use the linked official pages before making purchase or policy decisions.
+          </p>
+          <div class="tag-row">
+            <span class="tag green">source-grounded</span>
+            <span class="tag amber">not legal advice</span>
+            <span class="tag blue">course material</span>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>AI Coding Agents for Academic Work - July 2026 dashboard</span>
+      <span>Designed for quick orientation in AI for Academics courses.</span>
+    </div>
+  </footer>
+</body>
+</html>
