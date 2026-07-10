@@ -26,9 +26,9 @@ Everything for the afternoon "From Chat to Delegated Work" session. Participant-
 - `sample_content/` — green, safe files to practise on:
   - `sample_glossary.txt`, `sample_assignment.md`, `sample_rubric.md`
   - `student_essays_synthetic/` — six fabricated essays (no real student data)
-  - `sample_deep_research_report.md` — a planted-error report for the citation audit (answer key: facilitator folder)
+  - `sample_deep_research_report.md` — a planted-error report for the citation audit (your instructor keeps the verified answer key)
   - `Zyphur_2026_Responsible_AI_in_Academic_Research.pdf` — real, freely shared report; the Track 4 stand-in PDF for participants without their own
-  - `sample_glossary_with_injection.txt` — reserved for a live demonstration in the afternoon session; leave unopened until then (details in the facilitator run sheet).
+  - `sample_glossary_with_injection.txt` — reserved for a live demonstration in the afternoon session; leave unopened until then, it's more fun that way.
 
 ## Access
 - The **new ChatGPT desktop app → Codex mode** is the default for every track. ChatGPT Work is not required for this lab.
