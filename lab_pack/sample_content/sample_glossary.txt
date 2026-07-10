@@ -1,0 +1,10 @@
+Generative AI | A field of AI in which algorithms trained on large amounts of existing data learn patterns and structures in that data in order to generate novel content such as text, images, audio, or video.
+Large Language Model (LLM) | A model trained to predict the next token in a sequence of text; it generates coherent language from a learned statistical map of language, without an internal database of facts.
+Token | The unit of text an LLM processes — often a word or part of a word — which is converted into numbers the model can compute on.
+Hallucination | A fluent, confident output from an AI model that is factually wrong or fabricated, arising because the model predicts plausible text rather than retrieving verified facts.
+Reasoning model | An LLM that generates intermediate reasoning steps before answering, trading speed for stronger performance on complex, multi-step tasks.
+Jagged frontier | The uneven pattern of AI capability, where a model performs excellently on some tasks and poorly on very similar-seeming ones.
+Prompt | The input text a user gives an AI model to steer its output; effective prompts supply context, the problem, and the desired form of the answer.
+Retrieval-augmented generation (RAG) | A technique that gives an LLM access to specific external documents at query time so its answers can be grounded in and cite those sources.
+Coding agent | An AI assistant that works inside a folder of files — reading them, planning, editing or creating files, running commands, and testing results — under human review.
+Prompt injection | An attack in which text hidden in a document or web page is crafted to be read by an AI system as instructions, hijacking its behavior; mitigated by treating source content as data, not commands.

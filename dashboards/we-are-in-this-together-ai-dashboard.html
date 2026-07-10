@@ -1,0 +1,1404 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>We Are in This Together - AI Practice Dashboard for Academics</title>
+  <meta name="description" content="A research-grounded dashboard for educators on transparent, collaborative AI practice with students.">
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #5c6875;
+      --soft: #f4f6f5;
+      --paper: #ffffff;
+      --line: #d7dedc;
+      --blue: #1f5d8c;
+      --blue-soft: #e7f0f7;
+      --teal: #08796f;
+      --teal-soft: #e2f4f1;
+      --green: #356f3f;
+      --green-soft: #e8f3ea;
+      --amber: #a86600;
+      --amber-soft: #fff1d8;
+      --red: #a43a3a;
+      --red-soft: #fae6e3;
+      --violet: #6551a8;
+      --violet-soft: #eeeafa;
+      --shadow: 0 16px 36px rgba(20, 31, 42, 0.10);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--soft);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: #174f83;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-inner,
+    .hero-inner,
+    main,
+    .footer-inner {
+      width: min(1200px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: var(--ink);
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: var(--teal);
+      color: white;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .brand span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: flex-end;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 8px;
+      border-radius: 7px;
+      font-size: 0.92rem;
+      font-weight: 650;
+    }
+
+    .nav a:hover,
+    .nav a:focus-visible {
+      color: var(--ink);
+      background: #edf2f1;
+      outline: none;
+    }
+
+    .hero {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-inner {
+      padding: 42px 0 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      color: var(--teal);
+      font-size: 0.82rem;
+      font-weight: 850;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 900px;
+      font-size: clamp(2.1rem, 5.3vw, 4.9rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 17px 0 0;
+      max-width: 820px;
+      color: #45515d;
+      font-size: clamp(1.02rem, 1.7vw, 1.22rem);
+    }
+
+    .hero-note {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border: 1px solid #c8ddd9;
+      border-left: 5px solid var(--teal);
+      border-radius: var(--radius);
+      background: #f3fbf9;
+      color: #254a45;
+      max-width: 820px;
+      font-size: 0.98rem;
+    }
+
+    .hero-panel {
+      background: linear-gradient(180deg, #ffffff 0%, #f5f8f8 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: grid;
+      align-content: center;
+      gap: 12px;
+    }
+
+    .lab-loop {
+      display: grid;
+      gap: 10px;
+    }
+
+    .loop-row {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .loop-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .loop-row:nth-child(2) .loop-num { background: var(--teal); }
+    .loop-row:nth-child(3) .loop-num { background: var(--amber); }
+    .loop-row:nth-child(4) .loop-num { background: var(--violet); }
+
+    .loop-row strong {
+      display: block;
+      font-size: 0.98rem;
+    }
+
+    .loop-row div span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    main {
+      padding: 28px 0 46px;
+    }
+
+    section {
+      scroll-margin-top: 78px;
+      margin-top: 26px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.42rem, 2.5vw, 2.05rem);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .section-head p,
+    .section-intro {
+      margin: 6px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: #394650;
+      font-size: 0.82rem;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 22px rgba(20, 31, 42, 0.06);
+      padding: 16px;
+      min-width: 0;
+    }
+
+    .card h3,
+    .source-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.06rem;
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .metric {
+      display: grid;
+      gap: 7px;
+      align-content: start;
+    }
+
+    .metric .value {
+      color: var(--blue);
+      font-size: 1.9rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .metric:nth-child(2) .value { color: var(--teal); }
+    .metric:nth-child(3) .value { color: var(--amber); }
+    .metric:nth-child(4) .value { color: var(--violet); }
+
+    .metric .label {
+      color: var(--ink);
+      font-weight: 850;
+      font-size: 0.98rem;
+    }
+
+    .metric .caption {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .philosophy {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .principle {
+      background: #17202a;
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 20px;
+      min-height: 100%;
+      display: grid;
+      align-content: space-between;
+      gap: 20px;
+    }
+
+    .principle h3 {
+      margin: 0;
+      font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .principle p {
+      margin: 0;
+      color: #dce5e9;
+      font-size: 1.02rem;
+    }
+
+    .principle .signal {
+      display: inline-flex;
+      width: fit-content;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 7px;
+      padding: 7px 9px;
+      color: #fff;
+      font-weight: 800;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .role-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .role {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .role .icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .role:nth-child(2) .icon { background: var(--teal); }
+    .role:nth-child(3) .icon { background: var(--amber); }
+    .role:nth-child(4) .icon { background: var(--violet); }
+
+    .role strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 0.98rem;
+    }
+
+    .role span {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 14px;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: #33414e;
+      min-height: 38px;
+      padding: 8px 11px;
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 760;
+      cursor: pointer;
+    }
+
+    .filter-btn:hover,
+    .filter-btn:focus-visible {
+      border-color: #b9c7c5;
+      background: #f8fbfa;
+      outline: none;
+    }
+
+    .filter-btn[aria-pressed="true"] {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+
+    .mode-card {
+      display: grid;
+      gap: 12px;
+      min-height: 100%;
+      transition: opacity 0.16s ease, transform 0.16s ease;
+    }
+
+    .mode-card.is-hidden {
+      display: none;
+    }
+
+    .mode-head {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .mode-title {
+      display: grid;
+      gap: 5px;
+    }
+
+    .mode-title h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1.2;
+    }
+
+    .lens {
+      width: fit-content;
+      border-radius: 7px;
+      padding: 4px 7px;
+      font-size: 0.78rem;
+      font-weight: 820;
+      color: #1e3f5b;
+      background: var(--blue-soft);
+    }
+
+    .lens.frontier { color: #724702; background: var(--amber-soft); }
+    .lens.reciprocal { color: #145949; background: var(--teal-soft); }
+    .lens.governance { color: #4e3f87; background: var(--violet-soft); }
+    .lens.integrity { color: #6f2525; background: var(--red-soft); }
+
+    .mode-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      background: #edf2f1;
+      color: #34444d;
+      font-weight: 900;
+    }
+
+    .mode-card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .mode-action {
+      display: grid;
+      gap: 7px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .mode-action strong {
+      color: var(--ink);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .mini-link {
+      font-size: 0.9rem;
+      font-weight: 750;
+    }
+
+    .frontier-board {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .board-legend {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .legend-item {
+      display: grid;
+      gap: 4px;
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .legend-item strong {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      display: inline-block;
+      background: var(--green);
+    }
+
+    .legend-item:nth-child(2) .dot { background: var(--amber); }
+    .legend-item:nth-child(3) .dot { background: var(--red); }
+    .legend-item:nth-child(4) .dot { background: var(--violet); }
+
+    .legend-item span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .frontier-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 22px rgba(20, 31, 42, 0.06);
+    }
+
+    .frontier-table th,
+    .frontier-table td {
+      padding: 13px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .frontier-table th {
+      color: #34414d;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #f8faf9;
+    }
+
+    .frontier-table tr:last-child td { border-bottom: 0; }
+
+    .status {
+      display: inline-flex;
+      min-width: 84px;
+      justify-content: center;
+      border-radius: 7px;
+      padding: 4px 7px;
+      font-size: 0.78rem;
+      font-weight: 850;
+    }
+
+    .status.green { color: #20562b; background: var(--green-soft); }
+    .status.amber { color: #724702; background: var(--amber-soft); }
+    .status.red { color: #7a2828; background: var(--red-soft); }
+    .status.violet { color: #4e3f87; background: var(--violet-soft); }
+
+    .routine {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .routine-step {
+      position: relative;
+      padding-top: 46px;
+    }
+
+    .routine-step .step-index {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: var(--teal);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 900;
+    }
+
+    .routine-step:nth-child(2) .step-index { background: var(--blue); }
+    .routine-step:nth-child(3) .step-index { background: var(--amber); }
+
+    .checklist {
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .checklist li {
+      position: relative;
+      padding-left: 24px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.45em;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      background: var(--teal);
+    }
+
+    .sample-box {
+      border: 1px solid #cbd9d6;
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 16px;
+    }
+
+    .sample-box h3 {
+      margin: 0 0 8px;
+      font-size: 1.06rem;
+    }
+
+    .sample-box blockquote {
+      margin: 0;
+      color: #394650;
+      border-left: 5px solid var(--teal);
+      padding-left: 12px;
+      font-size: 0.98rem;
+    }
+
+    .sample-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .sample-grid.disclosure-examples {
+      margin-top: 14px;
+    }
+
+    .culture-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .culture-list li {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .culture-list .marker {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--green);
+      font-weight: 900;
+    }
+
+    .culture-list.warn .marker { background: var(--red); }
+
+    .culture-list strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 0.96rem;
+    }
+
+    .culture-list span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .source-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .source-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .source-type {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 7px;
+      padding: 4px 7px;
+      background: #edf2f1;
+      color: #33414d;
+      font-size: 0.78rem;
+      font-weight: 850;
+    }
+
+    footer {
+      background: #fff;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      padding: 20px 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 980px) {
+      .hero-inner,
+      .philosophy,
+      .frontier-board,
+      .sample-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .grid.four,
+      .grid.three,
+      .routine,
+      .source-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar { position: static; }
+
+      .topbar-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 10px 0;
+      }
+
+      .nav {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        width: 100%;
+        padding-bottom: 2px;
+      }
+
+      .hero-inner {
+        padding: 30px 0 24px;
+      }
+
+      .section-head {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .grid.four,
+      .grid.three,
+      .grid.two,
+      .routine,
+      .source-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .frontier-table,
+      .frontier-table tbody,
+      .frontier-table tr,
+      .frontier-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .frontier-table thead {
+        display: none;
+      }
+
+      .frontier-table tr {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .frontier-table tr:last-child {
+        border-bottom: 0;
+      }
+
+      .frontier-table td {
+        border-bottom: 0;
+        padding: 10px 13px;
+      }
+
+      .frontier-table td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 4px;
+        color: #64717c;
+        font-size: 0.76rem;
+        font-weight: 850;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="Back to top">
+        <span class="brand-mark">AI</span>
+        <span>We Are in This Together</span>
+      </a>
+      <nav class="nav" aria-label="Dashboard sections">
+        <a href="#philosophy">Philosophy</a>
+        <a href="#modes">Classroom Modes</a>
+        <a href="#frontier">Jagged Frontier</a>
+        <a href="#routine">Disclosure Routine</a>
+        <a href="#sources">Sources</a>
+      </nav>
+    </div>
+  </div>
+
+  <header class="hero" id="top">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">AI for academics - course material</div>
+        <h1>We Are in This Together</h1>
+        <p class="lead">A classroom philosophy for AI use: academics model transparent practice, students help probe the moving frontier, and the course becomes a disciplined space for finding what works, what fails, and what should become policy.</p>
+        <div class="hero-note"><strong>The role-model move:</strong> disclose your own AI use to students, not only to journals. Show prompts, checks, edits, and rejects. Transparency from the front of the room is the strongest signal that AI use is a practice of judgment, not a shortcut.</div>
+      </div>
+      <aside class="hero-panel" aria-label="Shared practice loop">
+        <div class="lab-loop">
+          <div class="loop-row">
+            <span class="loop-num">1</span>
+            <div><strong>Show the workflow</strong><span>Make AI use visible: purpose, prompt, output, checks, and final human decision.</span></div>
+          </div>
+          <div class="loop-row">
+            <span class="loop-num">2</span>
+            <div><strong>Probe the frontier</strong><span>Test AI on real disciplinary tasks and record where performance is uneven.</span></div>
+          </div>
+          <div class="loop-row">
+            <span class="loop-num">3</span>
+            <div><strong>Share the failures</strong><span>Put useful outputs and bad outputs side by side, without blame.</span></div>
+          </div>
+          <div class="loop-row">
+            <span class="loop-num">4</span>
+            <div><strong>Update the norm</strong><span>Turn observed practice into course guidance, disclosure rules, and assessment design.</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section id="signals" aria-labelledby="signals-title">
+      <div class="section-head">
+        <div>
+          <h2 id="signals-title">Why This Matters Now</h2>
+          <p>Students and staff are already using AI, but formal norms often lag behind practice. The problem is not only rule compliance; it is shared orientation.</p>
+        </div>
+        <span class="tag">Updated July 2026</span>
+      </div>
+      <div class="grid four">
+        <article class="card metric">
+          <div class="value">4 in 5</div>
+          <div class="label">university students use generative AI</div>
+          <div class="caption">Stanford AI Index 2026 reports widespread student adoption and a fast-moving capability frontier.</div>
+        </article>
+        <article class="card metric">
+          <div class="value">95%</div>
+          <div class="label">UK undergraduates report some AI use</div>
+          <div class="caption">HEPI's 2026 survey shows AI is now normal in student study practice, including assessed-work contexts.</div>
+        </article>
+        <article class="card metric">
+          <div class="value">29%</div>
+          <div class="label">of students see instructors as well equipped</div>
+          <div class="caption">Digital Education Council's 2026 global survey makes reciprocal learning and faculty support a practical issue.</div>
+        </article>
+        <article class="card metric">
+          <div class="value">jagged</div>
+          <div class="label">AI can excel and fail in adjacent tasks</div>
+          <div class="caption">Mollick and colleagues show that AI's frontier is uneven, so local testing matters.</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="philosophy" aria-labelledby="philosophy-title">
+      <div class="section-head">
+        <div>
+          <h2 id="philosophy-title">The Philosophy in One Sentence</h2>
+          <p>Do not treat AI rules as a document students read once. Treat them as a visible practice that the class learns, tests, and refines together.</p>
+        </div>
+      </div>
+      <div class="philosophy">
+        <article class="principle">
+          <div>
+            <span class="signal">Model - test - disclose - revise</span>
+            <h3>Rules work when the practice behind them is visible.</h3>
+          </div>
+          <p>Academics bring disciplinary standards, assessment responsibility, and ethical boundaries. Students bring live tool experience, new workflows, and failure cases. The classroom becomes the safest serious place to discover the difference.</p>
+        </article>
+        <div class="role-grid">
+          <div class="role">
+            <span class="icon">A</span>
+            <div><strong>Academics model judgment</strong><span>They show how expert standards shape prompts, verification, editing, citation, and rejection.</span></div>
+          </div>
+          <div class="role">
+            <span class="icon">S</span>
+            <div><strong>Students surface the moving frontier</strong><span>They often know emerging tools first. That knowledge becomes course evidence, not a hidden advantage.</span></div>
+          </div>
+          <div class="role">
+            <span class="icon">D</span>
+            <div><strong>The discipline stays the anchor</strong><span>Every AI experiment is judged against domain standards: evidence, method, accuracy, ethics, and learning value.</span></div>
+          </div>
+          <div class="role">
+            <span class="icon">P</span>
+            <div><strong>Policy becomes a living output</strong><span>Observed workflows become assignment guidance, disclosure templates, and decisions about what must remain human.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="modes" aria-labelledby="modes-title">
+      <div class="section-head">
+        <div>
+          <h2 id="modes-title">Classroom Modes for a Shared AI Practice</h2>
+          <p>Use these modes as repeatable course activities. They turn transparency into a routine and give students legitimate ways to contribute expertise.</p>
+        </div>
+      </div>
+      <div class="filters" aria-label="Filter classroom modes">
+        <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">All modes</button>
+        <button class="filter-btn" type="button" data-filter="transparency" aria-pressed="false">Transparency</button>
+        <button class="filter-btn" type="button" data-filter="frontier" aria-pressed="false">Frontier testing</button>
+        <button class="filter-btn" type="button" data-filter="reciprocal" aria-pressed="false">Reciprocal learning</button>
+        <button class="filter-btn" type="button" data-filter="governance" aria-pressed="false">Policy making</button>
+      </div>
+      <div class="grid three" id="mode-grid">
+        <article class="card mode-card" data-lenses="transparency governance">
+          <div class="mode-head">
+            <div class="mode-title">
+              <span class="lens">Transparency</span>
+              <h3>1. Open Workflow Demo</h3>
+            </div>
+            <span class="mode-num">01</span>
+          </div>
+          <p>The educator runs a real task in front of the class: prompt, result, doubt, check, edit, and final decision.</p>
+          <div class="mode-action">
+            <strong>Class output</strong>
+            <p>A shared view of what good AI use looks like before students are asked to disclose their own.</p>
+            <a class="mini-link" href="https://er.educause.edu/articles/2026/3/from-prompt-to-practice-a-framework-for-transparent-genai-use-in-higher-education" target="_blank" rel="noopener">Grounded in EDUCAUSE transparency framework</a>
+          </div>
+        </article>
+
+        <article class="card mode-card" data-lenses="frontier integrity">
+          <div class="mode-head">
+            <div class="mode-title">
+              <span class="lens frontier">Frontier testing</span>
+              <h3>2. Reject Gallery</h3>
+            </div>
+            <span class="mode-num">02</span>
+          </div>
+          <p>Students and staff collect plausible AI outputs that are wrong, shallow, biased, fabricated, or inappropriate for the field.</p>
+          <div class="mode-action">
+            <strong>Class output</strong>
+            <p>A library of failure cases that makes verification concrete and reduces overconfidence.</p>
+            <a class="mini-link" href="https://www.hbs.edu/faculty/Pages/item.aspx?num=64700" target="_blank" rel="noopener">Grounded in the jagged frontier evidence</a>
+          </div>
+        </article>
+
+        <article class="card mode-card" data-lenses="reciprocal frontier">
+          <div class="mode-head">
+            <div class="mode-title">
+              <span class="lens reciprocal">Reciprocal learning</span>
+              <h3>3. Student Scout Rotation</h3>
+            </div>
+            <span class="mode-num">03</span>
+          </div>
+          <p>Small groups bring one tool, workflow, or prompt pattern and test it against a disciplinary task.</p>
+          <div class="mode-action">
+            <strong>Class output</strong>
+            <p>Educators learn from student practice while students learn to evaluate tools instead of merely consume them.</p>
+            <a class="mini-link" href="https://www.jisc.ac.uk/reports/student-perceptions-of-ai-2025" target="_blank" rel="noopener">Grounded in student voice research</a>
+          </div>
+        </article>
+
+        <article class="card mode-card" data-lenses="frontier transparency">
+          <div class="mode-head">
+            <div class="mode-title">
+              <span class="lens frontier">Frontier testing</span>
+              <h3>4. Jagged Frontier Map</h3>
+            </div>
+            <span class="mode-num">04</span>
+          </div>
+          <p>The class maps tasks into categories: useful, uncertain, unsafe, or skill-preserving. The map changes during the course.</p>
+          <div class="mode-action">
+            <strong>Class output</strong>
+            <p>A local evidence base for assignment guidance and risk discussion.</p>
+            <a class="mini-link" href="https://www.oneusefulthing.org/p/the-shape-of-ai-jaggedness-bottlenecks" target="_blank" rel="noopener">Grounded in Mollick's jaggedness framing</a>
+          </div>
+        </article>
+
+        <article class="card mode-card" data-lenses="transparency integrity">
+          <div class="mode-head">
+            <div class="mode-title">
+              <span class="lens integrity">Integrity</span>
+              <h3>5. Verification Sprint</h3>
+            </div>
+            <span class="mode-num">05</span>
+          </div>
+          <p>Students audit AI outputs against primary sources, datasets, rubrics, methods, or discipline-specific conventions.</p>
+          <div class="mode-action">
+            <strong>Class output</strong>
+            <p>Verification becomes a learned academic skill, not a vague warning about hallucinations.</p>
+            <a class="mini-link" href="https://www.unesco.org/en/articles/ai-competency-framework-students" target="_blank" rel="noopener">Grounded in UNESCO student AI competencies</a>
+          </div>
+        </article>
+
+        <article class="card mode-card" data-lenses="reciprocal transparency">
+          <div class="mode-head">
+            <div class="mode-title">
+              <span class="lens reciprocal">Reciprocal learning</span>
+              <h3>6. AI Role Lab</h3>
+            </div>
+            <span class="mode-num">06</span>
+          </div>
+          <p>Try AI as tutor, coach, teammate, simulator, tool, mentor, or student. Discuss when each role helps or distorts learning.</p>
+          <div class="mode-action">
+            <strong>Class output</strong>
+            <p>Students gain a vocabulary for use cases instead of a binary allowed or forbidden mindset.</p>
+            <a class="mini-link" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4475995" target="_blank" rel="noopener">Grounded in Mollick and Mollick's seven roles</a>
+          </div>
+        </article>
+
+        <article class="card mode-card" data-lenses="governance reciprocal">
+          <div class="mode-head">
+            <div class="mode-title">
+              <span class="lens governance">Policy making</span>
+              <h3>7. Co-Created AI Pact</h3>
+            </div>
+            <span class="mode-num">07</span>
+          </div>
+          <p>The class turns observed workflows into assignment-level rules: allowed uses, required disclosure, no-go zones, and assessment evidence.</p>
+          <div class="mode-action">
+            <strong>Class output</strong>
+            <p>A policy students understand because they helped test the reasons behind it.</p>
+            <a class="mini-link" href="https://teaching.pitt.edu/resources/co-creating-a-transparent-ai-use-policy-with-students/" target="_blank" rel="noopener">Grounded in co-created classroom policy examples</a>
+          </div>
+        </article>
+
+        <article class="card mode-card" data-lenses="governance integrity">
+          <div class="mode-head">
+            <div class="mode-title">
+              <span class="lens governance">Policy making</span>
+              <h3>8. Red-Line Clinic</h3>
+            </div>
+            <span class="mode-num">08</span>
+          </div>
+          <p>Identify what cannot be shared with AI tools: personal data, unpublished research, protected materials, exam content, or confidential cases.</p>
+          <div class="mode-action">
+            <strong>Class output</strong>
+            <p>Boundaries become practical and memorable, especially where public tools are tempting.</p>
+            <a class="mini-link" href="https://www.unesco.org/en/articles/ai-competency-framework-teachers" target="_blank" rel="noopener">Grounded in UNESCO teacher AI competencies</a>
+          </div>
+        </article>
+
+        <article class="card mode-card" data-lenses="frontier governance">
+          <div class="mode-head">
+            <div class="mode-title">
+              <span class="lens frontier">Frontier testing</span>
+              <h3>9. Assessment Stress Test</h3>
+            </div>
+            <span class="mode-num">09</span>
+          </div>
+          <p>Apply current AI tools to an assignment before assigning it. Ask what the tool can do, what it hides, and what evidence of learning remains.</p>
+          <div class="mode-action">
+            <strong>Class output</strong>
+            <p>Better assessment design: some tasks become AI-integrated, some need process evidence, and some stay AI-free.</p>
+            <a class="mini-link" href="https://hai.stanford.edu/ai-index/2026-ai-index-report" target="_blank" rel="noopener">Grounded in the speed of capability change</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="frontier" aria-labelledby="frontier-title">
+      <div class="section-head">
+        <div>
+          <h2 id="frontier-title">The Jagged Frontier Studio</h2>
+          <p>The goal is not to predict AI perfectly. The goal is to build a class habit of testing AI against the work your field actually values.</p>
+        </div>
+      </div>
+      <div class="frontier-board">
+        <aside class="board-legend" aria-label="Frontier categories">
+          <div class="legend-item">
+            <strong><span class="dot"></span> Useful now</strong>
+            <span>AI adds speed or perspective, and students can verify the result.</span>
+          </div>
+          <div class="legend-item">
+            <strong><span class="dot"></span> Uncertain</strong>
+            <span>AI sometimes helps, but quality depends on prompt, model, data, or domain.</span>
+          </div>
+          <div class="legend-item">
+            <strong><span class="dot"></span> No-go</strong>
+            <span>AI use creates unacceptable privacy, integrity, safety, or validity risk.</span>
+          </div>
+          <div class="legend-item">
+            <strong><span class="dot"></span> Skill-preserving</strong>
+            <span>The task may need AI-free time because the learning goal is the human capability itself.</span>
+          </div>
+        </aside>
+        <table class="frontier-table">
+          <thead>
+            <tr>
+              <th>Course task</th>
+              <th>Class test</th>
+              <th>Likely policy signal</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Course task">Generate practice questions from lecture notes</td>
+              <td data-label="Class test">Compare AI questions with course outcomes and known misconceptions.</td>
+              <td data-label="Likely policy signal">Often useful when students check and label AI-generated material.</td>
+              <td data-label="Status"><span class="status green">Useful</span></td>
+            </tr>
+            <tr>
+              <td data-label="Course task">Draft an essay argument</td>
+              <td data-label="Class test">Ask students to show prompt, outline, rejected options, and source checks.</td>
+              <td data-label="Likely policy signal">May be allowed with disclosure and process evidence.</td>
+              <td data-label="Status"><span class="status amber">Uncertain</span></td>
+            </tr>
+            <tr>
+              <td data-label="Course task">Summarize sensitive interviews or student data</td>
+              <td data-label="Class test">Check data protection, consent, tool terms, and institutional rules.</td>
+              <td data-label="Likely policy signal">Usually disallowed in public tools; may require approved systems.</td>
+              <td data-label="Status"><span class="status red">No-go</span></td>
+            </tr>
+            <tr>
+              <td data-label="Course task">First independent close reading, proof, diagnosis, or translation</td>
+              <td data-label="Class test">Ask whether AI removes the exact capability the assignment is meant to build.</td>
+              <td data-label="Likely policy signal">Reserve AI-free stages, then allow AI for critique or comparison later.</td>
+              <td data-label="Status"><span class="status violet">Preserve</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="routine" aria-labelledby="routine-title">
+      <div class="section-head">
+        <div>
+          <h2 id="routine-title">A Simple Disclosure Routine for Academics</h2>
+          <p>Use disclosure as teaching material. Students learn more from seeing a real decision trail than from hearing a general rule.</p>
+        </div>
+      </div>
+      <div class="routine">
+        <article class="card routine-step">
+          <span class="step-index">1</span>
+          <h3>Before class: prepare one trace</h3>
+          <p>Select a real workflow from your teaching or research preparation.</p>
+          <ul class="checklist">
+            <li>Tool or model used, with date.</li>
+            <li>Prompt or task instruction.</li>
+            <li>Output accepted, edited, or rejected.</li>
+            <li>Verification method and final human decision.</li>
+          </ul>
+        </article>
+        <article class="card routine-step">
+          <span class="step-index">2</span>
+          <h3>In class: narrate judgment</h3>
+          <p>Show the messy middle, not only the polished result.</p>
+          <ul class="checklist">
+            <li>Where AI saved time.</li>
+            <li>Where it sounded confident but failed.</li>
+            <li>What domain knowledge was needed.</li>
+            <li>What you would not share with the tool.</li>
+          </ul>
+        </article>
+        <article class="card routine-step">
+          <span class="step-index">3</span>
+          <h3>After class: update the local rule</h3>
+          <p>Turn what the group learned into clearer assignment guidance.</p>
+          <ul class="checklist">
+            <li>Allowed and disallowed uses.</li>
+            <li>Required student disclosure format.</li>
+            <li>Evidence of learning required.</li>
+            <li>Items to retest as tools change.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="sample-grid disclosure-examples">
+        <article class="sample-box">
+          <h3>Example educator disclosure</h3>
+          <blockquote>I used AI to generate three alternative explanations for this concept. I rejected one because it introduced a misleading analogy. I edited the second, checked it against the course reading, and used the third only as a discussion prompt.</blockquote>
+        </article>
+        <article class="sample-box">
+          <h3>Example student disclosure prompt</h3>
+          <blockquote>State where AI entered your process, paste the most important prompt or workflow step, identify one output you changed or rejected, and explain how you verified the final result.</blockquote>
+        </article>
+      </div>
+    </section>
+
+    <section id="culture" aria-labelledby="culture-title">
+      <div class="section-head">
+        <div>
+          <h2 id="culture-title">The Culture That Makes Rules Work</h2>
+          <p>Open does not mean careless. Non-judging does not mean uncritical. The culture is serious because failures are visible and discussable.</p>
+        </div>
+      </div>
+      <div class="grid two">
+        <article>
+          <h3>Signals to build</h3>
+          <ul class="culture-list">
+            <li><span class="marker">+</span><span><strong>Successes and failures side by side</strong><span>Useful outputs, bad outputs, and rejected outputs all become learning evidence.</span></span></li>
+            <li><span class="marker">+</span><span><strong>Student expertise has a legitimate channel</strong><span>Students can surface tools and workflows without hiding them or pretending they do not matter.</span></span></li>
+            <li><span class="marker">+</span><span><strong>Standards are explicit</strong><span>The class keeps returning to accuracy, evidence, privacy, fairness, originality, and learning value.</span></span></li>
+            <li><span class="marker">+</span><span><strong>Policy follows observed practice</strong><span>Rules are refreshed when the class learns something real about the domain and the tools.</span></span></li>
+          </ul>
+        </article>
+        <article>
+          <h3>Patterns to avoid</h3>
+          <ul class="culture-list warn">
+            <li><span class="marker">!</span><span><strong>Hidden educator AI use</strong><span>Students see a double standard when academics use AI privately but discuss only student restrictions.</span></span></li>
+            <li><span class="marker">!</span><span><strong>Generic permission statements</strong><span>Allowed or banned is too thin unless students see the why for each task.</span></span></li>
+            <li><span class="marker">!</span><span><strong>Tool novelty as the goal</strong><span>The point is not to chase every app. The point is to test value and risk in the discipline.</span></span></li>
+            <li><span class="marker">!</span><span><strong>Disclosure without consequences</strong><span>Disclosure should connect to feedback, assessment evidence, and better rules.</span></span></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="sources" aria-labelledby="sources-title">
+      <div class="section-head">
+        <div>
+          <h2 id="sources-title">Source Base and Leading Voices</h2>
+          <p>These sources ground the dashboard. They combine official frameworks, sector research, and leading classroom-oriented AI scholarship.</p>
+        </div>
+      </div>
+      <div class="source-grid">
+        <article class="source-card">
+          <span class="source-type">Leading paper</span>
+          <h3><a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=64700" target="_blank" rel="noopener">Navigating the Jagged Technological Frontier</a></h3>
+          <p>Ethan Mollick and co-authors show that AI performance is uneven: it can improve some knowledge-work tasks while harming others. This supports classroom testing instead of fixed assumptions.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Teaching framework</span>
+          <h3><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4475995" target="_blank" rel="noopener">Assigning AI: Seven Approaches for Students</a></h3>
+          <p>Ethan and Lilach Mollick give practical classroom roles for AI, including tutor, coach, simulator, teammate, tool, mentor, and student.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Leading blog</span>
+          <h3><a href="https://www.oneusefulthing.org/p/the-shape-of-ai-jaggedness-bottlenecks" target="_blank" rel="noopener">The Shape of AI: Jaggedness, Bottlenecks and Salients</a></h3>
+          <p>Mollick's public writing is useful for communicating why educators cannot rely on one stable mental model of what AI can do.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Transparency</span>
+          <h3><a href="https://er.educause.edu/articles/2026/3/from-prompt-to-practice-a-framework-for-transparent-genai-use-in-higher-education" target="_blank" rel="noopener">EDUCAUSE: Transparent GenAI Use in Higher Education</a></h3>
+          <p>Frames transparency as integrity work and pedagogy: visible AI process can become a learning resource rather than a private shortcut.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Student voice</span>
+          <h3><a href="https://www.jisc.ac.uk/reports/student-perceptions-of-ai-2025" target="_blank" rel="noopener">Jisc: Student Perceptions of AI 2025</a></h3>
+          <p>Students ask for fair, practical, course-specific guidance and a place in the conversation, which supports co-created norms.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Student survey</span>
+          <h3><a href="https://www.hepi.ac.uk/reports/student-generative-ai-survey-2026/" target="_blank" rel="noopener">HEPI Student Generative AI Survey 2026</a></h3>
+          <p>Shows AI use has become mainstream among students, strengthening the case for explicit guidance and structured induction.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Global report</span>
+          <h3><a href="https://hai.stanford.edu/ai-index/2026-ai-index-report" target="_blank" rel="noopener">Stanford HAI: AI Index Report 2026</a></h3>
+          <p>Documents accelerating model capability and wide student adoption, with governance and education still catching up.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Global survey</span>
+          <h3><a href="https://www.digitaleducationcouncil.com/resource-library-items/ai-in-higher-education-global-survey-2026" target="_blank" rel="noopener">Digital Education Council: AI in Higher Education Global Survey 2026</a></h3>
+          <p>Large international student and faculty survey showing uneven course integration; only 29% of students reported that instructors were well equipped to guide AI use.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Official competency framework</span>
+          <h3><a href="https://www.unesco.org/en/articles/ai-competency-framework-teachers" target="_blank" rel="noopener">UNESCO AI Competency Framework for Teachers</a></h3>
+          <p>Provides a human-centred basis for teacher AI literacy, ethics, pedagogy, and professional learning.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Official competency framework</span>
+          <h3><a href="https://www.unesco.org/en/articles/ai-competency-framework-students" target="_blank" rel="noopener">UNESCO AI Competency Framework for Students</a></h3>
+          <p>Frames students as responsible users and co-creators, supporting the dashboard's reciprocal learning stance.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Practice example</span>
+          <h3><a href="https://teaching.pitt.edu/resources/co-creating-a-transparent-ai-use-policy-with-students/" target="_blank" rel="noopener">University of Pittsburgh: Co-Creating a Transparent AI Use Policy</a></h3>
+          <p>Practical classroom example for turning AI policy into a shared conversation rather than a top-down statement.</p>
+        </article>
+        <article class="source-card">
+          <span class="source-type">Practice example</span>
+          <h3><a href="https://events.newark.rutgers.edu/event/smarteaching-co-design-a-classroom-policy-on-generative-ai-with-your-learners" target="_blank" rel="noopener">Rutgers: Co-Design a Classroom Policy with Learners</a></h3>
+          <p>Shows the same principle in faculty development form: student buy-in and transparency improve when learners help shape classroom AI rules.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Dashboard for AI for Academics course material. Use as inspiration, not as legal or institutional policy.</span>
+      <span>Core message: model the workflow, test the frontier, update the norm.</span>
+    </div>
+  </footer>
+
+  <script>
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const modeCards = document.querySelectorAll(".mode-card");
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.dataset.filter;
+        filterButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        modeCards.forEach((card) => {
+          const lenses = card.dataset.lenses.split(" ");
+          card.classList.toggle("is-hidden", filter !== "all" && !lenses.includes(filter));
+        });
+      });
+    });
+  </script>
+</body>
+</html>

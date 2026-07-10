@@ -19,6 +19,9 @@
   .lede{color:var(--mut);font-size:1.05rem;max-width:44rem}
   .thesis{margin:22px 0 0;padding:16px 20px;background:var(--teal-soft);border-radius:10px;font-size:1.02rem}
   .thesis b{color:var(--teal)}
+  .download{display:block;margin:14px 0 0;padding:13px 18px;background:var(--teal);color:#fff;border-radius:10px;text-align:center;text-decoration:none;font-weight:800}
+  .download:hover{background:#0b594d}
+  .download small{display:block;font-weight:500;opacity:.84}
   nav{position:sticky;top:0;background:rgba(250,248,243,.96);backdrop-filter:blur(4px);
       border-bottom:1px solid var(--line);margin-top:26px;z-index:5}
   nav .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:8px;padding-bottom:8px}
@@ -37,7 +40,7 @@
                  background:var(--teal);border:2.5px solid #fff;box-shadow:0 0 0 1.5px var(--teal)}
   .tl li.pm::before{background:var(--orange);box-shadow:0 0 0 1.5px var(--orange)}
   .tl li.br::before{background:#fff;box-shadow:0 0 0 1.5px var(--mut)}
-  .tl time{font-weight:800;font-variant-numeric:tabular-nums;color:var(--teal);margin-right:8px}
+  .tl time{display:inline-block;min-width:116px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--teal);margin-right:8px}
   .tl li.pm time{color:var(--orange)}
   .tl li.br time{color:var(--mut)}
   .tl .what{font-weight:700}
@@ -76,6 +79,8 @@
   .loop .b b{display:block;color:var(--orange)}
   .loop .b span{font-size:.8rem;color:var(--mut)}
   .quote{border-left:3px solid var(--orange);padding:4px 0 4px 16px;margin:16px 0;color:#333;font-style:italic}
+  .lab-route{margin:0 0 16px;padding:14px 18px;background:var(--orange-soft);border:1px solid #efd4ac;border-radius:10px;font-size:.94rem}
+  .lab-route b{color:var(--orange)}
   table{border-collapse:collapse;width:100%;font-size:.88rem;margin:8px 0 16px}
   th{background:var(--teal);color:#fff;text-align:left;padding:8px 10px}
   td{border:1px solid var(--line);padding:7px 10px;vertical-align:top}
@@ -90,11 +95,13 @@
 <header class="wrap">
   <div class="kicker">Art-Tech for Higher Education · Summer 2026 · Prague · Monday 13 July</div>
   <h1>Day 2 · Navigating the AI Landscape<br>Text &amp; Academic Practice</h1>
-  <p class="lede">Your one-page orientation: what happens when, the thread that connects it all,
+  <p class="lede"><b>Monday 13 July · 10:00–16:00 (hard stop).</b> Your one-page orientation: what happens when, the thread that connects it all,
   the ideas worth keeping, and where every handout fits.</p>
   <div class="thesis">The whole day in one sentence — advanced AI literacy is
     <b>choosing the right workflow</b> + <b>verifying the output</b> + <b>governing the data</b> +
     <b>delegating within bounds</b>. Everything below practises one of the four.</div>
+  <a class="download" href="downloads/TAH_Day2_Agent_Lab_Pack.zip" download>Download the complete lab pack
+    <small>Handouts + safe sample files + skills</small></a>
 </header>
 
 <nav><div class="wrap">
@@ -106,30 +113,38 @@
   <h2>The day at a glance</h2>
   <p class="sub">Morning = map &amp; decide (teal). Afternoon = hands-on with agents (orange). No screens at the edges of the day — on purpose.</p>
   <ul class="tl">
-    <li><time>09:30</time><span class="what">Warm-up (no screens)</span>
+    <li><time>10:00–10:10</time><span class="what">Rapid spectrum warm-up (no screens)</span>
         <span class="why">Spectrum lines — where the room actually stands — and your expectations on the wall.</span></li>
-    <li><time>10:00</time><span class="what">Mapping the AI landscape</span>
-        <span class="why">What changed since February · shared vocabulary · four myths vs. the 2026 evidence · institutional red lines &amp; EU checkpoints.</span></li>
-    <li><time>11:45</time><span class="what">Exercise: your map → your guidelines</span>
+    <li><time>10:10–11:20</time><span class="what">Mapping the AI landscape</span>
+        <span class="why">What changed since February · shared vocabulary · four myths vs. the 2026 evidence.</span></li>
+    <li class="br"><time>11:20–11:30</time><span class="what">Coffee</span>
+        <span class="why">Restart on time; the 11:45 exercise is protected.</span></li>
+    <li><time>11:30–11:45</time><span class="what">Institutional and legal synthesis</span>
+        <span class="why">Data red lines · EU checkpoints · the rules each participant needs for their own guidelines.</span></li>
+    <li><time>11:45–12:30</time><span class="what">Exercise: your map → your guidelines</span>
         <span class="why">Plot your real tasks, classify the data, and draft <em>your own</em> AI-use rules — the morning's payload.</span></li>
-    <li class="br"><time>12:30</time><span class="what">Lunch</span>
-        <span class="why">Before you go: copied lab folder with green files only; confirm you can log into Codex (free) or Claude.</span></li>
-    <li class="pm"><time>13:30</time><span class="what">From chatbots to agents</span>
-        <span class="why">Prompting primer · what a coding agent is (for non-programmers) · safety protocol · live demo.</span></li>
-    <li class="pm"><time>14:10</time><span class="what">Agent lab</span>
+    <li class="br"><time>12:30–13:30</time><span class="what">Lunch</span>
+        <span class="why">Before you go: copied lab folder with green files only; confirm you can sign in to the new ChatGPT desktop app and open Codex.</span></li>
+    <li class="pm"><time>13:30–14:05</time><span class="what">From chat to delegated work</span>
+        <span class="why">Chat vs. Work vs. Codex · safety protocol · delegation loop · live demo.</span></li>
+    <li class="pm"><time>14:05–14:55</time><span class="what">Agent lab</span>
         <span class="why">Your anchor task, run through a real agent — four tracks, one artifact, tested by you.</span></li>
-    <li class="pm"><time>15:10</time><span class="what">Build your own agent</span>
+    <li class="br"><time>14:55–15:05</time><span class="what">Break</span>
+        <span class="why">Hard restart for the final hour.</span></li>
+    <li class="pm"><time>15:05–15:25</time><span class="what">Build your own agent</span>
         <span class="why">A memory file that knows you + a skill that repeats your best move. Portable, open standards.</span></li>
-    <li class="pm"><time>15:35</time><span class="what">Peer exchange &amp; failure clinic</span>
+    <li class="pm"><time>15:25–15:40</time><span class="what">Peer exchange &amp; failure clinic</span>
         <span class="why">One pattern that worked, one failure + the fix — the cohort's shared library.</span></li>
-    <li class="br"><time>16:00</time><span class="what">Closing circle (no screens)</span>
+    <li class="pm"><time>15:40–15:45</time><span class="what">Your agent rule</span>
+        <span class="why">Amend your personal guidelines before the closing circle.</span></li>
+    <li class="br"><time>15:45–16:00</time><span class="what">Closing circle (no screens)</span>
         <span class="why">Your agent rule, out loud. Grounding exercise. Bridge to Day 3.</span></li>
   </ul>
 </section>
 
 <section id="thread" class="wrap">
   <h2>One task travels through everything</h2>
-  <p class="sub">The <b>AI Practice Passport</b> is the day's spine. You pick one real task at about 10:15; by 16:00 it has been through all eight boxes. If you ever feel lost, find your box.</p>
+  <p class="sub">The <b>AI Practice Passport</b> is the day's spine. You pick one real task during the morning; by 16:00 it has been through all eight boxes. If you ever feel lost, find your box.</p>
   <div class="thread">
     <div class="step"><b>Anchor task</b><span>One real task from your work you want AI's help with.</span></div>
     <div class="step"><b>Map it</b><span>Benefit × <em>can I verify it?</em> — the jagged-frontier canvas.</span></div>
@@ -192,8 +207,11 @@
 </section>
 
 <section id="afternoon" class="wrap">
-  <h2>Afternoon · From chatbots to agents</h2>
-  <p class="sub">First the ground layer (talking to an LLM well), then the leap: an assistant that acts on your files — under your rules.</p>
+  <h2>Afternoon · From chat to delegated work</h2>
+  <p class="sub">First choose the right surface, then make the leap from an answer to bounded action on files — under your rules.</p>
+
+  <div class="lab-route"><b>Monday's default route: <a href="https://chatgpt.com/download/">new ChatGPT desktop app</a> → Codex → your copied lab folder.</b><br>
+    Codex is the mode for local files and repositories, so the lab works even if ChatGPT Work has not reached your account yet. Open only the copied folder; keep real student, manuscript, credential, and other red data out.</div>
 
   <h3 style="margin-bottom:6px">The delegation loop you'll practise</h3>
   <div class="loop">
@@ -228,11 +246,15 @@
     <p><b>1 · Memory file</b> (CLAUDE.md / AGENTS.md): the standing briefing a new assistant would get on day one — who you teach, your tone, your verification rules, your red lines. Always loaded.</p>
     <p><b>2 · Skill</b> (SKILL.md): a written procedure for a task you'll ask for again — quiz-maker, rubric-writer. Loads only when needed. Neither is programming; both are plain text.</p>
     <p><b>3 · Portability:</b> the same files run in Claude Code <em>and</em> Codex — open standards under the Linux Foundation. You're building assets you own, not vendor lock-in.</p></div></details>
-  <details><summary>Which agent do I actually open at home?</summary><div class="body">
-    <p><b>Cowork</b> (in the Claude desktop app, any paid plan) — nothing to install: it runs in a sandboxed virtual machine and sees <em>only the folders you hand it</em>; you point it at documents, describe the task in plain language, and approve its plan. The gentlest start.</p>
-    <p><b>Claude Code</b> — the same agent with more reach, running directly on your machine (terminal, IDE, or the desktop app). The native installer needs no developer setup — no Node, no Python.</p>
-    <p><b>Codex</b> (OpenAI) — included in every ChatGPT tier, even Free, with noticeably more generous usage limits; but it's terminal/IDE/repo-oriented — there's no Cowork-style point-at-your-documents app.</p>
-    <p><em>None of these needs Python — that's for tasks, not the tools. July 2026 snapshot; the dated-snapshot warning below applies to tiers and limits too.</em></p></div></details>
+  <details><summary>Which mode do I open in the new ChatGPT desktop app?</summary><div class="body">
+    <p><b>Chat</b> — quick questions, search, and conversation. Use it when the outcome is an answer or a short exchange.</p>
+    <p><b>Work</b> — longer research and analysis that produces documents, spreadsheets, presentations, reports, or Sites. OpenAI launched it with GPT‑5.6 on <b>9 July 2026</b>, but access is still rolling out; it is optional on Monday.</p>
+    <p><b>Codex</b> — work with local files, repositories, terminals, and developer tools. <b>This is Monday's lab mode:</b> you can point it at the copied lab folder, ask for a plan, watch the edits, and test the artifact without depending on Work access.</p>
+    <p><b>The durable decision:</b> choose the surface by the job, then apply the same brief → plan → build → test → fix → disclose loop. Product names will change; bounded delegation will not.</p>
+    <p><small>Official snapshot: <a href="https://help.openai.com/en/articles/20001276">new desktop app and mode definitions</a> · <a href="https://openai.com/index/chatgpt-for-your-most-ambitious-work/">ChatGPT Work, 9 July</a> · <a href="https://openai.com/index/gpt-5-6/">GPT‑5.6 general availability</a>.</small></p>
+    <p><em>Claude Cowork and Claude Code remain viable alternatives for the same bounded-folder method. None of these tools requires you to know Python; programming languages are needed only when the task itself calls for them.</em></p></div></details>
+  <details><summary>Why aren't we moving these pages into ChatGPT Sites?</summary><div class="body">
+    <p>ChatGPT Sites also launched in public beta on 9 July, but it is <b>not available in the EEA at launch</b>. It is therefore not Monday infrastructure. Keep using this existing public GitHub Pages site (and the already-published course hub) so every participant has the same stable links. We can evaluate a migration after the workshop, not during the launch weekend. <a href="https://help.openai.com/en/articles/20001339">Official Sites availability →</a></p></div></details>
 </section>
 
 <section id="home" class="wrap">
@@ -250,6 +272,7 @@
   <h2>Your materials, mapped</h2>
   <table>
     <tr><th>When</th><th>Document</th><th>What it's for</th></tr>
+    <tr><td>Before the lab</td><td><a href="downloads/TAH_Day2_Agent_Lab_Pack.zip" download><b>Complete Agent Lab Pack</b></a><br><small>handouts + safe sample files + skills</small></td><td>Copy it to a safe working folder, then open only that folder in ChatGPT desktop → Codex</td></tr>
     <tr><td>All day</td><td>Participant Handbook / <b>01 · Passport</b></td><td>The one sheet that travels through every block</td></tr>
     <tr><td>11:45</td><td><b>02 · Jagged Frontier Canvas</b></td><td>Plot your tasks: benefit × verifiability</td></tr>
     <tr><td>11:55</td><td><b>03 · Data Classification Board</b></td><td>Green/amber/red — with the rules of thumb</td></tr>
@@ -257,12 +280,12 @@
     <tr><td>Reference</td><td><b>05 · Which Tool for Which Task</b></td><td>July-2026 task→tool table with $0 paths</td></tr>
     <tr><td>13:30 →</td><td><b>06 · Agent Safety Checklist</b></td><td>The seven habits — keep it next to your keyboard</td></tr>
     <tr><td>12:25 → lab</td><td><b>07 · Agent Task Brief template</b></td><td>Written just before lunch, drives your lab session</td></tr>
-    <tr><td>14:10</td><td><b>08–11 · Track sheets 1–4</b></td><td>Step-by-step for your chosen track</td></tr>
-    <tr><td>15:10</td><td><b>12 · Build Your Own Agent</b></td><td>Memory file + skill, step by step (with templates)</td></tr>
+    <tr><td>14:05</td><td><b>08–11 · Track sheets 1–4</b></td><td>Step-by-step for your chosen track</td></tr>
+    <tr><td>15:05</td><td><b>12 · Build Your Own Agent</b></td><td>Memory file + skill, step by step (with templates)</td></tr>
     <tr><td>Reference</td><td><b>13 · Prompt Pattern Library</b></td><td>Patterns that survive model changes — incl. P.R.O.P.E.R.</td></tr>
     <tr><td>Try them</td><td><b>Mini-apps</b> (<code>apps/</code> folder)</td><td>Flashcard quiz (what the demo builds) · Data-triage game · Citation-audit trainer · <b>Project Tour</b> (the explainer your agent should leave behind) · <b>Chatbot vs. Coding Agent</b> (the 90-second animation from before the demo — rewatch it at home, → to step) — each also models the artifact standard: one local file, no network calls, accessible, disclosed</td></tr>
-    <tr><td>Take home</td><td><b>Skills &amp; Agents Cookbook</b> (<code>cookbook/</code> folder)</td><td>26 ready-to-run skills + 3 example agents for teaching, research, admin, and accessibility — open <code>cookbook/index.html</code>, filter by the kind of work you do, copy any entry into your own folder. Has an empty slot per category for this cohort's best patterns</td></tr>
-    <tr><td>Anytime</td><td><b>Everything, online</b></td><td>No stick needed — the mini-apps, the cookbook, the lecture, and this companion live at <a href="https://michalie.github.io/tah-day2/"><b>michalie.github.io/tah-day2</b></a>; the citation-audit trainer joins there after the course</td></tr>
+    <tr><td>Take home</td><td><b>Skills &amp; Agents Cookbook</b> (<code>cookbook.html</code>)</td><td>26 ready-to-run skills + 3 example agents for teaching, research, admin, and accessibility — open <a href="cookbook.html"><code>cookbook.html</code></a>, filter by the kind of work you do, and copy any entry into your own folder.</td></tr>
+    <tr><td>Anytime</td><td><b>Everything, online</b></td><td>No stick needed — the mini-apps, the cookbook, the lecture, and this companion live at <a href="https://michalie.github.io/tah-day2/"><b>michalie.github.io/tah-day2</b></a>; the citation-audit trainer joins there after the course. GitHub Pages remains the Monday host; ChatGPT Sites is unavailable in the EEA at launch.</td></tr>
   </table>
 </section>
 

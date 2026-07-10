@@ -23,6 +23,20 @@
   .tagline{font-size:17px;color:var(--muted);max-width:620px}
   section{padding:36px 0}
   h2{font-family:var(--serif);font-weight:normal;font-size:24px;margin-bottom:16px}
+  .section-lede{color:var(--muted);font-size:14px;margin:-9px 0 16px}
+  .route-section{padding:28px 0 8px}
+  .route{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:0 8px 24px rgba(34,39,46,.05)}
+  .route h2{margin-bottom:4px}
+  .schedule{font-weight:700;color:var(--accent);margin-bottom:18px}
+  .path{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;counter-reset:path}
+  .path li{position:relative;background:var(--paper);border-radius:10px;padding:14px 14px 14px 44px;font-size:14px;color:var(--muted)}
+  .path li::before{counter-increment:path;content:counter(path);position:absolute;left:13px;top:13px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;text-align:center;font-weight:800;line-height:22px}
+  .path b{color:var(--ink)}
+  .download{display:block;margin-top:16px;padding:14px 18px;background:var(--accent);color:#fff;border-radius:10px;text-align:center;font-weight:800}
+  .download:hover{background:#0b594d}
+  .download small{display:block;font-weight:500;opacity:.84}
+  .news{margin-top:14px;padding:14px 18px;background:var(--accent-soft);border-radius:10px;font-size:14px;color:var(--ink)}
+  .news p+p{margin-top:7px}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;color:var(--ink)}
   .card:hover{border-color:var(--accent);background:var(--accent-soft)}
@@ -32,22 +46,42 @@
   .wide{grid-column:1 / -1}
   .note{margin-top:22px;padding:14px 18px;background:var(--accent-soft);border-radius:10px;font-size:14px;color:var(--ink)}
   footer{padding:28px 0 56px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
-  @media(max-width:640px){.cards{grid-template-columns:1fr}h1{font-size:29px}}
+  @media(max-width:640px){.cards,.path{grid-template-columns:1fr}h1{font-size:29px}.route{padding:20px}}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap">
-    <div class="kicker">Art-Tech for Higher Education · Day 2 · Summer 2026</div>
+    <div class="kicker">Art-Tech for Higher Education · Day 2 · Monday 13 July · 10:00–16:00</div>
     <h1>Navigating the AI Landscape<br>— course artifacts</h1>
-    <p class="tagline">Everything from the day, one click away. Every artifact is a single self-contained file — it works offline, tracks nothing, and carries its own AI-use disclosure. Built the way the course teaches.</p>
+    <p class="tagline">This page is the front door for the whole day. Follow the three steps below; everything else is a reference you can explore when you need it.</p>
   </div>
 </header>
 
+<section class="route-section">
+  <div class="wrap">
+    <div class="route">
+      <h2>Your Monday path</h2>
+      <p class="schedule">10:00 start · 16:00 hard stop</p>
+      <ol class="path">
+        <li><b>Orient.</b> Open the <a href="companion.html">Course Companion</a> for the schedule and the Passport thread.</li>
+        <li><b>Prepare.</b> Download the lab pack, then copy it to a safe working folder. Use green data only.</li>
+        <li><b>Build.</b> <a href="https://chatgpt.com/download/">Install or update the new ChatGPT desktop app</a>, choose <b>Codex</b>, and open only that copied folder.</li>
+      </ol>
+      <a class="download" href="downloads/TAH_Day2_Agent_Lab_Pack.zip" download>Download the complete lab pack
+        <small>Handouts + safe sample files + skills</small></a>
+    </div>
+    <div class="news">
+      <p><b>What changed on 9 July:</b> the new desktop app now brings together <b>Chat</b> for quick questions and conversation, <b>Work</b> for longer research and finished deliverables, and <b>Codex</b> for local files and repositories. OpenAI also launched <a href="https://openai.com/index/chatgpt-for-your-most-ambitious-work/">ChatGPT Work</a> and made <a href="https://openai.com/index/gpt-5-6/">GPT‑5.6 generally available</a>. Work is still <a href="https://help.openai.com/en/articles/20001276">rolling out by account</a>, so Monday's lab uses desktop → Codex and does not depend on it.</p>
+      <p><b>Hosting stays put:</b> ChatGPT Sites is <a href="https://help.openai.com/en/articles/20001339">not available in the EEA at launch</a>. This versioned GitHub Pages hub remains Monday's public front door; the Google Sites pages stay available as tested mirrors.</p>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
-    <h2>Start here</h2>
+    <h2>Course materials</h2>
     <div class="cards">
       <a class="card wide" href="companion.html"><b>Day 2 Course Companion</b>
         <span>Your one-page orientation: the day at a glance, the Passport thread, eight ideas worth keeping, and where every handout fits.</span>
@@ -81,6 +115,23 @@
       <a class="card" href="the_retraction.html"><b>The Retraction</b>
         <span>A ~12-minute radio play by Claude on AI in science. Fiction on the surface — every disaster in it is footnoted to a real, documented case. Companion piece to the lecture.</span>
         <span class="tag">the_retraction.html</span></a>
+    </div>
+
+    <h2 style="margin-top:34px">Live reference dashboards</h2>
+    <p class="section-lede">Open during the workshop or revisit later. Their source and revision history stay versioned with the course in GitHub; this is an extension of the existing site, not a hosting migration.</p>
+    <div class="cards">
+      <a class="card wide" href="dashboards/we-are-in-this-together-ai-dashboard.html"><b>We Are in This Together</b>
+        <span>The core dashboard: research-grounded orientation for transparent, collaborative AI practice with students.</span>
+        <span class="tag">dashboards/we-are-in-this-together-ai-dashboard.html · core</span></a>
+      <a class="card" href="dashboards/ai-coding-tools-academic-dashboard.html"><b>AI coding agents for academic work</b>
+        <span>A source-grounded comparison of the current agent landscape for academics and non-programmers, updated for the 9 July changes.</span>
+        <span class="tag">dashboards/ai-coding-tools-academic-dashboard.html · updated 9 July</span></a>
+      <a class="card" href="dashboards/ai-act-higher-ed-dashboard.html"><b>EU AI Act for higher education</b>
+        <span>Optional policy orientation for universities and educators: duties, dates, and practical implications.</span>
+        <span class="tag">dashboards/ai-act-higher-ed-dashboard.html · optional</span></a>
+      <a class="card" href="dashboards/ff-upce-ai-policy-dashboard.html"><b>FF UPCE AI-use policy</b>
+        <span>Optional local case: an English dashboard preview of faculty guidance for students and academics.</span>
+        <span class="tag">dashboards/ff-upce-ai-policy-dashboard.html · optional local case</span></a>
     </div>
 
     <h2 style="margin-top:34px">The foundations — critical thinking in the AI era</h2>
