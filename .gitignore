@@ -5,3 +5,8 @@ Thumbs.db
 registration*.csv
 *Form responses*.csv
 facilitator-private/
+
+# The facilitator deck and answer keys never belong in the public repository.
+*.pptx
+*.potx
+*ANSWER_KEY*

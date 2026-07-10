@@ -19,7 +19,7 @@ Everything for the afternoon "From Chat to Delegated Work" session. Participant-
 - `templates/AGENTS_md_educator_template.md` — optional starter if you want a memory note form to adapt.
 - `skills/quiz-maker/`, `skills/rubric-writer/` — two worked SKILL.md examples.
 - `skills/skill-scaffold/` — blank SKILL.md to make your own.
-- **After the course:** the take-home **Skills & Agents Cookbook** on your stick extends this starter kit with ready-made skill folders for teaching, research, admin, and accessibility.
+- **After the course:** the take-home **Skills & Agents Cookbook** on the course hub (<https://michalie.github.io/tah-day2/cookbook.html>) extends this starter kit with ready-made skill folders for teaching, research, admin, and accessibility.
 
 ## Reference & materials
 - `participant_reading_docx/07_Prompt_Pattern_Library.docx` — patterns for the lab and peer exchange.
