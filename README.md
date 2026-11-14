@@ -1,5 +1,9 @@
 # TAH Day 2 — Navigating the AI Landscape
 
+> **Archived, November 2026.** These are the materials of a course held on 13 July 2026. The course will not be repeated and the materials are no longer updated. Tool names, install steps and product news describe July 2026 and are out of date; treat them as a record of the day. The thinking tools (the critical-thinking guide, the prompt pairs, the practice scenarios, the data triage game) age more slowly, but they have not been reviewed since.
+>
+> Newer work on the same questions: the [Agent Risk Atlas](https://michalie.github.io/agent-risk-atlas/) (how research with AI agents goes wrong), [Publishing under AI](https://github.com/MichaLie/publishing-under-ai) and [Journal AI policies](https://github.com/MichaLie/journal-ai-policies) (AI in scientific writing and what publishers allow), and the [Research Intelligence Engine](https://github.com/MichaLie/Research-Intelligence-Engine) (your judgment first, then the agents).
+
 Participant materials for **Art-Tech for Higher Education, Day 2** in Prague.
 
 **Monday 13 July · 10:00–16:00**
